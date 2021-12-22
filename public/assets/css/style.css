@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;500;600;700&display=swap');
+
+body{
+font-family: 'Poppins', sans-serif;
+background: #F8F8F8;
+}
+
+.wrapper{
+
+    padding-top: 15px;
+
+}
+.I_header
+{
+      display: flex;
+    align-items: center;
+    justify-content: space-between;  
+    min-height: 50px;
+    height: 100%;
+}
+.logo img{
+    width: 150px;
+}
+.userProfile img{
+    width: 29px;
+}
+.login_box{
+/*    height: 420px;*/
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+box-shadow: 0px 6px 14px #EFE9EA;
+border: 1px solid #DBDFEA;
+border-radius: 10px;
+opacity: 1;
+overflow: hidden;
+}
+.hv-100
+{
+   height: calc(100vh - 50px - 55px);
+}
+.lbanner
+{
+    position: relative;
+}
+.lbanner > img
+{
+position: relative;
+    width: 100%;
+    max-height: 420px;
+    height: 100%;
+}
+.lbanner > .captText {
+    position: absolute;
+    top: 50%;
+    color: #f5f5f5;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    text-align: center;
+    left: 50%;
+
+}
+.lbanner  h4
+{
+font-size: 19px;
+    font-weight: 500;
+}
+.lbanner  p
+{
+font-size: 14px;
+    font-weight: 500;
+    line-height: 1.8;
+}
+.login_box label
+{
+    text-align: left;
+font-size: 14px;
+letter-spacing: 0px;
+color: #717A86;
+text-transform: uppercase;
+opacity: 1;
+font-weight: 500;
+margin-bottom: 0;
+}
+
+.login_box input.form-control {
+    background: transparent;
+    border-color: transparent;
+    border-bottom: 2px solid #dbdfea;
+    border-radius: 0;
+    padding: 0px;
+    height: 30px;
+    color: #4A5B72;
+    font-size: 14px;
+    font-weight: 600;
+}
+form input:-webkit-autofill {
+    background-color: transparent!important;
+}
+.checkbox + .link
+{
+    font-size: 12px!important;
+}
+.login_box .link{
+    text-align: right;
+font-size: 14px!important;
+letter-spacing: 0px;
+color: #DA4138;
+opacity: 1;
+text-transform: capitalize;
+}
+.login_box button[type="submit"]
+{
+    background: transparent linear-gradient(97deg, #FCBA3F 0%, #DB2A5A 53%, #D9551A 100%) 0% 0% no-repeat padding-box;
+box-shadow: 0px 8px 18px #DA413858;
+border-radius: 4px;
+opacity: 1;
+border: none;
+height: 50px;
+    text-transform: capitalize;
+    font-size: 14px;
+}
+.login_box form p{
+    color: #7A8295;
+    font-size: 14px;
+        font-weight: 300;
+}
+.f-18{
+    font-size: 22px;
+    font-weight: 600;
+}
+.f-12{
+    font-size: 14px;
+}
+.checkbox
+{
+    text-transform: capitalize!important;
+}
+.I_footer{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+box-shadow: 0px -5px 18px #00000019;
+opacity: 1;
+position: relative;
+}
+.I_footer::after{
+     position: absolute;
+    content: "";
+    background: transparent linear-gradient(
+90deg, #FCBA3F 0%, #DB2A5A 53%, #D9551A 100%) 0% 0% no-repeat padding-box;
+    opacity: 1;
+    top: 100%;
+    height: 4px;
+    width: 100%;
+    z-index: 9;
+    left: 0;
+}
+.copy{
+    text-align: left;
+font-size: 14px;
+letter-spacing: 0px;
+color: #4D4D4D;
+opacity: 1;
+}
+.userProfile
+{
+    display: flex;
+    align-items: center;
+}
+.userProfile h6{
+    margin-bottom: 0;
+    margin-right: 10px;
+    font-weight: 600;
+}
+.checkbox input[type="checkbox"] {
+    position: relative;
+    top: 2px;
+    margin-right: 4px;
+}
+.fw-600
+{
+    font-weight: 600!important;
+}
+@media screen and (max-width: 768px){
+    .lbanner > img {
+    max-height: 150px;
+}
+}
+@media screen and (max-width: 1100px){
+    .lbanner > img {
+    max-height: 150px;
+}
+}
+@media screen and (max-width: 768px){
+.login_box form p,.copy {
+   font-size: 12px;
+    
+}
+}
+
+@media screen and (max-width: 1100px){
+.loginForm {
+    margin: auto;
+}
+}
+
+@media screen and (min-width: 1600px){
+.loginForm {
+   flex: 0 0 900px!important;
+   margin: auto
+    
+}
+}
+
