@@ -34,8 +34,8 @@ COPY src ./src
 
 RUN npm run build
 
-# FROM nginx:alpine
-# COPY --from=build /app/build /usr/share/nginx/html
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
 
 
 ## docker for production
