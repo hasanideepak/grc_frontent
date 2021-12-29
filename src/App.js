@@ -2,6 +2,7 @@ import React, {Suspense, lazy} from 'react';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import './App.css';
 import Layout from './components/layouts/MainLayout';
+import Dashboard from './pages/Dashboard';
 // import Login from './pages/Login';
 
 const Home = lazy(()=> import("./pages/Home"))
@@ -16,6 +17,7 @@ function App() {
             <Route exact path="/" element={<Home />}></Route>
             <Route exact path="/home" element={<Home />}></Route>
             <Route exact path="/login" element={<Login />}></Route>
+            <Route exact path="/dashboard" element={<Dashboard />}></Route>
           </Routes>
         </Suspense>
       </Router>

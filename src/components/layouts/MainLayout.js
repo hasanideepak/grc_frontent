@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 import Footer from "../partials/Footer";
 import Header from "../partials/Header";
-import "../../assets/css/style.css"
+// import "../../assets/css/style.css"
 
 const Layout = (props) => {
     let location = window.location.pathname
-    let noLayoutPath = ['/login','/signup']
+    let noLayoutPath = ['/login','/signup','/dashboard']
     return (
         <Fragment>
             {(()=>{

@@ -66,13 +66,21 @@ const Login = (props) => {
                       </label>
                       <a href="#" class="link">forget password?</a>
                     </div>
-                    <button class="btn btn-primary btn-block mb-lg-4 mb-md-4 mb-2" type="submit"> sign in</button>
+                    <button class="btn btn-primary btn-block mb-lg-4 mb-md-4 mb-2" type="button" onClick={() => navigate("/dashboard")}> sign in</button>
                     <p class="text-center fw-600">Don’t have an account? <a href="" class="link">Signup</a></p>
                   </form>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="I_header I_footer container-fluid">
+        <div class="copy">
+          <p class="mb-0">© 2021 AirPlatform - All Rights Reserved</p>
+        </div>
+        <div class="logo d-none d-lg-block d-xl-block d-md-block">
+          <img src="/assets/img/logo.svg" alt="logo" class="img-fluid" />
         </div>
       </div> 
     </> 
