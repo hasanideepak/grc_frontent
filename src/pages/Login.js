@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
 import { setCookie, getCookie } from "../helpers/Helper";
 import { useNavigate } from "react-router-dom";
+import crypto from 'crypto'
 import l_banner2 from "../assets/img/l_banner2.png"
 const Login = (props) => {
   const navigate = useNavigate()
@@ -11,11 +12,16 @@ const Login = (props) => {
     if(!data.email || data.email == '' || !data.password || data.password == '' ){
       return false
     };
+    if(data.password){
+      let md5Pass = crypto.createHash('md5').update(data.password).digest('hex');
+      data.password = md5Pass
+    }
     console.log(!data.email || data.email == '' || !data.password || data.password == '');
     let payload = data
+    payload.type = "login"
     let res = await ApiService.post(payload.type,payload,Login);
-    if(res && res.status == true){
-        setCookie('currentUser',JSON.stringify(res.data))
+    if(res && res.message == "Success"){
+        setCookie('currentUser',JSON.stringify(res.results))
         navigate('/home')
     }
   }
@@ -54,11 +60,11 @@ const Login = (props) => {
                     <p>Please enter your email and Password to continue…</p>
                     <div class="form-group">
                       <label for="email">email address</label>
-                      <input type="email" class="form-control" {...register("email")} name="email" autocomplete="off" value="Oliver.methu8980@gmail.com" />
+                      <input type="email" class="form-control" {...register("email")} name="email" autocomplete="off" defaultValue="rajiv@audiencelogy.com" />
                     </div>
                     <div class="form-group">
                       <label for="password">Password</label>
-                      <input type="password" class="form-control" {...register("password")} name="password" autocomplete="off" value="12345678" />
+                      <input type="password" class="form-control" {...register("password")} name="password" autocomplete="off" defaultValue="e10adc3949ba59abbe56e057f20f883e" />
                     </div>
                     <div class="d-flex justify-content-between form-group">
                       <label for="" class="checkbox">
@@ -66,7 +72,7 @@ const Login = (props) => {
                       </label>
                       <a href="#" class="link">forget password?</a>
                     </div>
-                    <button class="btn btn-primary btn-block mb-lg-4 mb-md-4 mb-2" type="button" onClick={() => navigate("/dashboard")}> sign in</button>
+                    <button class="btn btn-primary btn-block mb-lg-4 mb-md-4 mb-2" type="submit"> sign in</button>
                     <p class="text-center fw-600">Don’t have an account? <a href="" class="link">Signup</a></p>
                   </form>
                 </div>

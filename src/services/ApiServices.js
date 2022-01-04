@@ -39,7 +39,7 @@ class ApiService {
               
               
             // }
-          const response = await fetch(`${process.env.REACT_APP_SERVER_URL}login`,config);
+          const response = await fetch(`${process.env.REACT_APP_API_URL}auth/login`,config);
           let res = null
           if(payload.responseType && payload.responseType == 'file'){
             console.log("returning file")
