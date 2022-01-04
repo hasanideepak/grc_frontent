@@ -10,14 +10,14 @@ class ApiService {
         console.log(type)
         try {
 
-            let token = encryptData(new Date().getTime());
+            // let token = encryptData(new Date().getTime());
             let config = {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(payload),
               }
             if(customHeader){
-              config['headers']['token'] = token
+              config['headers']['token'] = ""
             }
             // if(customHeader || auth){
               if(!isServer){
