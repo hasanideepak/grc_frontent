@@ -1,13 +1,44 @@
-import { useNavigate } from "react-router-dom"
+import {useState, useEffect} from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 
 
 const Header = (props) => {
-    const navigate = useNavigate
-    const goToUrl = (url = '') =>{
-        if(url == ''){
+    const [headerTitle, setHeaderTitle] = useState('')
+    const navigate = useNavigate();
+    const location = useLocation()
+    console.log(props)
+    useEffect(() => {
+        setPageHeader()
+    }, [])
+    const goToUrl = (url = '') => {
+        if (url == '') {
             return false
         }
         navigate(url)
+    }
+    const setPageHeader = () =>{
+        switch (location.pathname) {
+            case "/home":
+                setHeaderTitle("Home")
+            break;
+            case "/dashboard":
+                setHeaderTitle("Dashboard")
+            break;
+            case "/task-manager":
+                setHeaderTitle("Task Manager")
+            break;
+            case "/evidence-manger":
+                setHeaderTitle("Evidence Manager")
+            break;
+            case "/onboarding":
+                setHeaderTitle("Onboarding")
+            break;
+            case "/configuration":
+                setHeaderTitle("Configuration")
+            break;
+            default:
+            break;
+        }
     }
     return (
         <header>
@@ -18,7 +49,7 @@ const Header = (props) => {
                     </button>
                     <div className="collapse navbar-collapse" id="collapsibleNavbar">
                         <ul className="navbar nav pl-lg-0 pl-0">
-                            <li className="nav-item active">
+                            <li className="nav-item">
                                 <a onClick={() => goToUrl('/dashboard')} className="nav-link">Dashboard</a>
                             </li>
                             <li className="nav-item ">
@@ -36,35 +67,21 @@ const Header = (props) => {
                         </ul>
                     </div>
                 </nav>
+                <div className="userProfile pr-2">
+                    <div className="mdw bg-transparent p-0 shadow-none"><img src="assets/img/userProfile.png" alt="profile" className="img-fluid" /></div>
+                    <div className="mdw"><a href="#"><img src="assets/img/gbl.gif" alt="notification" className="img-fluid" /></a></div>
+                </div>
+            </div>
+            <div className="align-items-center d-flex justify-content-between aDm_navigation pl-lg-3 border-0">
                 <div className="userProfile">
-                    <div className="btn-group">
-                        <div className="dropdown fdrp">
-                            <button type="button" className="btn btn-primary dropdown-toggle " data-toggle="dropdown">
-                                CISCO
-                            </button>
-                            <div className="dropdown-menu mt-1">
-                                <a className="dropdown-item" href="#">Link 1</a>
-                                <a className="dropdown-item" href="#">Link 2</a>
-                                <a className="dropdown-item" href="#">Link 3</a>
-                            </div>
-                        </div>
-                        <div className="dropdown">
-                            <button type="button" className="btn btn-primary dropdown-toggle sdrp" data-toggle="dropdown">
-                            HIPAA Secur...
-                            </button>
-                            <div className="dropdown-menu mt-1">
-                            <a className="dropdown-item" href="#">Link 1</a>
-                            <a className="dropdown-item" href="#">Link 2</a>
-                            <a className="dropdown-item" href="#">Link 3</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mdw bg-transparent p-0 shadow-none">
-                        <img src="assets/img/userProfile.png" alt="profile" className="img-fluid" />
-                    </div>
-                    <div className="mdw">
-                        <a href="#"><img src="assets/img/notification.svg" alt="" className="img-fluid" /></a>
-                    </div>
+                    <h6 className="mr-0">{headerTitle}</h6>
+                </div>
+                <div>
+                    <ul className="breadcrumb mb-0 bg-transparent invisible">
+                        <li className="breadcrumb-item"><a href="#">Configuration</a></li>
+                        <li className="breadcrumb-item"><a href="#">Home</a></li>
+
+                    </ul>
                 </div>
             </div>
         </header>

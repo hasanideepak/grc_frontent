@@ -55,19 +55,19 @@ const Login = (props) => {
                   </div>
                 </div>
                 <div className="col-md-12 col-12 col-xl-7 col-md-6 col-sm-12 d-flex justify-content-center align-items-center pl-md-0">
-                  <form className="w-100 mx-lg-5 mx-md-5 mx-xl-5 my-md-4 mx-2 my-2" name="form1" autocomplete="off" onSubmit={handleSubmit(onSubmit)}>
+                  <form className="w-100 mx-lg-5 mx-md-5 mx-xl-5 my-md-4 mx-2 my-2" name="form1" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
                     <h6 className="f-12 fw-600">Login to Account</h6>
                     <p>Please enter your email and Password to continue…</p>
                     <div className="form-group">
-                      <label for="email">email address</label>
-                      <input type="email" className="form-control" {...register("email")} name="email" autocomplete="off" defaultValue="rajiv@audiencelogy.com" />
+                      <label htmlFor="email">email address</label>
+                      <input type="email" className="form-control" {...register("email")} name="email" autoComplete="off" defaultValue="rajiv@audiencelogy.com" />
                     </div>
                     <div className="form-group">
-                      <label for="password">Password</label>
-                      <input type="password" className="form-control" {...register("password")} name="password" autocomplete="off" defaultValue="e10adc3949ba59abbe56e057f20f883e" />
+                      <label htmlFor="password">Password</label>
+                      <input type="password" className="form-control" {...register("password")} name="password" autoComplete="off" defaultValue="e10adc3949ba59abbe56e057f20f883e" />
                     </div>
                     <div className="d-flex justify-content-between form-group">
-                      <label for="" className="checkbox">
+                      <label htmlFor="" className="checkbox">
                         <input type="checkbox" /> Remember me
                       </label>
                       <a href="#" className="link">forget password?</a>

@@ -6,10 +6,14 @@ const Home = (props) =>{
     useEffect(() => {
       let loggedInUser = getCookie("currentUser")
       loggedInUser = loggedInUser ? JSON.parse(loggedInUser) : false
-      if(user.length == 0 && loggedInUser){
-        setUser(loggedInUser.user) 
+      console.log(loggedInUser)
+      if(Object.keys(user).length == 0 && loggedInUser){
+        setUser(oldVal =>{
+          return {...oldVal,...loggedInUser.user}
+        })
       }
-    })
+    },[])
+  console.log(user)
   return (
     <>
       <div className="container">

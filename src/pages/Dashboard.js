@@ -31,7 +31,7 @@ const Dashboard = (props) => {
             <div className="align-items-center d-flex justify-content-between my-3">
               <div>
                 <ul className="pagination mb-0 filterview">
-                  <li className="page-item active"><a href="#" className="page-link">Today</a></li>
+                  <li className="page-item active"><a onClick={()=> navigate("/onboarding")} className="page-link">Today</a></li>
                   <li className="page-item"><a href="#" className="page-link">Tommorow</a></li>
                   <li className="page-item"><a href="#" className="page-link p_px">
                     <input type="text" className="form-control border-0 bg-transparent" name="date" placeholder="Select Date" />
