@@ -4,6 +4,7 @@ import { setCookie, getCookie } from "../helpers/Helper";
 import { useNavigate } from "react-router-dom";
 import Asidebar from "../components/partials/Asidebar";
 import Footer from "../components/partials/Footer";
+import Header from "../components/partials/Header";
 const Dashboard = (props) => {
   const navigate = useNavigate()
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -25,6 +26,7 @@ const Dashboard = (props) => {
 
   return (
     <>
+      <Header />
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-12 col-12 pl-0 pr-0 pl-lg-3 pr-lg-3 pl-xl-3 pr-xl-3">

@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
 import { setCookie, getCookie } from "../helpers/Helper";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/partials/Header";
 const TaskManager = (props) => {
   const navigate = useNavigate()
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -23,6 +24,7 @@ const TaskManager = (props) => {
 
   return (
     <>
+      <Header />
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-12 col-12 pl-0 pr-0 pl-lg-3 pr-lg-3 pl-xl-3 pr-xl-3">

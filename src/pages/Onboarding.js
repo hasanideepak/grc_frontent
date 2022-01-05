@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
 import { setCookie, getCookie } from "../helpers/Helper";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/partials/Header";
 const Onboarding = (props) => {
   const navigate = useNavigate()
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -23,7 +24,7 @@ const Onboarding = (props) => {
 
   return (
     <>
-      
+      <Header />
       <div id="accordion" className="accordion pl-lg-3 pr-lg-3 accordianSec">
           <div className="card">
             <div className="card-header collapsed" data-toggle="collapse" href="#cp1">

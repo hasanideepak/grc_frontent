@@ -6,10 +6,9 @@ const Header = (props) => {
     const [headerTitle, setHeaderTitle] = useState('')
     const navigate = useNavigate();
     const location = useLocation()
-    console.log(props)
     useEffect(() => {
         setPageHeader()
-    }, [])
+    },[])
     const goToUrl = (url = '') => {
         if (url == '') {
             return false
@@ -27,7 +26,7 @@ const Header = (props) => {
             case "/task-manager":
                 setHeaderTitle("Task Manager")
             break;
-            case "/evidence-manger":
+            case "/evidence-manager":
                 setHeaderTitle("Evidence Manager")
             break;
             case "/onboarding":

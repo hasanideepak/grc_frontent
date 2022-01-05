@@ -64,6 +64,7 @@ function App() {
 
 function RouterOutlet({layout:Layout,...rest}){
   let location = window.location.pathname
+  console.log(location)
   return (
       <Layout location={location}>
         <Outlet />

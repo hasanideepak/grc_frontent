@@ -1,4 +1,5 @@
 import { useState,useEffect, React } from 'react';
+import Header from '../components/partials/Header';
 import { getCookie } from "../helpers/Helper";
 
 const Home = (props) =>{
@@ -16,6 +17,7 @@ const Home = (props) =>{
   console.log(user)
   return (
     <>
+      <Header />
       <div className="container">
         <div className="row">
           <div className="col-md-7 ">

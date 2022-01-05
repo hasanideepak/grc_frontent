@@ -13,7 +13,7 @@ const Layout = (props) => {
                         {/* Aside bar */}
                         <Asidebar />
                         <div className="mainContent">
-                            <Header {...props} />
+                            {/* <Header {...props} /> */}
                             <main>{props.children}</main>
                         </div>
                     </div>
