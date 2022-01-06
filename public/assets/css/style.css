@@ -279,7 +279,7 @@ form input:-webkit-autofill {
 .accordion .card-header:before,
 .addtask:before {
     content: "";
-    background: url(../img/gbl.png) 78px 0;
+    background: url(../img/gbl.png) 52px 0;
     height: 18px;
     background-color: #9597B4;
     width: 18px;
@@ -296,7 +296,7 @@ form input:-webkit-autofill {
 
 .accordion .card-header.collapsed:before,
 .addtask:before {
-background: url(../img/gbl.png) 52px 19.1px;
+background: url(../img/gbl.png) 78px 0px;
     background-color: #9597b4;
 }
 

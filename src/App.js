@@ -42,6 +42,7 @@ function App() {
             </Route> */}
             {/* after login layout routes end */}
 
+                  {/* <Route exact path="/" element={<Home />}></Route> */}
                   <Route path="/" element={<RouterOutlet layout={Layout} />}>
                     <Route exact path="/home" element={<Home />}></Route>
                     <Route  path="/dashboard" element={<Dashboard />}></Route>
@@ -54,8 +55,9 @@ function App() {
 
                   <Route path="/" element={<RouterOutlet layout={PublicLayout} isPublic="true" />} >
                     <Route exact path="/login" element={<Login />}></Route>
-                    <Route exact path="/" element={<Home />}></Route>
                   </Route>
+
+                  
                   
           </Routes>
         </Suspense>
@@ -67,8 +69,7 @@ function RouterOutlet({layout:Layout,...rest}){
   let location = window.location.pathname
   let {isPublic = false,roles = 'admin'} = rest
   let getAuthUser = IsAuthenticated(true)
-  let isAuth = (isPublic || (!isPublic && getAuthUser.isLoggedIn)) ? true : false
-  console.log(rest, isAuth)
+  let isAuth = (isPublic || (!isPublic && getAuthUser.isLoggedIn)) ? true : false;
   return isAuth ? (
       <Layout location={location}>
         <Outlet />

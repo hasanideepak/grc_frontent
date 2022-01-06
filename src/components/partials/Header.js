@@ -35,6 +35,9 @@ const Header = (props) => {
             case "/configuration":
                 setHeaderTitle("Configuration")
             break;
+            case "/onboarding":
+                setHeaderTitle("Onboarding")
+            break;
             default:
             break;
         }
@@ -63,6 +66,9 @@ const Header = (props) => {
                             <li className="nav-item ">
                                 <a onClick={() => goToUrl('/configuration')} className="nav-link ">Configuration</a>
                             </li>
+                            {/* <li className="nav-item ">
+                                <a onClick={() => goToUrl('/onboarding')} className="nav-link ">Onboarding</a>
+                            </li> */}
                         </ul>
                     </div>
                 </nav>
