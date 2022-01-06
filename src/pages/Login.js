@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
-import { setCookie, getCookie } from "../helpers/Helper";
+import { SetCookie, GetCookie } from "../helpers/Helper";
 import { useNavigate } from "react-router-dom";
 import crypto from 'crypto'
 import l_banner2 from "../assets/img/l_banner2.png"
@@ -21,7 +21,7 @@ const Login = (props) => {
     payload.type = "login"
     let res = await ApiService.post(payload.type,payload,Login);
     if(res && res.message == "Success"){
-        setCookie('currentUser',JSON.stringify(res.results))
+        SetCookie('currentUser',JSON.stringify(res.results))
         navigate('/home')
     }
   }

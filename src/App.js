@@ -1,8 +1,9 @@
 import React, {Suspense, lazy} from 'react';
-import { BrowserRouter as Router, Routes, Route, Outlet} from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate} from 'react-router-dom'
 import './App.css';
 import Layout from './components/layouts/MainLayout';
 import PublicLayout from './components/layouts/PublicLayout';
+import { IsAuthenticated } from './helpers/Auth';
 // import Login from './pages/Login';
 
 const Home = lazy(()=> import("./pages/Home"))
@@ -51,7 +52,7 @@ function App() {
                   </Route>
 
 
-                  <Route path="/" element={<RouterOutlet layout={PublicLayout} />} >
+                  <Route path="/" element={<RouterOutlet layout={PublicLayout} isPublic="true" />} >
                     <Route exact path="/login" element={<Login />}></Route>
                     <Route exact path="/" element={<Home />}></Route>
                   </Route>
@@ -64,13 +65,17 @@ function App() {
 
 function RouterOutlet({layout:Layout,...rest}){
   let location = window.location.pathname
-  console.log(location)
-  return (
+  let {isPublic = false,roles = 'admin'} = rest
+  let getAuthUser = IsAuthenticated(true)
+  let isAuth = (isPublic || (!isPublic && getAuthUser.isLoggedIn)) ? true : false
+  console.log(rest, isAuth)
+  return isAuth ? (
       <Layout location={location}>
         <Outlet />
       </Layout>
-    
-  )
+    ) : (
+        <Navigate to="/login" replace />
+    );
 }
 
 export default App;

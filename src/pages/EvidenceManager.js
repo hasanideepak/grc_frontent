@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
-import { setCookie, getCookie } from "../helpers/Helper";
+import { SetCookie, GetCookie } from "../helpers/Helper";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/partials/Header";
 const EvidenceManager = (props) => {
@@ -15,7 +15,7 @@ const EvidenceManager = (props) => {
     let payload = data
     let res = await ApiService.post(payload.type, payload, EvidenceManager);
     if (res && res.status == true) {
-      setCookie('currentUser', JSON.stringify(res.data))
+      SetCookie('currentUser', JSON.stringify(res.data))
       navigate('/home')
     }
   }

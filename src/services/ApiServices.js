@@ -1,4 +1,4 @@
-import { encryptData,getCookie, getServerCookie } from "../helpers/Helper"
+import { encryptData,GetCookie, GetServerCookie } from "../helpers/Helper"
 class ApiService {
 
     static post = async (type, payload, Component,customHeader=false, handleSuccess, handleError) => {
@@ -21,7 +21,7 @@ class ApiService {
             }
             // if(customHeader || auth){
               if(!isServer){
-                let userData = getCookie('currentUserValue')
+                let userData = GetCookie('currentUserValue')
                 userData  = userData ? JSON.parse(userData) : false;
                 if(userData){
                   let authToken = `Bearer ${userData.accessToken}`
@@ -29,7 +29,7 @@ class ApiService {
                 }
               }else{
                 let {req} = Component.apiObj
-                let userData = getServerCookie(req,'currentUserValue')
+                let userData = GetServerCookie(req,'currentUserValue')
                 userData  = userData ? JSON.parse(userData) : false;
                 if(userData){
                   let authToken = `Bearer ${userData.accessToken}`
@@ -102,7 +102,7 @@ class ApiService {
             if(method == 'POST' || method == 'PATCH'){
               config.body = formData
             }
-            let userData = getCookie('currentUserValue')
+            let userData = GetCookie('currentUserValue')
             userData  = userData ? JSON.parse(userData) : false;
             if(userData){
               let authToken = `Bearer ${userData.accessToken}`

@@ -1,9 +1,9 @@
-import Router from "next/router";
-import {getCookie} from "./Helper"
+import { useNavigate } from "react-router-dom";
+import {GetCookie} from "./Helper"
 
-export const isAuthenticated = (fetchUser = false) => {
+export const IsAuthenticated = (fetchUser = false) => {
     //fetch Data
-    let userData = getCookie('currentUserValue')
+    let userData = GetCookie('currentUser')
     userData  = userData ? JSON.parse(userData) : false;
     let result = {isLoggedIn : false,currentUser: null,token: ''}
     if(userData){
@@ -15,19 +15,20 @@ export const isAuthenticated = (fetchUser = false) => {
     return result
 }
 
-export const authenticationCheck = (firstLogin = false) => {
-    let userData = isAuthenticated(true)
+export const AuthenticationCheck = (firstLogin = false) => {
+    let navigate = useNavigate()
+    let userData = IsAuthenticated(true)
     let user = userData.currentUser ? userData.currentUser : {}
     if (Object.keys(user).length > 0) {
         if (user.role === 'ROLE_PROFESSIONAL') {
-            let job = getCookie('clickCurrentApplyJob')
+            let job = GetCookie('clickCurrentApplyJob')
             job = job ? JSON.parse(job) : undefined
             if (job) {
-                Router.push(`/profile/heliohire-application/referenceNumber/${job.referenceNumber}`)
+                navigate(`/profile/heliohire-application/referenceNumber/${job.referenceNumber}`)
             }else if (firstLogin) {
-                Router.push(`/profile/${user.slug}?event=true`)
+                navigate(`/profile/${user.slug}?event=true`)
             } else {
-                Router.push(`/jobs-home`)
+                navigate(`/jobs-home`)
             }
         }
         else if (user.role === 'ROLE_ORGANIZATIONAL') {

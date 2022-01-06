@@ -1,6 +1,19 @@
+import { Navigate, useNavigate } from "react-router-dom";
+import { IsAuthenticated } from "../../helpers/Auth"
+import { DelCookie } from "../../helpers/Helper";
 
 
 const Asidebar = (props) => {
+    let navigate = useNavigate()
+    let logOut = () => {
+        let loggedInUser = IsAuthenticated(true);
+        if(loggedInUser.isLoggedIn){
+           let del =  DelCookie('currentUser')
+           if(del){
+            navigate("login")
+           }
+        }
+    }
     return (
         <>
             <div className="sideWidth">
@@ -22,7 +35,7 @@ const Asidebar = (props) => {
                                 <li className="navHeader">SETTINGS</li>
                                 <li><a href="#"><img src="assets/img/gbl.gif" alt="myProfile" className="img-fluid" /><span>My Profile</span></a></li>
                                 <li><a href="#"><img src="assets/img/gbl.gif" alt="newAccount" className="img-fluid" /><span>New Account / Project</span></a></li>
-                                <li><a href="#"><img src="assets/img/gbl.gif" alt="logout" className="img-fluid" /><span>Logout</span></a></li>
+                                <li><a onClick={() => logOut()}><img src="assets/img/gbl.gif" alt="logout" className="img-fluid" /><span>Logout</span></a></li>
                             </ul>
                         </div>
                     </div>

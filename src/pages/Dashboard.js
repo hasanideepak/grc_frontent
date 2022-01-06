@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
-import { setCookie, getCookie } from "../helpers/Helper";
+import { SetCookie, GetCookie } from "../helpers/Helper";
 import { useNavigate } from "react-router-dom";
 import Asidebar from "../components/partials/Asidebar";
 import Footer from "../components/partials/Footer";
@@ -17,7 +17,7 @@ const Dashboard = (props) => {
     let payload = data
     let res = await ApiService.post(payload.type, payload, Dashboard);
     if (res && res.status == true) {
-      setCookie('currentUser', JSON.stringify(res.data))
+      SetCookie('currentUser', JSON.stringify(res.data))
       navigate('/home')
     }
   }

@@ -1,11 +1,11 @@
 import { useState,useEffect, React } from 'react';
 import Header from '../components/partials/Header';
-import { getCookie } from "../helpers/Helper";
+import { GetCookie } from "../helpers/Helper";
 
 const Home = (props) =>{
   const [user, setUser] = useState({})
     useEffect(() => {
-      let loggedInUser = getCookie("currentUser")
+      let loggedInUser = GetCookie("currentUser")
       loggedInUser = loggedInUser ? JSON.parse(loggedInUser) : false
       console.log(loggedInUser)
       if(Object.keys(user).length == 0 && loggedInUser){

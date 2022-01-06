@@ -25,7 +25,7 @@ export const decryptData = (token = '') =>{
     return data
 }
 
-export const getCookie = (cookieName = '') =>{
+export const GetCookie = (cookieName = '') =>{
     if(!cookieName || cookieName == ''){
         return false;
     }
@@ -34,7 +34,7 @@ export const getCookie = (cookieName = '') =>{
     let getCookie = cookieCutter.get(cookieName)
     return getCookie ? getCookie : false
 }
-export const getServerCookie = (req,cookieName = '') =>{
+export const GetServerCookie = (req,cookieName = '') =>{
     if(!cookieName || cookieName == ''){
         return false;
     }
@@ -46,7 +46,7 @@ export const getServerCookie = (req,cookieName = '') =>{
     // return getCookie ? getCookie : false
 }
 
-export const setCookie = (cookieName = '',value,options = null) =>{
+export const SetCookie = (cookieName = '',value,options = null) =>{
     if(!cookieName || cookieName == '' || !value || value == ''){
         return false;
     }
@@ -63,7 +63,7 @@ export const setCookie = (cookieName = '',value,options = null) =>{
     return setCookie ? setCookie : false
 }
 
-export const delCookie = (cookieName = '') =>{
+export const DelCookie = (cookieName = '') =>{
     if(!cookieName || cookieName == ''){
         return false;
     }
@@ -74,7 +74,7 @@ export const delCookie = (cookieName = '') =>{
 
 }
 
-export const getRandomColor = ()=>{
+export const DetRandomColor = ()=>{
     var letters = "0123456789ABCDEF"; 
     // let colors = ['#bcc6cca6','#7d7d7d94','#ee7e01','#b1d8ec', '#00b8ff', '#309e7b','']
     let colors = ['#7d7d7d94','#e31e1e8c','#b1d8ec', '#00b8ff', '#309e7b','#ffc107']
@@ -82,7 +82,7 @@ export const getRandomColor = ()=>{
     return selColor
 }
 
-export const getInitials = (str = '')=>{
+export const DetInitials = (str = '')=>{
     if(str == ''){
       return 'HH'
     }
@@ -93,7 +93,7 @@ export const getInitials = (str = '')=>{
     return result
 }
   
-export const getShareUrl = (socialPlatform='',type='',data=null) =>{
+export const DetShareUrl = (socialPlatform='',type='',data=null) =>{
     
     let url = '' 
     let publicUrl = process.env.siteUrl;
@@ -173,7 +173,7 @@ export const getShareUrl = (socialPlatform='',type='',data=null) =>{
     return url
 }
 
-export const sanitizeHtml = (htmlStr = null,textMode = true,thirdPartyJob = false) =>{
+export const SanitizeHtml = (htmlStr = null,textMode = true,thirdPartyJob = false) =>{
     let result = '';
     if(htmlStr == null){
         return result
@@ -195,7 +195,7 @@ export const sanitizeHtml = (htmlStr = null,textMode = true,thirdPartyJob = fals
     
 }
 
-export const changeDateFormat = (date, type = 1, dateStr = false,format = 0) => {
+export const ChangeDateFormat = (date, type = 1, dateStr = false,format = 0) => {
     /*
         type:
         1 = 'a day ago format'
@@ -225,10 +225,10 @@ export const changeDateFormat = (date, type = 1, dateStr = false,format = 0) => 
       var day = 24 * 60 * 60;
       var d = (timeDiff) / day;
       if (d > 1) {
-        customFormat = changeDateFormat(date, 2,false,format)
+        customFormat = ChangeDateFormat(date, 2,false,format)
       }
       else {
-        customFormat = calcTime(2, timeDiff)
+        customFormat = CalcTime(2, timeDiff)
       }
     }
     else {
@@ -268,7 +268,7 @@ export const changeDateFormat = (date, type = 1, dateStr = false,format = 0) => 
     return customFormat;
   }
 
-  export const calcTime = (type = 0, timeDiff = 0) => {
+  export const CalcTime = (type = 0, timeDiff = 0) => {
     let result = false;
     let time;
     let timeAlias;
@@ -295,7 +295,7 @@ export const changeDateFormat = (date, type = 1, dateStr = false,format = 0) => 
     }
 
     if (tempTime < 1) {
-      result = calcTime(type - 1, timeDiff)
+      result = CalcTime(type - 1, timeDiff)
     }
     else {
       if (timeAlias == 'Just Now') {
@@ -309,7 +309,7 @@ export const changeDateFormat = (date, type = 1, dateStr = false,format = 0) => 
     return result;
   }
 
-  export const isValidImgUrl = async (url,prefix = '') =>{
+  export const IsValidImgUrl = async (url,prefix = '') =>{
     return await new Promise((resolve,reject)=>{
         var img = new Image();
         let result = false
@@ -320,7 +320,7 @@ export const changeDateFormat = (date, type = 1, dateStr = false,format = 0) => 
     
   }
 
-  export const fetchUrlInfo = (url = '') =>{
+  export const FetchUrlInfo = (url = '') =>{
     if(url == ''){
         return false
     }
@@ -329,7 +329,7 @@ export const changeDateFormat = (date, type = 1, dateStr = false,format = 0) => 
     return hostname
   }
   
-  export const formatPhoneNumber = (e= null,number = '') => {
+  export const FormatPhoneNumber = (e= null,number = '') => {
         let ele = e ? e.target : e
         var tempNum = ('' + number).replace(/\D/g, '');
         let matchPattern;
@@ -366,7 +366,7 @@ export const changeDateFormat = (date, type = 1, dateStr = false,format = 0) => 
         return null;
   }
 
-  export const formatDate = (e= null,number = '',formatType = 0) => {
+  export const FormatDate = (e= null,number = '',formatType = 0) => {
         /*
             0 default mm/dd/yyyy format
             1 yyyy-mm-dd format 
@@ -409,7 +409,7 @@ export const changeDateFormat = (date, type = 1, dateStr = false,format = 0) => 
         return null;
   }
 
-  export const onImgErr = (ev = null,type='institution') =>{
+  export const OnImgErr = (ev = null,type='institution') =>{
     if(ev == null){
         return false
     }
@@ -430,7 +430,7 @@ export const changeDateFormat = (date, type = 1, dateStr = false,format = 0) => 
     return
   }
 
-  export const genMD5Hash = (str = '') =>{
+  export const GenMD5Hash = (str = '') =>{
         let result = ''
         if(!str || str.length == 0){
             return false
