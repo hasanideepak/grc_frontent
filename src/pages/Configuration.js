@@ -10,6 +10,7 @@ const Configuration = (props) => {
   const [memberRoles, setMemberRoles] = useState([])
   const [members, setMembers] = useState([])
   const [servicePartners, setServicePartners] = useState([])
+  const [taskOwners, setTaskOwners] = useState([])
   const navigate = useNavigate()
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
@@ -148,6 +149,42 @@ const Configuration = (props) => {
        tempArr.push(servicePartners[pIndex])
     }
     setServicePartners(oldVal => {
+      return [...tempArr]
+    })
+  }
+
+  const addTaskOwner = () => {
+    let toFnInput = document.getElementById("toFirstname")
+    let toLnInput = document.getElementById("toLastname")
+    let toEmailInput = document.getElementById("toEmail")
+    let toFn = toFnInput.value
+    let toLn = toLnInput.value
+    let toEmail= toEmailInput.value
+    if (!toFn || !toLn || !toEmail) {
+      return false;
+    }
+    let listArr = Object.assign([],taskOwners);
+    listArr.push({ firstname: toFn,lastname:toLn, email: toEmail })
+    setTaskOwners(oldVal => {
+      return [...listArr]
+    })
+    toFnInput.value = ""
+    toLnInput.value = ""
+    toEmailInput.value = ""
+    
+  }
+  const delTaskOwner = (index = null) => {
+    if (index == null) {
+      return false;
+    }
+    let tempArr = [];
+    for (let tIndex in taskOwners) {
+       if(index == tIndex){
+         continue
+       }
+       tempArr.push(taskOwners[tIndex])
+    }
+    setTaskOwners(oldVal => {
       return [...tempArr]
     })
   }
@@ -365,28 +402,24 @@ const Configuration = (props) => {
           <div id="cp4" className="card-body p-0 collapse bg-pink" data-parent="#accordion">
             <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
               <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
-                <div className="flex-grow-1 mr-2 w-75"><input type="text" className="form-control" placeholder="Enter Firstname" /></div>
-                <div className="flex-grow-1 mr-2 w-75"><input type="text" className="form-control" placeholder="Enter Lastname" /></div>
-                <div className="flex-grow-1 mr-2 w-75"><input type="text" className="form-control" placeholder="Enter Email Address" /></div>
-                <div><a href="" className=" info"> <img src="assets/img/plus.svg" alt="" className="plus" /> </a></div>
+                <div className="flex-grow-1 mr-2 w-75"><input id="toFirstname" type="text" className="form-control" placeholder="Enter Firstname" /></div>
+                <div className="flex-grow-1 mr-2 w-75"><input id="toLastname" type="text" className="form-control" placeholder="Enter Lastname" /></div>
+                <div className="flex-grow-1 mr-2 w-75"><input id="toEmail" type="text" className="form-control" placeholder="Enter Email Address" /></div>
+                <div><a onClick={()=> addTaskOwner() } className=" info"> <img src="assets/img/plus.svg" alt="" className="plus" /> </a></div>
               </div>
             </div>
             <div className="search_result bg-white ">
-              <div className=" px-3">
-                <div className="flex-grow-1 ml-lg-3 ml-md-0 ">Firstname Lastname</div>
-                <div>Email Address </div>
-                <div className="mr-lg-3"><a href="#"> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
-              </div>
-              <div className="px-3">
-                <div className="flex-grow-1 ml-lg-3 ml-md-0 ">Firstname Lastname</div>
-                <div>Email Address </div>
-                <div className="mr-lg-3"><a href="#"> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
-              </div>
-              <div className=" px-3">
-                <div className="flex-grow-1 ml-lg-3 ml-md-0 ">Firstname Lastname</div>
-                <div>Email Address </div>
-                <div className="mr-lg-3"><a href="#"> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
-              </div>
+            {taskOwners && taskOwners.length > 0 && taskOwners.map((owner, index) => {
+                    return (
+                      <>
+                        <div className=" px-3">
+                          <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{owner.firstname} {owner.lastname}</div>
+                          <div>{owner.email} </div>
+                          <div className="mr-lg-3"><a onClick={() => delTaskOwner(index) }> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
+                        </div>
+                      </>
+                    )
+              })}
             </div>
           </div>
         </div>

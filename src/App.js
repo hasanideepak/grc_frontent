@@ -46,7 +46,7 @@ function App() {
                   <Route path="/" element={<RouterOutlet layout={Layout} />}>
                     <Route exact path="/home" element={<Home />}></Route>
                     <Route  path="/dashboard" element={<Dashboard />}></Route>
-                    <Route  path="/onboarding" element={<Onboarding />}></Route>
+                    <Route  path="/onboarding" element={<Configuration />}></Route>
                     <Route  path="/task-manager" element={<TaskManager /> }></Route>
                     <Route  path="/evidence-manager" element={<EvidenceManager /> }></Route>
                     <Route  path="/configuration" element={<Configuration /> }></Route>
