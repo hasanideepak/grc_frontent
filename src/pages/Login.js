@@ -16,9 +16,9 @@ const Login = (props) => {
       let md5Pass = crypto.createHash('md5').update(data.password).digest('hex');
       data.password = md5Pass
     }
-    console.log(!data.email || data.email == '' || !data.password || data.password == '');
     let payload = data
     payload.type = "login"
+    payload.url = "auth/login"
     let res = await ApiService.post(payload.type,payload,Login);
     if(res && res.message == "Success"){
         SetCookie('currentUser',JSON.stringify(res.results))
@@ -60,11 +60,11 @@ const Login = (props) => {
                     <p>Please enter your email and Password to continue…</p>
                     <div className="form-group">
                       <label htmlFor="email">email address</label>
-                      <input type="email" className="form-control" {...register("email")} name="email" autoComplete="off" defaultValue="rajiv@audiencelogy.com" />
+                      <input type="email" className="form-control" {...register("email")} name="email" autoComplete="off" defaultValue="" />
                     </div>
                     <div className="form-group">
                       <label htmlFor="password">Password</label>
-                      <input type="password" className="form-control" {...register("password")} name="password" autoComplete="off" defaultValue="e10adc3949ba59abbe56e057f20f883e" />
+                      <input type="password" className="form-control" {...register("password")} name="password" autoComplete="off" defaultValue="" />
                     </div>
                     <div className="d-flex justify-content-between form-group">
                       <label htmlFor="" className="checkbox">

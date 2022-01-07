@@ -36,10 +36,8 @@ class ApiService {
                   config['headers']['Authorization'] = authToken
                 }
               }
-              
-              
             // }
-          const response = await fetch(`${process.env.REACT_APP_API_URL}auth/login`,config);
+          const response = await fetch(`${process.env.REACT_APP_API_URL}${payload.url}`,config);
           let res = null
           if(payload.responseType && payload.responseType == 'file'){
             console.log("returning file")
@@ -102,7 +100,7 @@ class ApiService {
             if(method == 'POST' || method == 'PATCH'){
               config.body = formData
             }
-            let userData = GetCookie('currentUserValue')
+            let userData = GetCookie('currentUser')
             userData  = userData ? JSON.parse(userData) : false;
             if(userData){
               let authToken = `Bearer ${userData.accessToken}`
@@ -111,7 +109,7 @@ class ApiService {
               }
               config['headers']['Authorization'] = authToken
             }
-          const response = await fetch(`${url}`,config);
+          const response = await fetch(`${process.env.REACT_APP_API_URL}${url}`,config);
           let res = await response.json();
           return res
         }
