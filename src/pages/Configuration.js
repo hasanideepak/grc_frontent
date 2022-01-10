@@ -8,6 +8,7 @@ const Configuration = (props) => {
   const [accountsList, setAccountsList] = useState([])
   const [frameWorks, setFrameWorks] = useState([])
   const [tpServices, setTpServices] = useState([])
+  const [selectedTPS, setSelTPS] = useState([])
   const [memberRoles, setMemberRoles] = useState([])
   const [members, setMembers] = useState([])
   const [servicePartners, setServicePartners] = useState([])
@@ -29,7 +30,7 @@ const Configuration = (props) => {
   }, [])
 
   const getThirdPartySefvice = () => {
-    let tpsArr = [{ id: 0, name: "AWS" }]
+    let tpsArr = [{ id: 1, name: "AWS" },{ id: 2, name: "GCS" },{ id: 3, name: "Azure" }]
     setTpServices(oldVal => {
       return [...tpsArr]
     })
@@ -101,12 +102,12 @@ const Configuration = (props) => {
     let memEmailInput = document.getElementById("memberEmail")
     let memRoleInput = document.getElementById("memberRole")
     let memEmail = memEmailInput.value
-    let memRole = memRoleInput.value
+    let memRole = memberRoles[memRoleInput.value]
     if (!memEmail || !memRole) {
       return false;
     }
     let memListArr = Object.assign([], members);
-    memListArr.push({ email: memEmail, role: memRole })
+    memListArr.push({ email: memEmail, role: memRole.name,roleId:memRole.id })
     setMembers(oldVal => {
       return [...memListArr]
     })
@@ -198,6 +199,21 @@ const Configuration = (props) => {
       return [...tempArr]
     })
   }
+  const onSelectTPS = (index = null) => {
+    if (index == null) {
+      return false;
+    }
+    let tempArr = selectedTPS;
+    if(selectedTPS.includes(tpServices[index])){
+
+    }else{
+
+    }
+    // setSelTPS
+    setSelTPS(oldVal => {
+      return [...tempArr]
+    })
+  }
 
   console.log(accountsList)
 
@@ -227,15 +243,13 @@ const Configuration = (props) => {
               </div>
             </div>
             <div className="search_result bg-white ">
-              {accountsList && accountsList.length > 0 && accountsList.map((account, index) => {
+              {accountsList && accountsList.length > 0 && accountsList.map((account, accIndex) => {
                 return (
-                  <>
-                    <div className=" px-3">
+                    <div key={accIndex} className=" px-3">
                       <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{account.name}</div>
                       <div>{account.project} </div>
                       {/* <div className="mr-lg-3"><a href="#"> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div> */}
                     </div>
-                  </>
                 )
               })}
             </div>
@@ -302,15 +316,13 @@ const Configuration = (props) => {
             <div className="search_result bg-white ">
               <div className=" px-3">
                 <div>
-                  {frameWorks && frameWorks.length > 0 && frameWorks.map((frameWork, index) => {
+                  {frameWorks && frameWorks.length > 0 && frameWorks.map((frameWork, fwIndex) => {
                     return (
-                      <>
-                        <label htmlFor={`f${index + 1}`}>
-                          <input type="checkbox" id={`f${index + 1}`} />
+                        <label key={fwIndex} htmlFor={`f${fwIndex + 1}`}>
+                          <input type="checkbox" id={`f${fwIndex + 1}`} />
                           <img className="mx-1" src="assets/img/m1.svg" alt="" height="20" width="20" />
                           <span>{frameWork.name}</span>
                         </label>
-                      </>
                     )
                   })}
                 </div>
@@ -338,11 +350,9 @@ const Configuration = (props) => {
                 <div className="w-25 mr-2">
                   <select name="" id="memberRole" className="form-control">
                     <option value="">Select Role</option>
-                    {memberRoles && memberRoles.length > 0 && memberRoles.map((role, index) => {
+                    {memberRoles && memberRoles.length > 0 && memberRoles.map((role, mrIndex) => {
                       return (
-                        <>
-                          <option value={role.id}>{role.name}</option>
-                        </>
+                          <option key={mrIndex} value={role.id}>{role.name}</option>
                       )
                     })}
                   </select>
@@ -351,15 +361,13 @@ const Configuration = (props) => {
               </div>
             </div>
             <div className="search_result bg-white ">
-              {members && members.length > 0 && members.map((member, index) => {
+              {members && members.length > 0 && members.map((member, mIndex) => {
                 return (
-                  <>
-                    <div className="px-3">
+                    <div key={mIndex} className="px-3">
                       <div className="flex-grow-1 ml-lg-3">{member.email}</div>
                       <div>{member.role} </div>
-                      <div className="mr-lg-3"><a onClick={() => delMember(index)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
+                      <div className="mr-lg-3"><a onClick={() => delMember(mIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                     </div>
-                  </>
                 )
               })}
             </div>
@@ -385,15 +393,13 @@ const Configuration = (props) => {
               </div>
             </div>
             <div className="search_result bg-white ">
-              {servicePartners && servicePartners.length > 0 && servicePartners.map((partner, index) => {
+              {servicePartners && servicePartners.length > 0 && servicePartners.map((partner, spIndex) => {
                 return (
-                  <>
-                    <div className=" px-3">
+                    <div key={spIndex} className=" px-3">
                       <div className="flex-grow-1 ">{partner.fullname} </div>
                       <div className="ml-lg-3 ml-md-0 ">{partner.email}</div>
-                      <div className="mr-lg-3"><a onClick={() => delPartner(index)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
+                      <div className="mr-lg-3"><a onClick={() => delPartner(spIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                     </div>
-                  </>
                 )
               })}
             </div>
@@ -419,15 +425,13 @@ const Configuration = (props) => {
               </div>
             </div>
             <div className="search_result bg-white ">
-              {taskOwners && taskOwners.length > 0 && taskOwners.map((owner, index) => {
+              {taskOwners && taskOwners.length > 0 && taskOwners.map((owner, toIndex) => {
                 return (
-                  <>
-                    <div className=" px-3">
+                    <div key={toIndex} className=" px-3">
                       <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{owner.firstname} {owner.lastname}</div>
                       <div>{owner.email} </div>
-                      <div className="mr-lg-3"><a onClick={() => delTaskOwner(index)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
+                      <div className="mr-lg-3"><a onClick={() => delTaskOwner(toIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                     </div>
-                  </>
                 )
               })}
             </div>
@@ -447,15 +451,13 @@ const Configuration = (props) => {
             <div className="search_result bg-white ">
               <div className=" px-3">
                 <div>
-                  {tpServices && tpServices.length > 0 && tpServices.map((tpService, index) => {
+                  {tpServices && tpServices.length > 0 && tpServices.map((tpService, tpIndex) => {
                     return (
-                      <>
-                        <label htmlFor={`f${index + 1}`}>
-                          <input type="checkbox" id={`f${index + 1}`} />
+                        <label key={tpIndex} htmlFor={`f${tpIndex + 1}`}>
+                          <input type="checkbox" id={`f${tpIndex + 1}`} onClick={()=> onSelectTPS(tpIndex) }/>
                           <img className="mx-1" src="assets/img/aws.jpeg" alt="" height="20" width="20" />
                           <span>{tpService.name}</span>
                         </label>
-                      </>
                     )
                   })}
                 </div>

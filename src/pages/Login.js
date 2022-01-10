@@ -22,7 +22,7 @@ const Login = (props) => {
     let res = await ApiService.post(payload.type,payload,Login);
     if(res && res.message == "Success"){
         SetCookie('currentUser',JSON.stringify(res.results))
-        if(res.results.user.is_onboard == 'Y'){
+        if(res.results.user.is_onboard == 'N'){
           navigate('/onboarding')
         }else{
           navigate('/home')
