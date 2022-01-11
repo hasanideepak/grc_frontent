@@ -31,7 +31,7 @@ const Configuration = (props) => {
   }, [])
 
   const getThirdPartySefvice = () => {
-    let tpsArr = [{ id: 1, name: "AWS" }, { id: 2, name: "GCS" }, { id: 3, name: "Azure" }]
+    let tpsArr = [{ id: 1, name: "AWS" }]
     setTpServices(oldVal => {
       return [...tpsArr]
     })
@@ -528,7 +528,7 @@ const Configuration = (props) => {
                 <div className="mr-2 add_member">Select Third Party Service</div>
                   <div className="w-25 mr-2">
                     <select id="tpsSelectInput" name="" className="form-control" onChange={(e) => clearData("access_token") }>
-                      <option value="">Select Role</option>
+                      <option value="">Select Service</option>
                       {selectedTPS && selectedTPS.length > 0 && selectedTPS.map((selTPS, sTpsIndex) => {
                         return (
                           <option key={sTpsIndex} value={selTPS.id}>{selTPS.name}</option>
