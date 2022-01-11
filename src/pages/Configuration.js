@@ -13,6 +13,7 @@ const Configuration = (props) => {
   const [members, setMembers] = useState([])
   const [servicePartners, setServicePartners] = useState([])
   const [taskOwners, setTaskOwners] = useState([])
+  const [tpsAccessTokens, setAccessToken] = useState([])
   const navigate = useNavigate()
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
@@ -30,7 +31,7 @@ const Configuration = (props) => {
   }, [])
 
   const getThirdPartySefvice = () => {
-    let tpsArr = [{ id: 1, name: "AWS" },{ id: 2, name: "GCS" },{ id: 3, name: "Azure" }]
+    let tpsArr = [{ id: 1, name: "AWS" }, { id: 2, name: "GCS" }, { id: 3, name: "Azure" }]
     setTpServices(oldVal => {
       return [...tpsArr]
     })
@@ -107,7 +108,7 @@ const Configuration = (props) => {
       return false;
     }
     let memListArr = Object.assign([], members);
-    memListArr.push({ email: memEmail, role: memRole.name,roleId:memRole.id })
+    memListArr.push({ email: memEmail, role: memRole.name, roleId: memRole.id })
     setMembers(oldVal => {
       return [...memListArr]
     })
@@ -199,23 +200,73 @@ const Configuration = (props) => {
       return [...tempArr]
     })
   }
-  const onSelectTPS = (index = null) => {
+  const onSelectTPS = (event = null, index = null) => {
     if (index == null) {
       return false;
     }
+    let tpsCheckInput = event.target
+    let tpsCheck = tpsCheckInput.checked
     let tempArr = selectedTPS;
-    if(selectedTPS.includes(tpServices[index])){
-
-    }else{
-
+    let tempArrIds = tempArr.map(tps => tps.id)
+    if (tpsCheck) {
+      if (!tempArrIds.includes(tpServices[index].id)) {
+        tempArr.push(tpServices[index])
+      }
+    } else {
+      let arrIndex = tempArrIds.indexOf(tpServices[index].id)
+      if (arrIndex != -1) {
+        tempArr.splice(arrIndex, 1)
+      }
     }
-    // setSelTPS
     setSelTPS(oldVal => {
       return [...tempArr]
     })
+
   }
 
-  console.log(accountsList)
+  const addAccessToken = () => {
+    let tokenInput = document.getElementById("tpsAccessToken")
+    let tpsSelectInput = document.getElementById("tpsSelectInput")
+    let token = tokenInput.value
+    let selTPS = selectedTPS.find(tps => tps.id == tpsSelectInput.value)
+    if (!token || !selTPS) {
+      return false;
+    }
+    
+    let accessTokensArr = Object.assign([], tpsAccessTokens);
+    accessTokensArr.push(Object.assign(selTPS,{accessToken:token}))
+    setAccessToken(oldVal => {
+      return [...accessTokensArr]
+    })
+    tokenInput.value = ""
+    tpsSelectInput.value = ""
+
+  }
+  const clearData = (type = null) => {
+    if (type == null) {
+      return false;
+    }
+    if(type == "access_token"){
+      let tokenInput = document.getElementById("tpsAccessToken")
+      tokenInput.value = ""
+    }
+  }
+
+  const delToken = (index = null) => {
+    if (index == null) {
+      return false;
+    }
+    let tempArr = [];
+    for (let atIndex in tpsAccessTokens) {
+      if (index == atIndex) {
+        continue
+      }
+      tempArr.push(tpsAccessTokens[atIndex])
+    }
+    setAccessToken(oldVal => {
+      return [...tempArr]
+    })
+  }
 
   // console.log(watch("email")); // watch input value by passing the name of it
 
@@ -245,11 +296,11 @@ const Configuration = (props) => {
             <div className="search_result bg-white ">
               {accountsList && accountsList.length > 0 && accountsList.map((account, accIndex) => {
                 return (
-                    <div key={accIndex} className=" px-3">
-                      <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{account.name}</div>
-                      <div>{account.project} </div>
-                      {/* <div className="mr-lg-3"><a href="#"> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div> */}
-                    </div>
+                  <div key={accIndex} className=" px-3">
+                    <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{account.name}</div>
+                    <div>{account.project} </div>
+                    {/* <div className="mr-lg-3"><a href="#"> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div> */}
+                  </div>
                 )
               })}
             </div>
@@ -318,11 +369,11 @@ const Configuration = (props) => {
                 <div>
                   {frameWorks && frameWorks.length > 0 && frameWorks.map((frameWork, fwIndex) => {
                     return (
-                        <label key={fwIndex} htmlFor={`f${fwIndex + 1}`}>
-                          <input type="checkbox" id={`f${fwIndex + 1}`} />
-                          <img className="mx-1" src="assets/img/m1.svg" alt="" height="20" width="20" />
-                          <span>{frameWork.name}</span>
-                        </label>
+                      <label key={fwIndex} htmlFor={`f${fwIndex + 1}`}>
+                        <input type="checkbox" id={`f${fwIndex + 1}`} />
+                        <img className="mx-1" src="assets/img/m1.svg" alt="" height="20" width="20" />
+                        <span>{frameWork.name}</span>
+                      </label>
                     )
                   })}
                 </div>
@@ -352,7 +403,7 @@ const Configuration = (props) => {
                     <option value="">Select Role</option>
                     {memberRoles && memberRoles.length > 0 && memberRoles.map((role, mrIndex) => {
                       return (
-                          <option key={mrIndex} value={role.id}>{role.name}</option>
+                        <option key={mrIndex} value={role.id}>{role.name}</option>
                       )
                     })}
                   </select>
@@ -363,11 +414,11 @@ const Configuration = (props) => {
             <div className="search_result bg-white ">
               {members && members.length > 0 && members.map((member, mIndex) => {
                 return (
-                    <div key={mIndex} className="px-3">
-                      <div className="flex-grow-1 ml-lg-3">{member.email}</div>
-                      <div>{member.role} </div>
-                      <div className="mr-lg-3"><a onClick={() => delMember(mIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
-                    </div>
+                  <div key={mIndex} className="px-3">
+                    <div className="flex-grow-1 ml-lg-3">{member.email}</div>
+                    <div>{member.role} </div>
+                    <div className="mr-lg-3"><a onClick={() => delMember(mIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
+                  </div>
                 )
               })}
             </div>
@@ -395,11 +446,11 @@ const Configuration = (props) => {
             <div className="search_result bg-white ">
               {servicePartners && servicePartners.length > 0 && servicePartners.map((partner, spIndex) => {
                 return (
-                    <div key={spIndex} className=" px-3">
-                      <div className="flex-grow-1 ">{partner.fullname} </div>
-                      <div className="ml-lg-3 ml-md-0 ">{partner.email}</div>
-                      <div className="mr-lg-3"><a onClick={() => delPartner(spIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
-                    </div>
+                  <div key={spIndex} className=" px-3">
+                    <div className="flex-grow-1 ">{partner.fullname} </div>
+                    <div className="ml-lg-3 ml-md-0 ">{partner.email}</div>
+                    <div className="mr-lg-3"><a onClick={() => delPartner(spIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
+                  </div>
                 )
               })}
             </div>
@@ -427,11 +478,11 @@ const Configuration = (props) => {
             <div className="search_result bg-white ">
               {taskOwners && taskOwners.length > 0 && taskOwners.map((owner, toIndex) => {
                 return (
-                    <div key={toIndex} className=" px-3">
-                      <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{owner.firstname} {owner.lastname}</div>
-                      <div>{owner.email} </div>
-                      <div className="mr-lg-3"><a onClick={() => delTaskOwner(toIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
-                    </div>
+                  <div key={toIndex} className=" px-3">
+                    <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{owner.firstname} {owner.lastname}</div>
+                    <div>{owner.email} </div>
+                    <div className="mr-lg-3"><a onClick={() => delTaskOwner(toIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
+                  </div>
                 )
               })}
             </div>
@@ -453,11 +504,11 @@ const Configuration = (props) => {
                 <div>
                   {tpServices && tpServices.length > 0 && tpServices.map((tpService, tpIndex) => {
                     return (
-                        <label key={tpIndex} htmlFor={`f${tpIndex + 1}`}>
-                          <input type="checkbox" id={`f${tpIndex + 1}`} onClick={()=> onSelectTPS(tpIndex) }/>
-                          <img className="mx-1" src="assets/img/aws.jpeg" alt="" height="20" width="20" />
-                          <span>{tpService.name}</span>
-                        </label>
+                      <label key={tpIndex} htmlFor={`f${tpIndex + 1}`}>
+                        <input type="checkbox" id={`f${tpIndex + 1}`} onClick={(e) => onSelectTPS(e, tpIndex)} />
+                        <img className="mx-1" src="assets/img/aws.jpeg" alt="" height="20" width="20" />
+                        <span>{tpService.name}</span>
+                      </label>
                     )
                   })}
                 </div>
@@ -471,11 +522,34 @@ const Configuration = (props) => {
               Access Token
             </a>
           </div>
-          <div id="cp6" className="collapse" data-parent="#accordion">
-            <div className="card-body"> <p>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-              aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat
-              craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-            </p>
+          <div id="cp6" className="card-body p-0 collapse bg-pink" data-parent="#accordion">
+            <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
+              <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
+                <div className="mr-2 add_member">Select Third Party Service</div>
+                  <div className="w-25 mr-2">
+                    <select id="tpsSelectInput" name="" className="form-control" onChange={(e) => clearData("access_token") }>
+                      <option value="">Select Role</option>
+                      {selectedTPS && selectedTPS.length > 0 && selectedTPS.map((selTPS, sTpsIndex) => {
+                        return (
+                          <option key={sTpsIndex} value={selTPS.id}>{selTPS.name}</option>
+                        )
+                      })}
+                    </select>
+                  </div>
+                  <div className="flex-grow-1 mr-2 w-75"><input id="tpsAccessToken" type="text" className="form-control" placeholder="Access Token" /></div>
+                <div><a onClick={() => addAccessToken()} className=" info"> <img src="/assets/img/plus.svg" alt="" className="plus" /> </a></div>
+              </div>
+            </div>
+            <div className="search_result bg-white ">
+              {tpsAccessTokens && tpsAccessTokens.length > 0 && tpsAccessTokens.map((accToken, atIndex) => {
+                return (
+                  <div key={atIndex} className="px-3">
+                    <div className="flex-grow-1 ml-lg-3">{accToken.name}</div>
+                    <div>***************{accToken.accessToken.substr(accToken.accessToken.length - 3,3)} </div>
+                    <div className="mr-lg-3"><a onClick={() => delToken(atIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
