@@ -4,6 +4,13 @@ import { SetCookie, GetCookie } from "../helpers/Helper";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/partials/Header";
 import { useState } from "react";
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+import 'bootstrap-daterangepicker/daterangepicker.css';
+import moment from "moment";
+
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import { Calendar } from 'react-date-range';
 const TaskManager = (props) => {
   const [viewType, setViewType] = useState({ board: true })
   const navigate = useNavigate()
@@ -20,6 +27,25 @@ const TaskManager = (props) => {
       SetCookie('currentUser', JSON.stringify(res.data))
       navigate('/home')
     }
+  }
+
+  const selectionRange = {
+    'Today': [moment(), moment()],
+    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+    'This Month': [moment().startOf('month'), moment().endOf('month')],
+    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+ }
+
+  const handleSelect = (ranges) =>{
+    console.log(ranges);
+    // {
+    //   selection: {
+    //     startDate: [native Date Object],
+    //     endDate: [native Date Object],
+    //   }
+    // }
   }
 
   const changeView = (view = "") => {
@@ -56,8 +82,14 @@ const TaskManager = (props) => {
 
 
               </div>
-              <div>
-                <input type="text" className="form-control border-0" name="date" placeholder="Select Date" />
+              <div className="Position-relative">
+                <DateRangePicker
+                    initialSettings={{ startDate: '1/1/2014', endDate: '3/1/2014',ranges:selectionRange }}
+                  >
+                  <input id="drpicker" type="text" className="form-control border-0" name="date" placeholder="Select Date" />
+                </DateRangePicker>
+                
+                
                 <i className="fa fa-calendar"></i>
               </div>
               <div>
@@ -745,9 +777,15 @@ const TaskManager = (props) => {
                           <li className="page-item"><a href="#" className="page-link">Complete</a></li>
                         </ul>
                       </div>
-                      <div id="calendarTools">dfsadf</div>
+                      {/* <div id="calendarTools">dfsadf</div> */}
                     </div>
-                    <div id="calendar"></div>
+                    <div id="calendar">
+                      <Calendar
+                        date={new Date()}
+                        onChange={handleSelect}
+                        className="customDateLayout w-100 position-relative"
+                      />
+                    </div>
                   </>
                 )
               }

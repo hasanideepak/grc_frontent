@@ -5,3 +5,73 @@
     top:5px;
     right: 18px;
 }
+
+/* calender design css start */
+.customDateLayout .rdrMonth{
+    width: 100% !important;
+}
+.customDateLayout .rdrMonthPicker select,
+.customDateLayout .rdrYearPicker select{
+    -webkit-appearance: none;
+    pointer-events: none;
+    border: none;
+    background: none;
+    width: 60px;
+    padding: 5px;
+    text-align: center;
+}
+/* .customDateLayout .rdrMonthPicker select{
+    text-align: right;
+} */
+.customDateLayout .rdrMonthAndYearWrapper{
+    width: 175px;
+    position: absolute;
+    top: -85px;
+    right: 0;
+}
+.customDateLayout .rdrWeekDays{
+    background: #EDD8DD 0% 0% no-repeat padding-box;
+    border-radius: 10px 10px 0px 0px;
+    opacity: 1;
+}
+.customDateLayout .rdrWeekDays .rdrWeekDay{
+    color: #000000;
+    height: 36px;
+}
+
+.customDateLayout .rdrDays .rdrDay{
+    width: 155px;
+    height: 130px;
+}
+.customDateLayout .rdrDays .rdrDay span{
+    border-radius: 0;
+}
+.customDateLayout .rdrNextPrevButton{
+    background: none;
+    margin: 0;
+    width: 15px;
+}
+/* .customDateLayout .rdrNextPrevButton i{
+    border: none;
+} */
+.customDateLayout .rdrNextPrevButton.rdrPprevButton i{
+    border-right: 3px solid;
+    border-bottom: 3px solid;
+    border-left: none;
+    height: 13px;
+    width: 12px;
+    transform: rotate(130deg);
+    margin: 0;
+    margin-left: 5px;
+}
+.customDateLayout .rdrNextPrevButton.rdrNextButton i{
+    border-right: 3px solid;
+    border-bottom: 3px solid;
+    border-left: none;
+    height: 13px;
+    width: 12px;
+    transform: rotate(-45deg);
+    margin: 0;
+    margin-left: -2px;
+}
+/* calender design css end */
