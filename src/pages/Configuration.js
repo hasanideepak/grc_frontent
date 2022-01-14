@@ -6,6 +6,7 @@ import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
 const Configuration = (props) => {
   const [accountsList, setAccountsList] = useState([])
+  const [addFrameWorksList, setAddFrameWorksList] = useState([])
   const [frameWorks, setFrameWorks] = useState([])
   const [tpServices, setTpServices] = useState([])
   const [selectedTPS, setSelTPS] = useState([])
@@ -126,6 +127,54 @@ const Configuration = (props) => {
       })
       accInput.value = ""
       accProjectInput.value = ""
+    }else{
+
+    }
+    
+  }
+
+  const addToFrameWorkList = (ev = null, index = null) => {
+    if(ev == null || index == null || !frameWorks[index]){
+      return
+    }
+
+    let obj = frameWorks[index]
+    let tempArr = addFrameWorksList;
+    tempArr.push(obj)
+    setAddFrameWorksList(oldVal =>{
+      return [...tempArr]
+    })
+    console.log(addFrameWorksList)
+
+  }
+  const removeFromFrameworkList = (ev = null, index = null) => {
+    if(ev == null || index == null || !frameWorks[index]){
+      return
+    }
+
+    let obj = frameWorks[index]
+    let tempArr = addFrameWorksList;
+    let tempArrIndex = tempArr.indexOf(obj)
+    tempArr.splice(tempArrIndex,1)
+    setAddFrameWorksList(oldVal =>{
+      return [...tempArr]
+    })
+  }
+
+  const addProjectFramework = async() => {
+    setFormSbmt(true)
+    setFormRes({staus:false,err:false,data:{}})
+    setErrorMsg(false)
+    if (addFrameWorksList.length == 0) {
+      return false;
+    }
+    let payloadUrl = "configuration/addProjectFrameworks"
+    let method = "POST";
+    let frmwrkIds = addFrameWorksList.map(({id}) => id)
+    let formData = { project_name: accountsList[0].project_name,framework_ids:frmwrkIds }
+    let res = await ApiService.fetchData(payloadUrl, method,formData);
+    if (res && res.message == "Success") {
+
     }else{
 
     }
@@ -380,64 +429,17 @@ const Configuration = (props) => {
             </a>
             <div className="ml-auto action_item position-absolute">
               <a href="#" className="btn btn-outline-primary btn-sm">Update</a>
-              <a href="#" className="btn btn-primary btn-sm ml-2">Save</a>
+              <a onClick={() => addProjectFramework()} className="btn btn-primary btn-sm ml-2">Save</a>
             </div>
           </div>
           <div id="cp1" className="card-body p-0 collapse bg-pink" data-parent="#accordion">
-
-            {/* <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
-              <div className="d-flex  align-items-center justify-content-start  flex-lg-row  ">
-              <div className="mr-2 add_member">SELECT FRAMEWORK</div>
-                <div className="multiselect w-25 mr-2">
-                  <div className="selectBox">
-                    <select className="form-control">
-                      <option>Select an option</option>
-                    </select>
-                    <div className={`overSelect`}></div>
-                  </div>
-                  <div id="checkboxes">
-                    <label htmlFor="one">
-                      <input type="checkbox" id="one" />
-                      <img src="assets/img/m1.svg" alt="" height="20" width="20" />
-                      <span>PCI</span>
-                    </label>
-                    <label htmlFor="two">
-                      <input type="checkbox" id="two" />
-                      <img src="assets/img/m2.svg" alt="" height="20" width="20" />
-                      <span>HIPAA</span>
-                    </label>
-                    <label htmlFor="three">
-                      <input type="checkbox" id="three" />
-                      <img src="assets/img/m3.svg" alt="" height="20" width="20" />
-                      <span>ISO</span>
-                    </label>
-                    <label htmlFor="four">
-                      <input type="checkbox" id="four" />
-                      <img src="assets/img/m4.svg" alt="" height="20" width="20" />
-                      <span>CCPA</span>
-                    </label>
-                    <label htmlFor="five">
-                      <input type="checkbox" id="five" />
-                      <img src="assets/img/m5.svg" alt="" height="20" width="20" />
-                      <span>DSS</span>
-                    </label>
-                    <label htmlFor="six">
-                      <input type="checkbox" id="six" />
-                      <img src="assets/img/m6.svg" alt="" height="20" width="20" />
-                      <span>GDPR</span>
-                    </label>
-                  </div>
-                </div>
-                <div><a href="" className=" info"> <img src="assets/img/plus.svg" alt="" className="plus" /> </a></div>
-              </div>
-            </div> */}
             <div className="search_result bg-white ">
               <div className=" px-3">
                 <div>
                   {frameWorks && frameWorks.length > 0 && frameWorks.map((frameWork, fwIndex) => {
                     return (
                       <label key={fwIndex} htmlFor={`f${fwIndex + 1}`}>
-                        <input type="checkbox" id={`f${fwIndex + 1}`} />
+                        <input type="checkbox" id={`f${fwIndex + 1}`} onClick={(e)=> e.target.checked ? addToFrameWorkList(e,fwIndex) : removeFromFrameworkList(e,fwIndex)} />
                         <img className="mx-1" src="assets/img/m1.svg" alt="" height="20" width="20" />
                         <span>{frameWork.name}</span>
                       </label>
