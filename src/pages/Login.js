@@ -78,7 +78,6 @@ const Login = (props) => {
                       <a href="#" className="link">forget password?</a>
                     </div>
                     <button className="btn btn-primary btn-block mb-lg-4 mb-md-4 mb-2" type="submit"> sign in</button>
-                    <p className="text-center fw-600">Don’t have an account? <a href="" className="link">Signup</a></p>
                   </form>
                 </div>
               </div>
