@@ -171,7 +171,7 @@ const Configuration = (props) => {
     let payloadUrl = "configuration/addProjectFrameworks"
     let method = "POST";
     let frmwrkIds = addFrameWorksList.map(({id}) => id)
-    let formData = { project_name: accountsList[0].project_name,framework_ids:frmwrkIds }
+    let formData = { project_id: accountsList[0].project_id,framework_ids:frmwrkIds }
     let res = await ApiService.fetchData(payloadUrl, method,formData);
     if (res && res.message == "Success") {
 
