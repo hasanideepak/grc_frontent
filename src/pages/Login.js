@@ -40,10 +40,10 @@ const Login = (props) => {
           <div className="logo">
             <img src="/assets/img/logo.svg" alt="logo" className="img-fluid" />
           </div>
-          <div className="userProfile">
+          {/* <div className="userProfile">
             <h6>Welcome Back!</h6>
             <img src="/assets/img/userProfile.png" alt="profile" className="img-fluid" />
-          </div>
+          </div> */}
         </div>
         <div className="align-items-center d-flex row hv-100">
           <div className="col-md-8 col-lg-8 col-12 offset-md-2 col-xl-8 offset-xl-2 offset-lg-3 loginForm">

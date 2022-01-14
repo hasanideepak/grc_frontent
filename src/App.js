@@ -13,7 +13,7 @@ const Dashboard = lazy(()=> import("./pages/Dashboard"))
 const EvidenceManager = lazy(()=> import("./pages/EvidenceManager"))
 const Onboarding = lazy(()=> import("./pages/Onboarding"))
 const TaskManager = lazy(()=> import("./pages/TaskManager"))
-
+const getAuthUser = IsAuthenticated(true)
 function App() {
   return (
     
@@ -46,10 +46,10 @@ function App() {
                   <Route path="/" element={<RouterOutlet layout={Layout} />}>
                     <Route exact path="/home" element={<Home />}></Route>
                     <Route  path="/dashboard" element={<Dashboard />}></Route>
-                    <Route  path="/onboarding" element={<Configuration />}></Route>
+                    <Route  path="/onboarding" element={<Configuration user={getAuthUser} />}></Route>
                     <Route  path="/task-manager" element={<TaskManager /> }></Route>
                     <Route  path="/evidence-manager" element={<EvidenceManager /> }></Route>
-                    <Route  path="/configuration" element={<Configuration /> }></Route>
+                    <Route  path="/configuration" element={<Configuration user={getAuthUser} /> }></Route>
                   </Route>
 
 
@@ -68,7 +68,6 @@ function App() {
 function RouterOutlet({layout:Layout,...rest}){
   let location = window.location.pathname
   let {isPublic = false,roles = 'admin'} = rest
-  let getAuthUser = IsAuthenticated(true)
   let isAuth = (isPublic || (!isPublic && getAuthUser.isLoggedIn)) ? true : false;
   return isAuth ? (
       <Layout location={location}>

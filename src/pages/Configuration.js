@@ -10,20 +10,27 @@ const Configuration = (props) => {
   const [tpServices, setTpServices] = useState([])
   const [selectedTPS, setSelTPS] = useState([])
   const [memberRoles, setMemberRoles] = useState([])
+  const [ownerRoles, setOwnerRoles] = useState([])
   const [members, setMembers] = useState([])
   const [servicePartners, setServicePartners] = useState([])
   const [taskOwners, setTaskOwners] = useState([])
   const [tpsAccessTokens, setAccessToken] = useState([])
   const navigate = useNavigate()
+
+  // const { register, handleSubmit, watch, formState: { errors } } = useForm(); // initialize the hook
+  const [formSubmitted,setFormSbmt] = useState(false)
+  const [formRes,setFormRes] = useState({staus:false,err:false,data:{}})
+  const [ errorMsg,setErrorMsg ] = useState(false);
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
-
-
   useEffect(() => {
     if (frameWorks.length == 0) {
       fetchInfo("frameworks")
     }
-    if (frameWorks.length == 0) {
+    if (memberRoles.length == 0) {
       fetchInfo("member_roles")
+    }
+    if (ownerRoles.length == 0) {
+      fetchInfo("owner_roles")
     }
     if (tpServices.length == 0) {
       getThirdPartySefvice()
@@ -51,7 +58,11 @@ const Configuration = (props) => {
       method = "GET";
     }
     if (type == 'member_roles') {
-      payloadUrl = 'reference/getRoles'
+      payloadUrl = 'reference/getDepartments/Y'
+      method = "GET";
+    }
+    if (type == 'owner_roles') {
+      payloadUrl = 'reference/getDepartments/N'
       method = "GET";
     }
 
@@ -64,6 +75,11 @@ const Configuration = (props) => {
       }
       if (type == "member_roles") {
         setMemberRoles(oldVal => {
+          return [...res.results]
+        })
+      }
+      if (type == "owner_roles") {
+        setOwnerRoles(oldVal => {
           return [...res.results]
         })
       }
@@ -88,18 +104,37 @@ const Configuration = (props) => {
     }
   }
 
-  const addAccount = () => {
-    let accName = document.getElementById("accName").value
-    let accProject = document.getElementById("accProject").value
+  const addAccount = async() => {
+    setFormSbmt(true)
+    setFormRes({staus:false,err:false,data:{}})
+    setErrorMsg(false)
+    let accInput = document.getElementById("accName");
+    let accProjectInput = document.getElementById("accProject");
+    let accName = accInput.value
+    let accProject = accProjectInput.value
     if (!accName || !accProject) {
       return false;
     }
-    let accListArr = [{ name: accName, project: accProject }]
-    setAccountsList(oldVal => {
-      return [...accListArr]
-    })
+    let payloadUrl = "configuration/setupAccount"
+    let method = "POST";
+    let formData = { account_name: accName, project_name: accProject,org_id:props?.user?.currentUser?.org_id }
+    let res = await ApiService.fetchData(payloadUrl, method,formData);
+    if (res && res.message == "Success") {
+      let accListArr = [Object.assign(formData, {project_id:res.project_id})]
+      setAccountsList(oldVal => {
+        return [...accListArr]
+      })
+      accInput.value = ""
+      accProjectInput.value = ""
+    }else{
+
+    }
+    
   }
-  const addMember = () => {
+  const addMember = async() => {
+    setFormSbmt(true)
+    setFormRes({staus:false,err:false,data:{}})
+    setErrorMsg(false)
     let memEmailInput = document.getElementById("memberEmail")
     let memRoleInput = document.getElementById("memberRole")
     let memEmail = memEmailInput.value
@@ -107,14 +142,22 @@ const Configuration = (props) => {
     if (!memEmail || !memRole) {
       return false;
     }
-    let memListArr = Object.assign([], members);
-    memListArr.push({ email: memEmail, role: memRole.name, roleId: memRole.id })
-    setMembers(oldVal => {
-      return [...memListArr]
-    })
-    memEmailInput.value = ""
-    memRoleInput.value = ""
 
+    let payloadUrl = "configuration/addKeyMember"
+    let method = "POST";
+    let formData = { email: memEmail, role: memRole.name, department_id: memRole.id, project_id:accountsList[0].project_id,org_id:props?.user?.currentUser?.org_id }
+    let res = await ApiService.fetchData(payloadUrl, method,formData);
+    if (res && res.message == "Success") {
+      let memListArr = Object.assign([], members);
+      memListArr.push(formData)
+      setMembers(oldVal => {
+        return [...memListArr]
+      })
+      memEmailInput.value = ""
+      memRoleInput.value = ""
+    }else{
+
+    }
   }
   const delMember = (index = null) => {
     if (index == null) {
@@ -132,7 +175,10 @@ const Configuration = (props) => {
     })
   }
 
-  const addPartner = () => {
+  const addPartner = async() => {
+    setFormSbmt(true)
+    setFormRes({staus:false,err:false,data:{}})
+    setErrorMsg(false)
     let partnerFnInput = document.getElementById("partnerFullname")
     let partnerEmailInput = document.getElementById("partnerEmail")
     let partnerFn = partnerFnInput.value
@@ -140,13 +186,22 @@ const Configuration = (props) => {
     if (!partnerFn || !partnerEmail) {
       return false;
     }
-    let listArr = Object.assign([], servicePartners);
-    listArr.push({ fullname: partnerFn, email: partnerEmail })
-    setServicePartners(oldVal => {
-      return [...listArr]
-    })
-    partnerFnInput.value = ""
-    partnerEmailInput.value = ""
+
+    let payloadUrl = "configuration/addKeyMember"
+    let method = "POST";
+    let formData = { fullname: partnerFn, email: partnerEmail, project_id:accountsList[0].project_id }
+    let res = await ApiService.fetchData(payloadUrl, method,formData);
+    if (res && res.message == "Success") {
+      let listArr = Object.assign([], servicePartners);
+      listArr.push(formData)
+      setServicePartners(oldVal => {
+        return [...listArr]
+      })
+      partnerFnInput.value = ""
+      partnerEmailInput.value = ""
+    }else{
+
+    }
 
   }
   const delPartner = (index = null) => {
@@ -165,7 +220,10 @@ const Configuration = (props) => {
     })
   }
 
-  const addTaskOwner = () => {
+  const addTaskOwner = async() => {
+    setFormSbmt(true)
+    setFormRes({staus:false,err:false,data:{}})
+    setErrorMsg(false)
     let toFnInput = document.getElementById("toFirstname")
     let toLnInput = document.getElementById("toLastname")
     let toEmailInput = document.getElementById("toEmail")
@@ -175,14 +233,23 @@ const Configuration = (props) => {
     if (!toFn || !toLn || !toEmail) {
       return false;
     }
-    let listArr = Object.assign([], taskOwners);
-    listArr.push({ firstname: toFn, lastname: toLn, email: toEmail })
-    setTaskOwners(oldVal => {
-      return [...listArr]
-    })
-    toFnInput.value = ""
-    toLnInput.value = ""
-    toEmailInput.value = ""
+
+    let payloadUrl = "configuration/addKeyMember"
+    let method = "POST";
+    let formData = { firstname: toFn, lastname: toLn, email: toEmail , project_id:accountsList[0].project_id,org_id:props?.user?.currentUser?.org_id }
+    let res = await ApiService.fetchData(payloadUrl, method,formData);
+    if (res && res.message == "Success") {
+      let listArr = Object.assign([], taskOwners);
+      listArr.push(formData)
+      setTaskOwners(oldVal => {
+        return [...listArr]
+      })
+      toFnInput.value = ""
+      toLnInput.value = ""
+      toEmailInput.value = ""
+    }else{
+
+    }
 
   }
   const delTaskOwner = (index = null) => {
@@ -281,15 +348,15 @@ const Configuration = (props) => {
             </a>
             <div className="ml-auto action_item position-absolute">
               {/* <a href="#" className="btn btn-outline-primary btn-sm">Update</a> */}
-              <a onClick={() => addAccount()} className="btn btn-primary btn-sm ml-2">Save</a>
+              <a onClick={() => addAccount()} className={`btn btn-primary btn-sm ml-2 ${accountsList.length > 0 ? 'd-none' : ''}`} >Save</a>
             </div>
           </div>
           <div id="cp0" className="card-body p-0 collapse show bg-pink" data-parent="#accordion">
 
             <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
               <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
-                <div className="flex-grow-1 mr-2 w-75"><input id="accName" type="text" className="form-control" placeholder="Enter Account name" /></div>
-                <div className="flex-grow-1 mr-2 w-75"><input id="accProject" type="text" className="form-control" placeholder="Enter Project" /></div>
+                <div className="flex-grow-1 mr-2 w-75"><input id="accName" type="text" className="form-control" placeholder="Enter Account name" disabled={accountsList.length > 0} /></div>
+                <div className="flex-grow-1 mr-2 w-75"><input id="accProject" type="text" className="form-control" placeholder="Enter Project" disabled={accountsList.length > 0} /></div>
                 {/* <div><a href="" className=" info"> <img src="assets/img/plus.svg" alt="" className="plus" /> </a></div> */}
               </div>
             </div>
@@ -297,8 +364,8 @@ const Configuration = (props) => {
               {accountsList && accountsList.length > 0 && accountsList.map((account, accIndex) => {
                 return (
                   <div key={accIndex} className=" px-3">
-                    <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{account.name}</div>
-                    <div>{account.project} </div>
+                    <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{account.account_name}</div>
+                    <div>{account.project_name} </div>
                     {/* <div className="mr-lg-3"><a href="#"> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div> */}
                   </div>
                 )
@@ -472,6 +539,16 @@ const Configuration = (props) => {
                 <div className="flex-grow-1 mr-2 w-75"><input id="toFirstname" type="text" className="form-control" placeholder="Enter Firstname" /></div>
                 <div className="flex-grow-1 mr-2 w-75"><input id="toLastname" type="text" className="form-control" placeholder="Enter Lastname" /></div>
                 <div className="flex-grow-1 mr-2 w-75"><input id="toEmail" type="text" className="form-control" placeholder="Enter Email Address" /></div>
+                <div className="flex-grow-1 mr-2 w-75">
+                  <select name="" id="ownerRole" className="form-control">
+                    <option value="">Select Owner Role</option>
+                    {ownerRoles && ownerRoles.length > 0 && ownerRoles.map((role, orIndex) => {
+                      return (
+                        <option key={orIndex} value={role.id}>{role.name}</option>
+                      )
+                    })}
+                  </select>
+                </div>
                 <div><a onClick={() => addTaskOwner()} className=" info"> <img src="assets/img/plus.svg" alt="" className="plus" /> </a></div>
               </div>
             </div>

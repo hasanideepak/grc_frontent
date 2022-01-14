@@ -83,19 +83,20 @@ class ApiService {
         }
         try {
             let formData = new FormData();
-            if(formType != 'form'){
+            if(formType == 'form'){
               if(Object.keys(data).length > 0){
                 for (let [key, value] of Object.entries(data)) {
                   formData.append(key,value)
                 }
               }
             }else{
-              formData = data
+              formData = JSON.stringify(data)
             }
             
             let config = {
                 method: method,
                 // body: formData,
+                headers:{'Content-Type': 'application/json'},
               }
             if(method == 'POST' || method == 'PATCH'){
               config.body = formData
