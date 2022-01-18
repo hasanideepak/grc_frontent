@@ -7,9 +7,7 @@ class ApiService {
           let {req} = Component.apiObj
           isServer = !!req
         }
-        console.log(type)
         try {
-
             // let token = encryptData(new Date().getTime());
             let config = {
                 method: 'POST',

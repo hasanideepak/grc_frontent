@@ -1,14 +1,12 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
 import { SetCookie, GetCookie } from "../helpers/Helper";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import crypto from 'crypto'
-import l_banner2 from "../assets/img/l_banner2.png"
 const Login = (props) => {
   const navigate = useNavigate()
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const onSubmit = async (data) => {
-    console.log(data);
     if(!data.email || data.email == '' || !data.password || data.password == '' ){
       return false
     };
@@ -21,11 +19,11 @@ const Login = (props) => {
     payload.url = "auth/login"
     let res = await ApiService.post(payload.type,payload,Login);
     if(res && res.message == "Success"){
-        SetCookie('currentUser',JSON.stringify(res.results))
+        let setcookie = SetCookie('currentUser',JSON.stringify(res.results))
         if(res.results.user.is_onboard == 'N'){
-          navigate('/onboarding')
+          navigate('/onboarding', { replace: true })
         }else{
-          navigate('/home')
+          navigate('/home', { replace: true })
         }
         
     }
@@ -75,7 +73,7 @@ const Login = (props) => {
                       <label htmlFor="" className="checkbox">
                         <input type="checkbox" /> Remember me
                       </label>
-                      <a href="#" className="link">forget password?</a>
+                      <Link to="/forgotpassword" className="link" >Forget password?</Link>
                     </div>
                     <button className="btn btn-primary btn-block mb-lg-4 mb-md-4 mb-2" type="submit"> sign in</button>
                   </form>

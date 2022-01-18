@@ -19,9 +19,9 @@ const Configuration = (props) => {
   const navigate = useNavigate()
 
   // const { register, handleSubmit, watch, formState: { errors } } = useForm(); // initialize the hook
-  const [formSubmitted,setFormSbmt] = useState(false)
-  const [formRes,setFormRes] = useState({staus:false,err:false,data:{}})
-  const [ errorMsg,setErrorMsg ] = useState(false);
+  const [formSubmitted, setFormSbmt] = useState(false)
+  const [formRes, setFormRes] = useState({ staus: false, err: false, data: {} })
+  const [errorMsg, setErrorMsg] = useState(false);
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
   useEffect(() => {
     if (frameWorks.length == 0) {
@@ -34,8 +34,14 @@ const Configuration = (props) => {
       fetchInfo("owner_roles")
     }
     if (tpServices.length == 0) {
-      getThirdPartySefvice()
+      fetchInfo("get_tps")
     }
+    // if(accountsList.length == 0){
+    //   let accListArr = [{project_id: 1}]
+    //   setAccountsList(oldVal => {
+    //     return [...accListArr]
+    //   })
+    // }
   }, [])
 
   const getThirdPartySefvice = () => {
@@ -66,6 +72,10 @@ const Configuration = (props) => {
       payloadUrl = 'reference/getDepartments/N'
       method = "GET";
     }
+    if (type == 'get_tps') {
+      payloadUrl = 'reference/getThirdPartyConnectors'
+      method = "GET";
+    }
 
     let res = await ApiService.fetchData(payloadUrl, method);
     if (res && res.message == "Success") {
@@ -81,6 +91,11 @@ const Configuration = (props) => {
       }
       if (type == "owner_roles") {
         setOwnerRoles(oldVal => {
+          return [...res.results]
+        })
+      }
+      if (type == "get_tps") {
+        setTpServices(oldVal => {
           return [...res.results]
         })
       }
@@ -105,9 +120,9 @@ const Configuration = (props) => {
     }
   }
 
-  const addAccount = async() => {
+  const addAccount = async () => {
     setFormSbmt(true)
-    setFormRes({staus:false,err:false,data:{}})
+    setFormRes({ staus: false, err: false, data: {} })
     setErrorMsg(false)
     let accInput = document.getElementById("accName");
     let accProjectInput = document.getElementById("accProject");
@@ -118,84 +133,86 @@ const Configuration = (props) => {
     }
     let payloadUrl = "configuration/setupAccount"
     let method = "POST";
-    let formData = { account_name: accName, project_name: accProject,org_id:props?.user?.currentUser?.org_id }
-    let res = await ApiService.fetchData(payloadUrl, method,formData);
+    let formData = { account_name: accName, project_name: accProject, org_id: props?.user?.currentUser?.org_id }
+    let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
-      let accListArr = [Object.assign(formData, {project_id:res.project_id})]
+      let accListArr = [Object.assign(formData, { project_id: res.project_id })]
       setAccountsList(oldVal => {
         return [...accListArr]
       })
       accInput.value = ""
       accProjectInput.value = ""
-    }else{
+    } else {
 
     }
-    
+
   }
 
   const addToFrameWorkList = (ev = null, index = null) => {
-    if(ev == null || index == null || !frameWorks[index]){
+    if (ev == null || index == null || !frameWorks[index]) {
       return
     }
 
     let obj = frameWorks[index]
     let tempArr = addFrameWorksList;
     tempArr.push(obj)
-    setAddFrameWorksList(oldVal =>{
+    setAddFrameWorksList(oldVal => {
       return [...tempArr]
     })
     console.log(addFrameWorksList)
 
   }
   const removeFromFrameworkList = (ev = null, index = null) => {
-    if(ev == null || index == null || !frameWorks[index]){
+    if (ev == null || index == null || !frameWorks[index]) {
       return
     }
 
     let obj = frameWorks[index]
     let tempArr = addFrameWorksList;
     let tempArrIndex = tempArr.indexOf(obj)
-    tempArr.splice(tempArrIndex,1)
-    setAddFrameWorksList(oldVal =>{
+    tempArr.splice(tempArrIndex, 1)
+    setAddFrameWorksList(oldVal => {
       return [...tempArr]
     })
   }
 
-  const addProjectFramework = async() => {
+  const addProjectFramework = async () => {
     setFormSbmt(true)
-    setFormRes({staus:false,err:false,data:{}})
+    setFormRes({ staus: false, err: false, data: {} })
     setErrorMsg(false)
     if (addFrameWorksList.length == 0) {
       return false;
     }
     let payloadUrl = "configuration/addProjectFrameworks"
     let method = "POST";
-    let frmwrkIds = addFrameWorksList.map(({id}) => id)
-    let formData = { project_id: accountsList[0].project_id,framework_ids:frmwrkIds }
-    let res = await ApiService.fetchData(payloadUrl, method,formData);
+    let frmwrkIds = addFrameWorksList.map(({ id }) => id)
+    let formData = { project_id: accountsList[0].project_id, framework_ids: frmwrkIds }
+    let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
 
-    }else{
+    } else {
 
     }
-    
+
   }
-  const addMember = async() => {
+  const addMember = async () => {
     setFormSbmt(true)
-    setFormRes({staus:false,err:false,data:{}})
+    setFormRes({ staus: false, err: false, data: {} })
     setErrorMsg(false)
     let memEmailInput = document.getElementById("memberEmail")
     let memRoleInput = document.getElementById("memberRole")
     let memEmail = memEmailInput.value
     let memRole = memberRoles[memRoleInput.value]
+    console.log(memberRoles,memRoleInput.value)
+    console.log(memEmail,memRole)
     if (!memEmail || !memRole) {
       return false;
     }
 
     let payloadUrl = "configuration/addKeyMember"
     let method = "POST";
-    let formData = { email: memEmail, role: memRole.name, department_id: memRole.id, project_id:accountsList[0].project_id,org_id:props?.user?.currentUser?.org_id }
-    let res = await ApiService.fetchData(payloadUrl, method,formData);
+    let formData = { email: memEmail, role: memRole.name, department_id: memRole.id, project_id: accountsList[0].project_id, org_id: props?.user?.currentUser?.org_id }
+    let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let memListArr = Object.assign([], members);
       memListArr.push(formData)
@@ -204,7 +221,7 @@ const Configuration = (props) => {
       })
       memEmailInput.value = ""
       memRoleInput.value = ""
-    }else{
+    } else {
 
     }
   }
@@ -224,9 +241,9 @@ const Configuration = (props) => {
     })
   }
 
-  const addPartner = async() => {
+  const addPartner = async () => {
     setFormSbmt(true)
-    setFormRes({staus:false,err:false,data:{}})
+    setFormRes({ staus: false, err: false, data: {} })
     setErrorMsg(false)
     let partnerFnInput = document.getElementById("partnerFullname")
     let partnerEmailInput = document.getElementById("partnerEmail")
@@ -236,10 +253,10 @@ const Configuration = (props) => {
       return false;
     }
 
-    let payloadUrl = "configuration/addKeyMember"
+    let payloadUrl = "configuration/addServicePartner"
     let method = "POST";
-    let formData = { fullname: partnerFn, email: partnerEmail, project_id:accountsList[0].project_id }
-    let res = await ApiService.fetchData(payloadUrl, method,formData);
+    let formData = { full_name: partnerFn, email: partnerEmail, project_id: accountsList[0].project_id }
+    let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let listArr = Object.assign([], servicePartners);
       listArr.push(formData)
@@ -248,7 +265,7 @@ const Configuration = (props) => {
       })
       partnerFnInput.value = ""
       partnerEmailInput.value = ""
-    }else{
+    } else {
 
     }
 
@@ -269,9 +286,9 @@ const Configuration = (props) => {
     })
   }
 
-  const addTaskOwner = async() => {
+  const addTaskOwner = async () => {
     setFormSbmt(true)
-    setFormRes({staus:false,err:false,data:{}})
+    setFormRes({ staus: false, err: false, data: {} })
     setErrorMsg(false)
     let toFnInput = document.getElementById("toFirstname")
     let toLnInput = document.getElementById("toLastname")
@@ -283,10 +300,10 @@ const Configuration = (props) => {
       return false;
     }
 
-    let payloadUrl = "configuration/addKeyMember"
+    let payloadUrl = "configuration/addTaskOwner"
     let method = "POST";
-    let formData = { firstname: toFn, lastname: toLn, email: toEmail , project_id:accountsList[0].project_id,org_id:props?.user?.currentUser?.org_id }
-    let res = await ApiService.fetchData(payloadUrl, method,formData);
+    let formData = { first_name: toFn, last_name: toLn, email: toEmail, project_id: accountsList[0].project_id, org_id: props?.user?.currentUser?.org_id }
+    let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let listArr = Object.assign([], taskOwners);
       listArr.push(formData)
@@ -296,7 +313,7 @@ const Configuration = (props) => {
       toFnInput.value = ""
       toLnInput.value = ""
       toEmailInput.value = ""
-    }else{
+    } else {
 
     }
 
@@ -316,13 +333,14 @@ const Configuration = (props) => {
       return [...tempArr]
     })
   }
-  const onSelectTPS = (event = null, index = null) => {
+  const onSelectTPS = async (event = null, index = null) => {
     if (index == null) {
       return false;
     }
     let tpsCheckInput = event.target
     let tpsCheck = tpsCheckInput.checked
     let tempArr = selectedTPS;
+    let apiType = selectedTPS.length == 0 ? 'add' : 'update'
     let tempArrIds = tempArr.map(tps => tps.id)
     if (tpsCheck) {
       if (!tempArrIds.includes(tpServices[index].id)) {
@@ -334,9 +352,21 @@ const Configuration = (props) => {
         tempArr.splice(arrIndex, 1)
       }
     }
-    setSelTPS(oldVal => {
-      return [...tempArr]
-    })
+    if (apiType == 'add') {
+      let payloadUrl = "configuration/addTaskOwner"
+      let method = "POST";
+      let formData = { project_id: accountsList[0].project_id, connector_id: tempArr[0] }
+      let res = await ApiService.fetchData(payloadUrl, method, formData);
+      if (res && res.message == "Success") {
+        setSelTPS(oldVal => {
+          return [...tempArr]
+        })
+      } else {
+
+      }
+
+    }
+
 
   }
 
@@ -348,9 +378,9 @@ const Configuration = (props) => {
     if (!token || !selTPS) {
       return false;
     }
-    
+
     let accessTokensArr = Object.assign([], tpsAccessTokens);
-    accessTokensArr.push(Object.assign(selTPS,{accessToken:token}))
+    accessTokensArr.push(Object.assign(selTPS, { accessToken: token }))
     setAccessToken(oldVal => {
       return [...accessTokensArr]
     })
@@ -362,7 +392,7 @@ const Configuration = (props) => {
     if (type == null) {
       return false;
     }
-    if(type == "access_token"){
+    if (type == "access_token") {
       let tokenInput = document.getElementById("tpsAccessToken")
       tokenInput.value = ""
     }
@@ -391,16 +421,17 @@ const Configuration = (props) => {
       <Header />
       <div id="accordion" className="accordion pl-lg-3 pr-lg-3 accordianSec">
         <div className="card ">
-          <div className="card-header" data-toggle="collapse" data-parent="#accordion" href="#cp0">
-            <a className="card-title">
-              Account Setup
-            </a>
-            <div className="ml-auto action_item position-absolute">
-              {/* <a href="#" className="btn btn-outline-primary btn-sm">Update</a> */}
+          <div class="d-flex align-items-center">
+            <div class="card-header flex-grow-1" data-toggle="collapse" href="#cp0" aria-expanded="true">
+              <a className="card-title">
+                Account Setup
+              </a>
+            </div>
+            <div className="ml-auto action_item">
               <a onClick={() => addAccount()} className={`btn btn-primary btn-sm ml-2 ${accountsList.length > 0 ? 'd-none' : ''}`} >Save</a>
             </div>
           </div>
-          <div id="cp0" className="card-body p-0 collapse show bg-pink" data-parent="#accordion">
+          <div id="cp0" className="card-body p-0 collapse show" data-parent="#accordion">
 
             <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
               <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
@@ -423,23 +454,24 @@ const Configuration = (props) => {
           </div>
         </div>
         <div className="card ">
-          <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp1">
-            <a className="card-title">
-              Framework Setup
-            </a>
-            <div className="ml-auto action_item position-absolute">
-              <a href="#" className="btn btn-outline-primary btn-sm">Update</a>
+          <div class="d-flex align-items-center">
+            <div class="card-header flex-grow-1 collapsed" data-toggle="collapse" href="#cp1" aria-expanded="true">
+              <a className="card-title">
+                Framework Setup
+              </a>
+            </div>
+            <div className="ml-auto action_item">
               <a onClick={() => addProjectFramework()} className="btn btn-primary btn-sm ml-2">Save</a>
             </div>
           </div>
-          <div id="cp1" className="card-body p-0 collapse bg-pink" data-parent="#accordion">
+          <div id="cp1" className="card-body p-0 collapse" data-parent="#accordion">
             <div className="search_result bg-white ">
               <div className=" px-3">
                 <div>
                   {frameWorks && frameWorks.length > 0 && frameWorks.map((frameWork, fwIndex) => {
                     return (
                       <label key={fwIndex} htmlFor={`f${fwIndex + 1}`}>
-                        <input type="checkbox" id={`f${fwIndex + 1}`} onClick={(e)=> e.target.checked ? addToFrameWorkList(e,fwIndex) : removeFromFrameworkList(e,fwIndex)} />
+                        <input type="checkbox" id={`f${fwIndex + 1}`} onClick={(e) => e.target.checked ? addToFrameWorkList(e, fwIndex) : removeFromFrameworkList(e, fwIndex)} />
                         <img className="mx-1" src="assets/img/m1.svg" alt="" height="20" width="20" />
                         <span>{frameWork.name}</span>
                       </label>
@@ -452,17 +484,17 @@ const Configuration = (props) => {
         </div>
 
         <div className="card ">
-          <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp2" aria-expanded="true">
-            <a className="card-title">
-              Key Members
-            </a>
-            <div className="ml-auto action_item position-absolute">
-              <a href="#" className="btn btn-outline-primary btn-sm">Update</a>
+          <div class="d-flex align-items-center">
+            <div class="card-header flex-grow-1 collapsed" data-toggle="collapse" href="#cp2" aria-expanded="true">
+              <a className="card-title">
+                Key Members
+              </a>
+            </div>
+            <div className="ml-auto action_item">
               <a href="#" className="btn btn-primary btn-sm ml-2">Save</a>
-
             </div>
           </div>
-          <div id="cp2" className="card-body p-0 collapse bg-pink" data-parent="#accordion">
+          <div id="cp2" className="card-body p-0 collapse" data-parent="#accordion">
             <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
               <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
                 <div className="mr-2 add_member">ADD MEMBER</div>
@@ -472,12 +504,12 @@ const Configuration = (props) => {
                     <option value="">Select Role</option>
                     {memberRoles && memberRoles.length > 0 && memberRoles.map((role, mrIndex) => {
                       return (
-                        <option key={mrIndex} value={role.id}>{role.name}</option>
+                        <option key={mrIndex} value={mrIndex}>{role.name}</option>
                       )
                     })}
                   </select>
                 </div>
-                <div><a onClick={() => addMember()} className=" info"> <img src="/assets/img/plus.svg" alt="" className="plus" /> </a></div>
+                <div><a onClick={() => addMember()} className="info"> <img src="/assets/img/plus.svg" alt="" className="plus" /> </a></div>
               </div>
             </div>
             <div className="search_result bg-white ">
@@ -494,16 +526,17 @@ const Configuration = (props) => {
           </div>
         </div>
         <div className="card">
-          <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp3">
-            <a className="card-title">
-              Invite Service Partners
-            </a>
-            <div className="ml-auto action_item position-absolute">
-              <a href="#" className="btn btn-outline-primary btn-sm">Update</a>
+          <div class="d-flex align-items-center">
+            <div class="card-header flex-grow-1 collapsed" data-toggle="collapse" href="#cp3" aria-expanded="true">
+              <a className="card-title">
+                Invite Service Partners
+              </a>
+            </div>
+            <div className="ml-auto action_item">
               <a href="#" className="btn btn-primary btn-sm ml-2">Save</a>
             </div>
           </div>
-          <div id="cp3" className="card-body p-0 collapse bg-pink" data-parent="#accordion">
+          <div id="cp3" className="card-body p-0 collapse" data-parent="#accordion">
             <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
               <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
                 <div className="mr-2 add_member">ADD PARTNER</div>
@@ -516,7 +549,7 @@ const Configuration = (props) => {
               {servicePartners && servicePartners.length > 0 && servicePartners.map((partner, spIndex) => {
                 return (
                   <div key={spIndex} className=" px-3">
-                    <div className="flex-grow-1 ">{partner.fullname} </div>
+                    <div className="flex-grow-1 ">{partner.full_name} </div>
                     <div className="ml-lg-3 ml-md-0 ">{partner.email}</div>
                     <div className="mr-lg-3"><a onClick={() => delPartner(spIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                   </div>
@@ -526,16 +559,17 @@ const Configuration = (props) => {
           </div>
         </div>
         <div className="card">
-          <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp4">
-            <a className="card-title">
-              Invite Task Owners
-            </a>
-            <div className="ml-auto action_item position-absolute">
-              <a href="#" className="btn btn-outline-primary btn-sm">Update</a>
+          <div class="d-flex align-items-center">
+            <div class="card-header flex-grow-1 collapsed" data-toggle="collapse" href="#cp4" aria-expanded="true">
+              <a className="card-title">
+                Invite Task Owners
+              </a>
+            </div>
+            <div className="ml-auto action_item">
               <a href="#" className="btn btn-primary btn-sm ml-2">Save</a>
             </div>
           </div>
-          <div id="cp4" className="card-body p-0 collapse bg-pink" data-parent="#accordion">
+          <div id="cp4" className="card-body p-0 collapse" data-parent="#accordion">
             <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
               <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
                 <div className="flex-grow-1 mr-2 w-75"><input id="toFirstname" type="text" className="form-control" placeholder="Enter Firstname" /></div>
@@ -558,7 +592,7 @@ const Configuration = (props) => {
               {taskOwners && taskOwners.length > 0 && taskOwners.map((owner, toIndex) => {
                 return (
                   <div key={toIndex} className=" px-3">
-                    <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{owner.firstname} {owner.lastname}</div>
+                    <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{owner.first_name} {owner.last_name}</div>
                     <div>{owner.email} </div>
                     <div className="mr-lg-3"><a onClick={() => delTaskOwner(toIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                   </div>
@@ -568,16 +602,17 @@ const Configuration = (props) => {
           </div>
         </div>
         <div className="card">
-          <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp5">
-            <a className="card-title">
-              Third Party Services
-            </a>
+          <div class="d-flex align-items-center">
+            <div class="card-header flex-grow-1 collapsed" data-toggle="collapse" href="#cp5" aria-expanded="true">
+              <a className="card-title">
+                Third Party Services
+              </a>
+            </div>
             <div className="ml-auto action_item">
-              <a href="#" className="btn btn-outline-primary btn-sm">Update</a>
               <a href="#" className="btn btn-primary btn-sm ml-2">Save</a>
             </div>
           </div>
-          <div id="cp5" className="card-body p-0 collapse bg-pink" data-parent="#accordion">
+          <div id="cp5" className="card-body p-0 collapse" data-parent="#accordion">
             <div className="search_result bg-white ">
               <div className=" px-3">
                 <div>
@@ -586,7 +621,7 @@ const Configuration = (props) => {
                       <label key={tpIndex} htmlFor={`f${tpIndex + 1}`}>
                         <input type="checkbox" id={`f${tpIndex + 1}`} onClick={(e) => onSelectTPS(e, tpIndex)} />
                         <img className="mx-1" src="assets/img/aws.jpeg" alt="" height="20" width="20" />
-                        <span>{tpService.name}</span>
+                        <span>{tpService.value}</span>
                       </label>
                     )
                   })}
@@ -596,26 +631,28 @@ const Configuration = (props) => {
           </div>
         </div>
         <div className="card">
-          <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp6">
-            <a className="card-title">
-              Access Token
-            </a>
+          <div class="d-flex align-items-center">
+            <div class="card-header flex-grow-1 collapsed" data-toggle="collapse" href="#cp5" aria-expanded="true">
+              <a className="card-title">
+                Access Token
+              </a>
+            </div>
           </div>
-          <div id="cp6" className="card-body p-0 collapse bg-pink" data-parent="#accordion">
+          <div id="cp6" className="card-body p-0 collapse" data-parent="#accordion">
             <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
               <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
                 <div className="mr-2 add_member">Select Third Party Service</div>
-                  <div className="w-25 mr-2">
-                    <select id="tpsSelectInput" name="" className="form-control" onChange={(e) => clearData("access_token") }>
-                      <option value="">Select Service</option>
-                      {selectedTPS && selectedTPS.length > 0 && selectedTPS.map((selTPS, sTpsIndex) => {
-                        return (
-                          <option key={sTpsIndex} value={selTPS.id}>{selTPS.name}</option>
-                        )
-                      })}
-                    </select>
-                  </div>
-                  <div className="flex-grow-1 mr-2 w-75"><input id="tpsAccessToken" type="text" className="form-control" placeholder="Access Token" /></div>
+                <div className="w-25 mr-2">
+                  <select id="tpsSelectInput" name="" className="form-control" onChange={(e) => clearData("access_token")}>
+                    <option value="">Select Service</option>
+                    {selectedTPS && selectedTPS.length > 0 && selectedTPS.map((selTPS, sTpsIndex) => {
+                      return (
+                        <option key={sTpsIndex} value={selTPS.id}>{selTPS.name}</option>
+                      )
+                    })}
+                  </select>
+                </div>
+                <div className="flex-grow-1 mr-2 w-75"><input id="tpsAccessToken" type="text" className="form-control" placeholder="Access Token" /></div>
                 <div><a onClick={() => addAccessToken()} className=" info"> <img src="/assets/img/plus.svg" alt="" className="plus" /> </a></div>
               </div>
             </div>
@@ -624,7 +661,7 @@ const Configuration = (props) => {
                 return (
                   <div key={atIndex} className="px-3">
                     <div className="flex-grow-1 ml-lg-3">{accToken.name}</div>
-                    <div>***************{accToken.accessToken.substr(accToken.accessToken.length - 3,3)} </div>
+                    <div>***************{accToken.accessToken.substr(accToken.accessToken.length - 3, 3)} </div>
                     <div className="mr-lg-3"><a onClick={() => delToken(atIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                   </div>
                 )

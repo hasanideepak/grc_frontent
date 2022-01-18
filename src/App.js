@@ -4,6 +4,7 @@ import './App.css';
 import Layout from './components/layouts/MainLayout';
 import PublicLayout from './components/layouts/PublicLayout';
 import { IsAuthenticated } from './helpers/Auth';
+import ForgotPassword from './pages/ForgotPassword';
 // import Login from './pages/Login';
 
 const Home = lazy(()=> import("./pages/Home"))
@@ -13,7 +14,7 @@ const Dashboard = lazy(()=> import("./pages/Dashboard"))
 const EvidenceManager = lazy(()=> import("./pages/EvidenceManager"))
 const Onboarding = lazy(()=> import("./pages/Onboarding"))
 const TaskManager = lazy(()=> import("./pages/TaskManager"))
-const getAuthUser = IsAuthenticated(true)
+const  getAuthUser = IsAuthenticated(true)
 function App() {
   return (
     
@@ -55,6 +56,7 @@ function App() {
 
                   <Route path="/" element={<RouterOutlet layout={PublicLayout} isPublic="true" />} >
                     <Route exact path="/login" element={<Login />}></Route>
+                    <Route exact path="/forgotpassword" element={<ForgotPassword />}></Route>
                   </Route>
 
                   
@@ -68,7 +70,9 @@ function App() {
 function RouterOutlet({layout:Layout,...rest}){
   let location = window.location.pathname
   let {isPublic = false,roles = 'admin'} = rest
+  let  getAuthUser = IsAuthenticated(true)
   let isAuth = (isPublic || (!isPublic && getAuthUser.isLoggedIn)) ? true : false;
+
   return isAuth ? (
       <Layout location={location}>
         <Outlet />

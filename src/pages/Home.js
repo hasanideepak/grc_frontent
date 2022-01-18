@@ -14,7 +14,6 @@ const Home = (props) =>{
         })
       }
     },[])
-  console.log(user)
   return (
     <>
       <Header />
