@@ -924,6 +924,7 @@ const Configuration = (props) => {
               <div className="px-3 labels">
                 <div className="flex-grow-1 ml-lg-3 ml-md-0">Fullname</div>
                 <div className="">Email </div>
+                {/* <div className="">Role </div> */}
                 <div className="mr-lg-3" style={{width:'20px'}}></div>
               </div>
               {taskOwners && taskOwners.length > 0 && taskOwners.map((owner, toIndex) => {
@@ -931,6 +932,7 @@ const Configuration = (props) => {
                   <div key={toIndex} className=" px-3">
                     <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{owner.first_name} {owner.last_name}</div>
                     <div>{owner.email} </div>
+                    {/* <div>{owner.department_name} </div> */}
                     <div className="mr-lg-3"><a onClick={() => delTaskOwner(toIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                   </div>
                 )
@@ -1026,8 +1028,14 @@ const Configuration = (props) => {
               }
             </div>
             <div className="search_result bg-white ">
+              <div className="px-3">
+                <div className="flex-grow-1 ml-lg-3">Third party service</div>
+                <div>Token </div>
+                <div className="mr-lg-3" style={{width:"20px"}}></div>
+              </div>
               {tpServices && tpServices.length > 0 && tpServices.map((tpsService, atIndex) => {
                 if(tpsService.is_selected == "Y" && tpsService.is_token_added == 'Y'){
+                  
                   return (
                     <div key={atIndex} className="px-3">
                       <div className="flex-grow-1 ml-lg-3">{tpsService.name}</div>
