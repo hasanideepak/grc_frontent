@@ -9,6 +9,20 @@
     right: 18px;
 }
 
+.accordion .card-header a > span.success_icon{
+    border-radius: 50%;
+    overflow: hidden;
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    background: #ffffff;
+}
+.accordion .card-header a > span.success_icon > i {
+    font-size: 18px;
+    color: #037e03;
+    line-height: 1;
+}
+
 /* calender design css start */
 .customDateLayout .rdrMonth{
     width: 100% !important;
