@@ -17,7 +17,7 @@ class ApiService {
             if(customHeader){
               config['headers']['token'] = ""
             }
-            config['headers']['apikey'] = "1aa84a38ddb5b29260878ff28dcececa";
+            config['headers']['apikey'] = process.env.REACT_APP_API_KEY;
             // if(customHeader || auth){
               if(!isServer){
                 let userData = GetCookie('currentUserValue')
@@ -109,7 +109,7 @@ class ApiService {
               }
               config['headers']['Authorization'] = authToken
             }
-            config['headers']['apikey'] = "1aa84a38ddb5b29260878ff28dcececa";
+            config['headers']['apikey'] = process.env.REACT_APP_API_KEY;
           const response = await fetch(`${process.env.REACT_APP_API_URL}${url}`,config);
           let res = await response.json();
           return res
