@@ -57,6 +57,7 @@ function App() {
                   <Route path="/" element={<RouterOutlet layout={PublicLayout} isPublic="true" />} >
                     <Route exact path="/login" element={<Login />}></Route>
                     <Route exact path="/forgotpassword" element={<ForgotPassword />}></Route>
+                    <Route exact path="/resetpassword" element={<ForgotPassword />}></Route>
                   </Route>
 
                   

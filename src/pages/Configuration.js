@@ -205,13 +205,18 @@ const Configuration = (props) => {
       })
       accInput.value = ""
       accProjectInput.value = ""
-      formRes = {status:true,err_status:false,error:{},msg:"Account added successfully"}
+      formRes = {status:true,err_status:false,type:"account",error:{},msg:"Account added successfully"}
       setFormRes(formRes)
     }else{
       formRes['err_status'] = true
+      formRes['error']['type'] = "account"
       formRes['error']['msg'] = "Something Went Wrong!"
       setFormRes(formRes)
     }
+    setTimeout(() => {
+      formRes = {status:false,err_status:false,error:{}}
+      setFormRes(formRes)
+    }, 3000);
 
   }
 
@@ -257,13 +262,18 @@ const Configuration = (props) => {
     let formData = { project_id: accountsList[0].project_id, framework_ids: addFrameWorksList }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
-      formRes = {status:true,err_status:false,error:{},msg:"Framework added successfully"}
+      formRes = {status:true,err_status:false,error:{},type:"framework",msg:"Framework added successfully"}
       setFormRes(formRes)
     } else {
       formRes['err_status'] = true
+      formRes['error']['type'] = "framework"
       formRes['error']['msg'] = "Something Went Wrong!"
       setFormRes(formRes)
     }
+    setTimeout(() => {
+      formRes = {status:false,err_status:false,error:{}}
+      setFormRes(formRes)
+    }, 3000);
 
   }
   const addMember = async () => {
@@ -302,17 +312,18 @@ const Configuration = (props) => {
       })
       memEmailInput.value = ""
       memRoleInput.value = ""
-      formRes = {status:true,err_status:false,error:{},msg:"Member added successfully"}
+      formRes = {status:true,err_status:false,error:{},type:"member",msg:"Member added successfully"}
       setFormRes(formRes)
-      setTimeout(() => {
-        formRes = {status:false,err_status:false,error:{}}
-        setFormRes(formRes)
-      }, 3000);
     } else {
       formRes['err_status'] = true
+      formRes['error']['type'] = "member"
       formRes['error']['msg'] = "Something Went Wrong!"
       setFormRes(formRes)
     }
+    setTimeout(() => {
+      formRes = {status:false,err_status:false,error:{}}
+      setFormRes(formRes)
+    }, 3000);
   }
   const delMember = async (index = null) => {
     if (index == null) {
@@ -371,17 +382,18 @@ const Configuration = (props) => {
       })
       partnerFnInput.value = ""
       partnerEmailInput.value = ""
-      formRes = {status:true,err_status:false,error:{},msg:"Member added successfully"}
+      formRes = {status:true,err_status:false,error:{},type:"partner",msg:"Member added successfully"}
       setFormRes(formRes)
-      setTimeout(() => {
-        formRes = {status:false,err_status:false,error:{}}
-        setFormRes(formRes)
-      }, 3000);
     } else {
       formRes['err_status'] = true
+      formRes['error']['type'] = "partner"
       formRes['error']['msg'] = "Something Went Wrong!"
       setFormRes(formRes)
     }
+    setTimeout(() => {
+      formRes = {status:false,err_status:false,error:{}}
+      setFormRes(formRes)
+    }, 3000);
 
   }
   const delPartner = async (index = null) => {
@@ -453,17 +465,18 @@ const Configuration = (props) => {
       toFnInput.value = ""
       toLnInput.value = ""
       toEmailInput.value = ""
-      formRes = {status:true,err_status:false,error:{},msg:"Task owner added successfully"}
+      formRes = {status:true,err_status:false,error:{},type:"owner",msg:"Task owner added successfully"}
       setFormRes(formRes)
-      setTimeout(() => {
-        formRes = {status:false,err_status:false,error:{}}
-        setFormRes(formRes)
-      }, 3000);
     } else {
       formRes['err_status'] = true
+      formRes['error']['type'] = "owner"
       formRes['error']['msg'] = "Something Went Wrong!"
       setFormRes(formRes)
     }
+    setTimeout(() => {
+      formRes = {status:false,err_status:false,error:{}}
+      setFormRes(formRes)
+    }, 3000);
 
   }
   const delTaskOwner = async (index = null) => {
@@ -571,17 +584,18 @@ const Configuration = (props) => {
       setTpServices(listArr)
       tokenInput.value = ""
       tpsSelectInput.value = ""
-      formRes = {status:true,err_status:false,error:{},msg:"Access token added successfully"}
+      formRes = {status:true,err_status:false,error:{},type:"atoken",msg:"Access token added successfully"}
       setFormRes(formRes)
-      setTimeout(() => {
-        formRes = {status:false,err_status:false,error:{}}
-        setFormRes(formRes)
-      }, 3000);
     } else {
       formRes['err_status'] = true
+      formRes['error']['type'] = "atoken"
       formRes['error']['msg'] = "Something Went Wrong!"
       setFormRes(formRes)
     }
+    setTimeout(() => {
+      formRes = {status:false,err_status:false,error:{}}
+      setFormRes(formRes)
+    }, 3000);
   }
   const clearData = (type = null) => {
     if (type == null) {
@@ -654,12 +668,12 @@ const Configuration = (props) => {
                 {/* <div><a href="" className=" info"> <img src="assets/img/plus.svg" alt="" className="plus" /> </a></div> */}
               </div>
               {
-                !formRes.status && formRes.err_status && formRes.error?.msg
+                !formRes.status && formRes.err_status && formRes.error?.type =="account" && formRes.error?.msg
                 ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
                 : ''
               }
               {
-                formRes.status && formRes.msg
+                formRes.status && formRes?.type == "account" && formRes.msg
                 ? <div className="text-success"><div>{formRes.msg}</div> </div>
                 : ''
               }
@@ -761,12 +775,12 @@ const Configuration = (props) => {
                 <div><a onClick={() => addMember()} className="info"> <img src="/assets/img/plus.svg" alt="" className="plus" /> </a></div>
               </div>
               {
-                !formRes.status && formRes.err_status && formRes.error?.msg
+                !formRes.status && formRes.err_status && formRes.error?.type =="member" && formRes.error?.msg
                 ? <div className="text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
                 : ''
               }
               {
-                formRes.status && formRes.msg
+                formRes.status && formRes?.type == "member" && formRes.msg
                 ? <div className="text-success mt-2"><div>{formRes.msg}</div> </div>
                 : ''
               }
@@ -827,12 +841,12 @@ const Configuration = (props) => {
                 <div><a onClick={() => addPartner()} className=" info"> <img src="/assets/img/plus.svg" alt="" className="plus" /> </a></div>
               </div>
               {
-                !formRes.status && formRes.err_status && formRes.error?.msg
+                !formRes.status && formRes.err_status && formRes.error?.type =="partner" && formRes.error?.msg
                 ? <div className="text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
                 : ''
               }
               {
-                formRes.status && formRes.msg
+                formRes.status && formRes?.type == "partner" && formRes.msg
                 ? <div className="text-success mt-2"><div>{formRes.msg}</div> </div>
                 : ''
               }
@@ -915,12 +929,12 @@ const Configuration = (props) => {
                 <div><a onClick={() => addTaskOwner()} className=" info"> <img src="assets/img/plus.svg" alt="" className="plus" /> </a></div>
               </div>
               {
-                !formRes.status && formRes.err_status && formRes.error?.msg
+                !formRes.status && formRes.err_status && formRes.error?.type =="owner" && formRes.error?.msg
                 ? <div className="text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
                 : ''
               }
               {
-                formRes.status && formRes.msg
+                formRes.status && formRes?.type == "owner" && formRes.msg
                 ? <div className="text-success mt-2"><div>{formRes.msg}</div> </div>
                 : ''
               }
@@ -1025,12 +1039,12 @@ const Configuration = (props) => {
                 <div><a onClick={() => addAccessToken()} className={`info `}> <img src="/assets/img/plus.svg" alt="" className="plus" /> </a></div>
               </div>
               {
-                !formRes.status && formRes.err_status && formRes.error?.msg
+                !formRes.status && formRes.err_status && formRes.error?.type =="atoken" && formRes.error?.msg
                 ? <div className="text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
                 : ''
               }
               {
-                formRes.status && formRes.msg
+                formRes.status && formRes?.type == "atoken" && formRes.msg
                 ? <div className="text-success mt-2"><div>{formRes.msg}</div> </div>
                 : ''
               }
