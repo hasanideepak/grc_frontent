@@ -6,7 +6,7 @@ import { useState } from "react";
 const ForgotPassword = (props) => {
   const navigate = useNavigate()
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const [viewType, setViewType] = useState("mail_sent")
+  const [viewType, setViewType] = useState("login")
   const [lastPayload, setLastPayload] = useState({})
   const onSubmit = async (data) => {
     if(!data.email || data.email == ''){

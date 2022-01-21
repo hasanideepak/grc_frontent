@@ -665,6 +665,11 @@ const Configuration = (props) => {
               }
             </div>
             <div className="search_result bg-white ">
+              <div className="px-3 h_labels">
+                <div className="flex-grow-1 ml-lg-3 ml-md-0 ">Account Name</div>
+                <div>Project Name </div>
+                {/* <div className="mr-lg-3"><a href="#"> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div> */}
+              </div>
               {accountsList && accountsList.length > 0 && accountsList.map((account, accIndex) => {
                 return (
                   <div key={accIndex} className=" px-3">
@@ -767,7 +772,7 @@ const Configuration = (props) => {
               }
             </div>
             <div className="search_result bg-white ">
-              <div className="px-3 labels">
+              <div className="px-3 h_labels">
                 <div className="flex-grow-1 ml-lg-3">Email</div>
                 <div>Role </div>
                 <div className="mr-lg-3" style={{width:'20px'}}></div>
@@ -804,7 +809,7 @@ const Configuration = (props) => {
               <div className="d-flex  align-items-start justify-content-between  flex-lg-row  ">
                 <div className="mr-2 add_member">ADD PARTNER</div>
                 <div className="mr-2 w-75">
-                  <input id="partnerFullname" type="text" className="form-control" placeholder="Fullname" />
+                  <input id="partnerFullname" type="text" className="form-control" placeholder="Name" />
                   {
                     formRes.err_status && formRes.error?.partnerFullname?.required
                     ? <div className="text-danger"><div>{formRes.error?.partnerFullname?.msg}</div> </div>
@@ -833,8 +838,8 @@ const Configuration = (props) => {
               }
             </div>
             <div className="search_result bg-white ">
-              <div className="px-3 labels">
-                <div className="flex-grow-1">Fullname</div>
+              <div className="px-3 h_labels">
+                <div className="flex-grow-1">Name</div>
                 <div className="ml-lg-3 ml-md-0">Email </div>
                 <div className="mr-lg-3" style={{width:'20px'}}></div>
               </div>
@@ -921,19 +926,22 @@ const Configuration = (props) => {
               }
             </div>
             <div className="search_result bg-white ">
-              <div className="px-3 labels">
-                <div className="flex-grow-1 ml-lg-3 ml-md-0">Fullname</div>
-                <div className="">Email </div>
+              <div className="px-3 h_labels">
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">Firstname</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">Lastname</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right">Role</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">Email</div>
                 {/* <div className="">Role </div> */}
-                <div className="mr-lg-3" style={{width:'20px'}}></div>
+                <div className="mr-lg-3 w20"></div>
               </div>
               {taskOwners && taskOwners.length > 0 && taskOwners.map((owner, toIndex) => {
                 return (
                   <div key={toIndex} className=" px-3">
-                    <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{owner.first_name} {owner.last_name}</div>
-                    <div>{owner.email} </div>
-                    {/* <div>{owner.department_name} </div> */}
-                    <div className="mr-lg-3"><a onClick={() => delTaskOwner(toIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 ">{owner.first_name}</div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">{owner.last_name}</div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right">{owner.department_name}</div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">{owner.email}</div>
+                    <div className="mr-lg-3 w20"><a onClick={() => delTaskOwner(toIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                   </div>
                 )
               })}
@@ -1028,7 +1036,7 @@ const Configuration = (props) => {
               }
             </div>
             <div className="search_result bg-white ">
-              <div className="px-3">
+              <div className="px-3 h_labels">
                 <div className="flex-grow-1 ml-lg-3">Third party service</div>
                 <div>Token </div>
                 <div className="mr-lg-3" style={{width:"20px"}}></div>
