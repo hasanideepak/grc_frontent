@@ -23,7 +23,7 @@ const Login = (props) => {
         if(res.results.user.is_onboard == 'N'){
           navigate('/onboarding', { replace: true })
         }else{
-          navigate('/home', { replace: true })
+          navigate('/dashboard', { replace: true })
         }
         
     }

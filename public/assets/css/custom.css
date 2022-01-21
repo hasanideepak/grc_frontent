@@ -12,6 +12,7 @@
 }
 .navbar-nav a{
     color: #ffffff !important;
+    cursor: pointer;
 }
 .select_labl{
     font-size: 14px;
