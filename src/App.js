@@ -5,6 +5,7 @@ import Layout from './components/layouts/MainLayout';
 import PublicLayout from './components/layouts/PublicLayout';
 import { IsAuthenticated } from './helpers/Auth';
 import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 // import Login from './pages/Login';
 
 const Home = lazy(()=> import("./pages/Home"))
@@ -57,7 +58,7 @@ function App() {
                   <Route path="/" element={<RouterOutlet layout={PublicLayout} isPublic="true" />} >
                     <Route exact path="/login" element={<Login />}></Route>
                     <Route exact path="/forgotpassword" element={<ForgotPassword />}></Route>
-                    {/* <Route exact path="/resetpassword" element={<ForgotPassword />}></Route> */}
+                    <Route exact path="/resetpassword/:token" element={<ResetPassword />}></Route>
                   </Route>
 
                   

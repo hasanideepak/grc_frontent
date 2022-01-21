@@ -8,25 +8,42 @@ const ForgotPassword = (props) => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const [viewType, setViewType] = useState("login")
   const [lastPayload, setLastPayload] = useState({})
+
+  const [formRes, setFormRes] = useState({ status: false, err_status: false, error: {} })
+  const [formSubmitted, setFormSbmt] = useState(false)
+
   const onSubmit = async (data) => {
+    let formRes =  {status: false, err_status: false, error: {} }
+    setFormRes(formRes)
     if(!data.email || data.email == ''){
       return false
     };
-    let payload = data
-    setLastPayload(payload)
-    payload.type = "forgot_pwd"
-    payload.url = "auth/forgotpassword"
-    let res = await ApiService.post(payload.type,payload,ForgotPassword);
+    setFormSbmt(true)
+    let payloadUrl = "auth/forgot_password"
+    let method = "POST";
+    let formData = {username:data.email}
+    setLastPayload(formData)
+    let res = await ApiService.fetchData(payloadUrl,method,formData);
     if(res && res.message == "Success"){
-      changeView("mail_sent");
+      formRes = {status:true,err_status:false,error:{},type:"reset_pass",msg:"Reset password mail sent successfully"}
+      setFormRes(formRes)
+      setTimeout(() => {
+        changeView("mail_sent");
+      }, 3000);
+    }else{
+      formRes['err_status'] = true
+      formRes['error']['type'] = "reset_pass"
+      formRes['error']['msg'] = "Something Went Wrong!"
+      setFormRes(formRes)
     }
+    setFormSbmt(false)
   }
 
   const resendLink = async () =>{
-    let payload = lastPayload
-    payload.type = "forgot_pwd"
-    payload.url = "auth/forgotpassword"
-    let res = await ApiService.post(payload.type,payload,ForgotPassword);
+    let payloadUrl = "auth/forgot_password"
+    let method = "POST";
+    let formData = lastPayload
+    let res = await ApiService.fetchData(payloadUrl,method,formData);
     if(res && res.message == "Success"){
       changeView("mail_sent");
     }
@@ -73,13 +90,24 @@ const ForgotPassword = (props) => {
                             <p>Enter your registered email below to receive password reset instruction</p>
                             <div className="form-group">
                               <label htmlFor="email">Email address</label>
-                              <input type="email" className="form-control" {...register("email")} name="email" autoComplete="off" defaultValue="" />
+                              <input type="email" className="form-control" {...register("email",{required:true})} name="email" autoComplete="off" defaultValue="" />
+                              {errors.email?.type === 'required' && <div className="error_block text-danger">*Email is required</div>}
                             </div>
                             <div className="d-flex justify-content-end form-group">
                               <span>Remember password? &nbsp;</span>
                               <Link to="/login" className="link" >Login</Link>
                             </div>
                             <button className="btn btn-primary btn-block mb-lg-4 mb-md-4 mb-2" type="submit"> Send</button>
+                            {
+                              !formRes.status && formRes.err_status && formRes.error?.type =="reset_pass" && formRes.error?.msg
+                              ? <div className="text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
+                              : ''
+                            }
+                            {
+                              formRes.status && formRes?.type == "reset_pass" && formRes.msg
+                              ? <div className="text-success mt-2"><div>{formRes.msg}</div> </div>
+                              : ''
+                            }
                           </form>
                         </div>
                       </>
