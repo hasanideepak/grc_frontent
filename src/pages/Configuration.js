@@ -799,7 +799,7 @@ const Configuration = (props) => {
             <div className="search_result bg-white ">
               <div className="px-3 h_labels">
                 <div className="flex-grow-1 ml-lg-3">Email</div>
-                <div>Role </div>
+                <div>Authority </div>
                 <div className="mr-lg-3" style={{width:'20px'}}></div>
               </div>
               {members && members.length > 0 && members.map((member, mIndex) => {
@@ -954,7 +954,7 @@ const Configuration = (props) => {
               <div className="px-3 h_labels">
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">Firstname</div>
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">Lastname</div>
-                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right">Role</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right">Authority</div>
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">Email</div>
                 {/* <div className="">Role </div> */}
                 <div className="mr-lg-3 w20"></div>
