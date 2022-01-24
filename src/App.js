@@ -4,17 +4,18 @@ import './App.css';
 import Layout from './components/layouts/MainLayout';
 import PublicLayout from './components/layouts/PublicLayout';
 import { IsAuthenticated } from './helpers/Auth';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
 // import Login from './pages/Login';
 
 const Home = lazy(()=> import("./pages/Home"))
 const Login = lazy(()=> import("./pages/Login"))
 const Configuration = lazy(()=> import("./pages/Configuration"))
+const ConfigurationScope = lazy(()=> import("./pages/ConfigurationScope"))
 const Dashboard = lazy(()=> import("./pages/Dashboard"))
 const EvidenceManager = lazy(()=> import("./pages/EvidenceManager"))
 const Onboarding = lazy(()=> import("./pages/Onboarding"))
 const TaskManager = lazy(()=> import("./pages/TaskManager"))
+const ForgotPassword = lazy(()=> import("./pages/ForgotPassword"))
+const ResetPassword = lazy(()=> import("./pages/ResetPassword"))
 const  getAuthUser = IsAuthenticated(true)
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
                     <Route  path="/task-manager" element={<TaskManager /> }></Route>
                     <Route  path="/evidence-manager" element={<EvidenceManager /> }></Route>
                     <Route  path="/configuration" element={<Configuration user={getAuthUser} /> }></Route>
+                    <Route  path="/onboarding_scope" element={<ConfigurationScope user={getAuthUser} /> }></Route>
                   </Route>
 
 

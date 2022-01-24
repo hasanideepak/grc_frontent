@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
 import { SetCookie, GetCookie } from "../helpers/Helper";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
 const Configuration = (props) => {
@@ -72,10 +72,10 @@ const Configuration = (props) => {
     //   method = "GET";
     // }
     else if (type == 'member_roles') {
-      payloadUrl = 'reference/getDepartments/Y'
+      payloadUrl = 'reference/getAuthorities/Y'
       method = "GET";
     }else if (type == 'owner_roles') {
-      payloadUrl = 'reference/getDepartments/N'
+      payloadUrl = 'reference/getAuthorities/N'
       method = "GET";
     }
     // else if (type == 'get_tps') {
@@ -253,15 +253,20 @@ const Configuration = (props) => {
     let formRes = {status:false,err_status:false,error:{}}
     setFormRes(formRes)
     setErrorMsg(false)
-    if (addFrameWorksList.length == 0) {
-      return false;
-    }
+    // if (addFrameWorksList.length == 0) {
+    //   return false;
+    // }
     let payloadUrl = "configuration/addProjectFrameworks"
     let method = "POST";
     // let frmwrkIds = addFrameWorksList.map(({ id }) => id)
     let formData = { project_id: accountsList[0].project_id, framework_ids: addFrameWorksList }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
+      let obj = getAllConfigs;
+      obj.frameWorks && obj.frameWorks.map(frameWork =>{
+          frameWork.is_selected = addFrameWorksList.includes(frameWork.id) ? "Y" : "N"
+      })
+      setAllConfigs(obj)
       formRes = {status:true,err_status:false,error:{},type:"framework",msg:"Framework added successfully"}
       setFormRes(formRes)
     } else {
@@ -301,7 +306,7 @@ const Configuration = (props) => {
 
     let payloadUrl = "configuration/addKeyMember"
     let method = "POST";
-    let formData = { email: memEmail, department_name: memRole.name, department_id: memRole.id, project_id: accountsList[0].project_id, org_id: props?.user?.currentUser?.org_id }
+    let formData = { email: memEmail, department_name: memRole.name, authority_id: memRole.id, project_id: accountsList[0].project_id, org_id: props?.user?.currentUser?.org_id }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let memListArr = Object.assign([], members);
@@ -453,7 +458,7 @@ const Configuration = (props) => {
 
     let payloadUrl = "configuration/addTaskOwner"
     let method = "POST";
-    let formData = { first_name: toFn, last_name: toLn, email: toEmail,department_name:oRole.name,department_id:oRole.id, project_id: accountsList[0].project_id, org_id: props?.user?.currentUser?.org_id }
+    let formData = { first_name: toFn, last_name: toLn, email: toEmail,department_name:oRole.name,authority_id:oRole.id, project_id: accountsList[0].project_id, org_id: props?.user?.currentUser?.org_id }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let listArr = Object.assign([], taskOwners);
@@ -534,15 +539,21 @@ const Configuration = (props) => {
     setFormRes(formRes)
     setErrorMsg(false)
     console.log(selectedTPS)
-    if (selectedTPS.length == 0) {
-      return false;
-    }
+    // if (selectedTPS.length == 0) {
+    //   return false;
+    // }
     let apiType = selectedTPS.length == 0 ? 'add' : 'update'
     let payloadUrl = "configuration/addThirdPartyConnector"
     let method = "POST";
     let formData = { project_id: accountsList[0].project_id, connector_ids: selectedTPS }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
+      let obj = tpServices || []
+      obj.map(service =>{
+        service.is_selected = selectedTPS.includes(service.id) ? "Y" : "N"
+      })
+      console.log(obj)
+      setTpServices(obj)
       formRes = {status:true,err_status:false,error:{},msg:"Framework added successfully"}
       setFormRes(formRes)
     } else {
@@ -1069,6 +1080,10 @@ const Configuration = (props) => {
               })}
             </div>
           </div>
+        </div>
+
+        <div className="d-flex justify-content-end yrscpe">
+          <Link to="/onboarding_scope" className="btn btn-primary submitBtn btn-lg">Define Your Scope</Link>
         </div>
       </div>
     </>
