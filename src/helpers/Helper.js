@@ -5,12 +5,11 @@ export const encryptData = (data = '') =>{
     if(data == ''){
         return data
     }
-    console.log(process.env.REACT_APP_ENCRYPT_KEY)
     let iv = crypto.randomBytes(16).toString('hex').slice(0, 16);
     let mykey = crypto.createCipheriv('aes-128-cbc', process.env.REACT_APP_ENCRYPT_KEY,iv);
     let token = mykey.update((data).toString(), 'utf8', 'hex')
     token += mykey.final('hex');
-
+    console.log(data,iv,mykey,token)
     return token
 }
 export const decryptData = (token = '') =>{

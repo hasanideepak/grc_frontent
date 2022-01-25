@@ -5,11 +5,11 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
 const ConfigurationScope = (props) => {
-  const {token = ''} = useParams()
+  const { token = '' } = useParams()
   // console.log(token)
   const orgId = props?.user?.currentUser?.org_id || 0;
-  // const projectId = decryptData(token).project_id || 0;
-  const projectId = 1;
+  const projectId = token;
+  // const projectId = 1;
   const [getAllScopes, setAllScopes] = useState({})
   const [accountsList, setAccountsList] = useState(null)
   const [addUtilitiesList, setUtilitiesList] = useState([])
@@ -77,12 +77,10 @@ const ConfigurationScope = (props) => {
     if (res && res.message == "Success") {
       if (type == 'all') {
         let obj = {
-          accounts_and_projects: res.accounts_and_projects,
-          frameWorks: res.frameworks,
-          keymembers: res.keymembers,
-          service_partners: res.service_partners,
-          task_owners: res.task_owners,
-          third_party_connectors: res.third_party_connectors,
+          peoples: res.peoples,
+          technology_assets: res.technology_assets,
+          third_party_utilities: res.third_party_utilities,
+          vendors: res.vendors,
         }
         //set accounts if added
 
@@ -111,31 +109,31 @@ const ConfigurationScope = (props) => {
       }
     }
   }
-  
+
   const addPeople = async () => {
     setFormSbmt(true)
     let formRes = { status: false, err_status: false, error: {} }
     setFormRes(formRes)
     setErrorMsg(false)
-    let empInput = document.getElementById("accName");
-    let consultantInput = document.getElementById("accProject");
+    let empInput = document.getElementById("empInput");
+    let consultantInput = document.getElementById("consultantInput");
     let employees = empInput.value
     let consultants = consultantInput.value
     if (!employees || !consultants) {
       // let formRes = {status:false,err_status:true,error:{}}
       formRes['err_status'] = true
       if (!employees) {
-        formRes['error']['account_name'] = { required: true, msg: "Account name is required!" }
+        formRes['error']['employees'] = { required: true, msg: "Employee is required!" }
       }
       if (!consultants) {
-        formRes['error']['project_name'] = { required: true, msg: "Project name is required!" }
+        formRes['error']['consultants'] = { required: true, msg: "Consultant is required!" }
       }
       setFormRes(formRes)
       return false;
     }
     let payloadUrl = "configuration/addPeople"
     let method = "POST";
-    let formData = { employees: employees, consultants: consultants, project_id:1}
+    let formData = { employees: employees, consultants: consultants, project_id: 1 }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       // let accListArr = [Object.assign(formData, { project_id: res.project_id })]
@@ -163,9 +161,9 @@ const ConfigurationScope = (props) => {
     let formRes = { status: false, err_status: false, error: {} }
     setFormRes(formRes)
     setErrorMsg(false)
-    let endPointInput = document.getElementById("accName");
-    let serversInput = document.getElementById("accProject");
-    let mobDevicesInput = document.getElementById("accProject");
+    let endPointInput = document.getElementById("epInput");
+    let serversInput = document.getElementById("serverInput");
+    let mobDevicesInput = document.getElementById("mdInput");
     let endpoints = endPointInput.value
     let servers = serversInput.value
     let mobileDevices = mobDevicesInput.value
@@ -173,20 +171,20 @@ const ConfigurationScope = (props) => {
       // let formRes = {status:false,err_status:true,error:{}}
       formRes['err_status'] = true
       if (!endpoints) {
-        formRes['error']['account_name'] = { required: true, msg: "Account name is required!" }
+        formRes['error']['endPoints'] = { required: true, msg: "End point is required!" }
       }
       if (!servers) {
-        formRes['error']['project_name'] = { required: true, msg: "Project name is required!" }
+        formRes['error']['servers'] = { required: true, msg: "Server is required!" }
       }
       if (!mobileDevices) {
-        formRes['error']['project_name'] = { required: true, msg: "Project name is required!" }
+        formRes['error']['mobileDevices'] = { required: true, msg: "Mobile Device is required!" }
       }
       setFormRes(formRes)
       return false;
     }
     let payloadUrl = "configuration/addTechnologyAssets"
     let method = "POST";
-    let formData = { endpoints: endpoints, servers: servers,mobile_devices:mobileDevices, project_id:1}
+    let formData = { endpoints: endpoints, servers: servers, mobile_devices: mobileDevices, project_id: 1 }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       // let accListArr = [Object.assign(formData, { project_id: res.project_id })]
@@ -195,7 +193,7 @@ const ConfigurationScope = (props) => {
       // })
       endPointInput.value = ""
       serversInput.value = ""
-      formRes = { status: true, err_status: false, type: "techAssets", error: {}, msg: "Account added successfully" }
+      formRes = { status: true, err_status: false, type: "techAssets", error: {}, msg: "Asset added successfully" }
       setFormRes(formRes)
     } else {
       formRes['err_status'] = true
@@ -215,26 +213,27 @@ const ConfigurationScope = (props) => {
     let formRes = { status: false, err_status: false, error: {} }
     setFormRes(formRes)
     setErrorMsg(false)
-    let vendorInput = document.getElementById("accName");
+    let vendorInput = document.getElementById("vendorInput");
     let vendor = vendorInput.value
     if (!vendor) {
       // let formRes = {status:false,err_status:true,error:{}}
       formRes['err_status'] = true
       if (!vendor) {
-        formRes['error']['account_name'] = { required: true, msg: "Account name is required!" }
+        formRes['error']['vendor'] = { required: true, msg: "Vandor name is required!" }
       }
       setFormRes(formRes)
       return false;
     }
     let payloadUrl = "configuration/addVendor"
     let method = "POST";
-    let formData = { vendor: vendor, project_id:1}
+    let formData = { vendor: vendor, project_id: 1 }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       // let accListArr = [Object.assign(formData, { project_id: res.project_id })]
       // setAccountsList(oldVal => {
       //   return [...accListArr]
       // })
+      fetchInfo("all")
       vendorInput.value = ""
       formRes = { status: true, err_status: false, type: "vendor", error: {}, msg: "Vendor added successfully" }
       setFormRes(formRes)
@@ -251,7 +250,7 @@ const ConfigurationScope = (props) => {
 
   }
 
-  const addToFrameWorkList = (ev = null, index = null) => {
+  const addToUtilityList = (ev = null, index = null) => {
     if (ev == null || index == null || !getAllScopes.frameWorks[index]) {
       return
     }
@@ -265,7 +264,7 @@ const ConfigurationScope = (props) => {
     console.log(addUtilitiesList)
 
   }
-  const removeFromFrameworkList = (ev = null, index = null) => {
+  const removeFromUtilityList = (ev = null, index = null) => {
     if (ev == null || index == null || !getAllScopes.frameWorks[index]) {
       return
     }
@@ -306,7 +305,7 @@ const ConfigurationScope = (props) => {
     }, 3000);
 
   }
-  
+
   const clearData = (type = null) => {
     if (type == null) {
       return false;
@@ -318,6 +317,21 @@ const ConfigurationScope = (props) => {
   }
 
   const delToken = (index = null) => {
+    if (index == null) {
+      return false;
+    }
+    let tempArr = [];
+    for (let atIndex in tpsAccessTokens) {
+      if (index == atIndex) {
+        continue
+      }
+      tempArr.push(tpsAccessTokens[atIndex])
+    }
+    setAccessToken(oldVal => {
+      return [...tempArr]
+    })
+  }
+  const delVendor = (index = null) => {
     if (index == null) {
       return false;
     }
@@ -348,7 +362,7 @@ const ConfigurationScope = (props) => {
 
             </div>
             <div className="ml-auto action_item">
-              <a href="javascript:void(0)" className="btn btn-primary btn-sm">Save</a>
+              <a onClick={() => addPeople()} className="btn btn-primary btn-sm">Save</a>
             </div>
           </div>
           <div id="cp1" className="collapse show" data-parent="#accordion" >
@@ -356,12 +370,34 @@ const ConfigurationScope = (props) => {
               <div className="row">
                 <div className="form-group col-md-6 formInline">
                   <label htmlFor="">Employees:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Employees" />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Employees" id="empInput" />
+                  {
+                    formRes.err_status && formRes.error?.employees?.required
+                      ? <div className="text-danger"><div>{formRes.error?.employees?.msg}</div> </div>
+                      : ''
+                  }
                 </div>
                 <div className="form-group col-md-6 formInline" >
                   <label htmlFor="" className="pl-xl-5">Consultant:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Consultant" />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Consultant" id="consultantInput" />
+                  {
+                    formRes.err_status && formRes.error?.consultants?.required
+                      ? <div className="text-danger"><div>{formRes.error?.consultants?.msg}</div> </div>
+                      : ''
+                  }
                 </div>
+              </div>
+              <div className="row">
+                {
+                  !formRes.status && formRes.err_status && formRes.error?.type == "people" && formRes.error?.msg
+                    ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
+                    : ''
+                }
+                {
+                  formRes.status && formRes?.type == "people" && formRes.msg
+                    ? <div className="text-success"><div>{formRes.msg}</div> </div>
+                    : ''
+                }
               </div>
             </div>
           </div>
@@ -374,7 +410,7 @@ const ConfigurationScope = (props) => {
               </a>
             </div>
             <div className="ml-auto action_item">
-              <a href="javascript:void(0)" className="btn btn-primary btn-sm">Save</a>
+              <a onClick={() => addTechnologyAssets()} className="btn btn-primary btn-sm">Save</a>
             </div>
           </div>
           <div id="cp2" className="collapse" data-parent="#accordion" >
@@ -382,20 +418,48 @@ const ConfigurationScope = (props) => {
               <div className="row">
                 <div className="form-group col-md-6 formInline">
                   <label htmlFor="">Endpoints:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Endpoints" />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Endpoints" id="epInput" />
+                  {
+                    formRes.err_status && formRes.error?.endPoints?.required
+                      ? <div className="text-danger"><div>{formRes.error?.endPoints?.msg}</div> </div>
+                      : ''
+                  }
                 </div>
                 <div className="form-group col-md-6 formInline" >
                   <label htmlFor="" className="pl-xl-5">Servers:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Servers" />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Servers" id="serverInput" />
+                  {
+                    formRes.err_status && formRes.error?.servers?.required
+                      ? <div className="text-danger"><div>{formRes.error?.servers?.msg}</div> </div>
+                      : ''
+                  }
                 </div>
               </div>
               <div className="row">
                 <div className="form-group col-md-6 formInline">
                   <label htmlFor="">Mobile Devices:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Mobile Devices" />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Mobile Devices" id="mdInput" />
+                  {
+                    formRes.err_status && formRes.error?.mobileDevices?.required
+                      ? <div className="text-danger"><div>{formRes.error?.mobileDevices?.msg}</div> </div>
+                      : ''
+                  }
                 </div>
               </div>
+              <div className="row">
+                {
+                  !formRes.status && formRes.err_status && formRes.error?.type == "techAssets" && formRes.error?.msg
+                    ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
+                    : ''
+                }
+                {
+                  formRes.status && formRes?.type == "techAssets" && formRes.msg
+                    ? <div className="text-success"><div>{formRes.msg}</div> </div>
+                    : ''
+                }
+              </div>
             </div>
+
           </div>
         </div>
         <div className="card">
@@ -407,23 +471,38 @@ const ConfigurationScope = (props) => {
           <div id="cp3" className="collapse bg-pink" data-parent="#accordion" >
             <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
               <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
-                <div className=" mr-2 w-50"><input type="text" className="form-control pl-0" placeholder="Enter Name" /></div>
-                <div ><a href="javascript:void(0)" className=" info"> <img src="assets/img/gbl.gif" alt="" className="plus" /> </a></div>
+                <div className=" mr-2 w-50">
+                  <input type="text" className="form-control pl-0" placeholder="Enter Name" id="vendorInput" />
+                  {
+                    formRes.err_status && formRes.error?.vendor?.required
+                      ? <div className="text-danger"><div>{formRes.error?.vendor?.msg}</div> </div>
+                      : ''
+                  }
+                </div>
+                <div ><a onClick={() => addVendor()} className=" info"> <img src="assets/img/gbl.gif" alt="" className="plus" /> </a></div>
+              </div>
+              <div className="row m-0">
+                {
+                  !formRes.status && formRes.err_status && formRes.error?.type == "vendor" && formRes.error?.msg
+                    ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
+                    : ''
+                }
+                {
+                  formRes.status && formRes?.type == "vendor" && formRes.msg
+                    ? <div className="text-success"><div>{formRes.msg}</div> </div>
+                    : ''
+                }
               </div>
             </div>
             <div className="search_result bg-white ">
-              <div className=" px-3">
-                <div className="flex-grow-1 ml-lg-3 ml-md-0 ">martin_guptill598@icloud.com</div>
-                <div className="mr-lg-3 mr-0"><a href="#"> <img src="assets/img/gbl.gif" alt="" className="cls" />  </a></div>
-              </div>
-              <div className="px-3">
-                <div className="flex-grow-1 ml-lg-3">pete_davidson_vagas@gmail.com</div>
-                <div className="mr-lg-3 mr-0"><a href="#"> <img src="assets/img/gbl.gif" alt="" className="cls" />  </a></div>
-              </div>
-              <div className=" px-3">
-                <div className="flex-grow-1 ml-lg-3">sohan.parker@yahoo.com</div>
-                <div className="mr-lg-3 mr-0"><a href="#"> <img src="assets/img/gbl.gif" alt="" className="cls" />  </a></div>
-              </div>
+              {getAllScopes && getAllScopes?.vendors && getAllScopes?.vendors.length > 0 && getAllScopes?.vendors.map((vendor, vIndex) => {
+                return (
+                  <div ey={vIndex} className=" px-3">
+                    <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{vendor.vendor}</div>
+                    <div className="mr-lg-3 mr-0"><a onClick={() => delVendor(vIndex)}> <img src="assets/img/gbl.gif" alt="" className="cls" />  </a></div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -437,40 +516,23 @@ const ConfigurationScope = (props) => {
             <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
               <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
                 <div className=" mr-2 w-50"><input type="text" className="form-control" placeholder="Enter Name" /></div>
-                <div ><a href="javascript:void(0)" className=" info"> <img src="assets/img/gbl.gif" alt="" className="plus" /> </a></div>
+                <div ><a onClick={() => addVendor()} className=" info"> <img src="assets/img/gbl.gif" alt="" className="plus" /> </a></div>
               </div>
             </div>
             <div className="search_result bg-white ">
               <ul className="list-unstyled">
-                <li >
-                  <div className=" ml-lg-3 ml-md-0 ">
-                    <input type="checkbox" id="j1" />
-                  </div>
-                  <img src="assets/img/utility.svg" alt="" className="p-1" />
-                  <label className="mb-0 f-12" htmlFor="j1">Jira 1 </label>
-                </li>
-                <li>
-                  <div className=" ml-lg-3 ml-md-0 ">
-                    <input type="checkbox" id="j2" />
-                  </div>
-                  <img src="assets/img/utility.svg" alt="" className="p-1" />
-                  <label className="mb-0 f-12" htmlFor="j2">Jira 2 </label>
-                </li>
-                <li>
-                  <div className=" ml-lg-3 ml-md-0 "><input type="checkbox" id="j3" /></div>
-                  <img src="assets/img/utility.svg" alt="" className="p-1" />
-                  <label className="mb-0 f-12" htmlFor="j3">Jira 3 </label>
-                </li>
-                <li>
-                  <div className=" ml-lg-3 ml-md-0 "><input type="checkbox" id="j4" /></div>
-                  <img src="assets/img/utility.svg" alt="" className="p-1" />
-                  <label className="mb-0 f-12" htmlFor="j4">Jira 4 </label>
-                </li>
-                <li>
-                  <div className=" ml-lg-3 ml-md-0 "><input type="checkbox" id="j5" /></div>
-                  <img src="assets/img/utility.svg" alt="" className="p-1" />
-                  <label className="mb-0 f-12" htmlFor="j5">Jira 5 </label>
-                </li>
+
+                {tpUtilities && tpUtilities.length > 0 && tpUtilities.map((utility, uIndex) => {
+                  return (
+                    <li key={uIndex}>
+                      <div className=" ml-lg-3 ml-md-0 ">
+                        <input type="checkbox" id={`f${uIndex + 1}`} defaultChecked={utility.is_selected == 'Y'} onClick={(e) => e.target.checked ? addToUtilityList(e, uIndex) : removeFromUtilityList(e, uIndex)} />
+                      </div>
+                      <img src="/assets/img/utility.svg" alt="" className="p-1" />
+                      <label className="mb-0 f-12" htmlFor={`f${uIndex + 1}`}>{utility.name}</label>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           </div>

@@ -73,8 +73,8 @@ const Header = (props) => {
                     </div>
                 </nav>
                 <div className="userProfile pr-2">
-                    <div className="mdw bg-transparent p-0 shadow-none"><img src="assets/img/userProfile.png" alt="profile" className="img-fluid" /></div>
-                    <div className="mdw"><a href="#"><img src="assets/img/gbl.gif" alt="notification" className="img-fluid" /></a></div>
+                    <div className="mdw bg-transparent p-0 shadow-none"><img src="/assets/img/userProfile.png" alt="profile" className="img-fluid" /></div>
+                    <div className="mdw"><a href="#"><img src="/assets/img/gbl.svg" alt="notification" className="img-fluid" /></a></div>
                 </div>
             </div>
             <div className="align-items-center d-flex justify-content-between aDm_navigation pl-lg-3 border-0">
