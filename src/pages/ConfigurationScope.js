@@ -8,7 +8,7 @@ const ConfigurationScope = (props) => {
   const { token = '' } = useParams()
   // console.log(token)
   const orgId = props?.user?.currentUser?.org_id || 0;
-  const projectId = token;
+  const projectId = Number(token);
   // const projectId = 1;
   const [getAllScopes, setAllScopes] = useState({})
   const [accountsList, setAccountsList] = useState(null)
@@ -249,6 +249,47 @@ const ConfigurationScope = (props) => {
     }, 3000);
 
   }
+  const createThirdPartyUtility = async () => {
+    setFormSbmt(true)
+    let formRes = { status: false, err_status: false, error: {} }
+    setFormRes(formRes)
+    setErrorMsg(false)
+    let utilityInput = document.getElementById("utilityInput");
+    let utility = utilityInput.value
+    if (!utility) {
+      // let formRes = {status:false,err_status:true,error:{}}
+      formRes['err_status'] = true
+      if (!utility) {
+        formRes['error']['utility'] = { required: true, msg: "utility name is required!" }
+      }
+      setFormRes(formRes)
+      return false;
+    }
+    let payloadUrl = "configuration/createThirdPartyUtility"
+    let method = "POST";
+    let formData = { utility_name: utility, project_id: projectId}
+    let res = await ApiService.fetchData(payloadUrl, method, formData);
+    if (res && res.message == "Success") {
+      // let accListArr = [Object.assign(formData, { project_id: res.project_id })]
+      // setAccountsList(oldVal => {
+      //   return [...accListArr]
+      // })
+      fetchInfo("tpUtilites")
+      utilityInput.value = ""
+      formRes = { status: true, err_status: false, type: "utility", error: {}, msg: "Utility added successfully" }
+      setFormRes(formRes)
+    } else {
+      formRes['err_status'] = true
+      formRes['error']['type'] = "utility"
+      formRes['error']['msg'] = "Something Went Wrong!"
+      setFormRes(formRes)
+    }
+    setTimeout(() => {
+      formRes = { status: false, err_status: false, error: {} }
+      setFormRes(formRes)
+    }, 3000);
+
+  }
 
   const addToUtilityList = (ev = null, index = null) => {
     if (ev == null || index == null || !getAllScopes.frameWorks[index]) {
@@ -278,6 +319,7 @@ const ConfigurationScope = (props) => {
     })
   }
 
+  
   const addThirdPartyUtilities = async () => {
     setFormSbmt(true)
     let formRes = { status: false, err_status: false, error: {} }
@@ -512,11 +554,33 @@ const ConfigurationScope = (props) => {
               SaaS/Third Party Utility
             </a>
           </div>
+          <div className="ml-auto action_item">
+              <a onClick={() => addThirdPartyUtilities()} className="btn btn-primary btn-sm">Save</a>
+            </div>
           <div id="cp4" className="collapse bg-pink" data-parent="#accordion" >
             <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
               <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
-                <div className=" mr-2 w-50"><input type="text" className="form-control" placeholder="Enter Name" /></div>
-                <div ><a onClick={() => addVendor()} className=" info"> <img src="assets/img/gbl.gif" alt="" className="plus" /> </a></div>
+                <div className=" mr-2 w-50">
+                  <input type="text" className="form-control" placeholder="Enter Name"  id="utilityInput" />
+                  {
+                    formRes.err_status && formRes.error?.utility?.required
+                      ? <div className="text-danger"><div>{formRes.error?.utility?.msg}</div> </div>
+                      : ''
+                  }
+                </div>
+                <div ><a onClick={() => createThirdPartyUtility()} className=" info"> <img src="/assets/img/gbl.svg" alt="" className="plus" /> </a></div>
+              </div>
+              <div className="row m-0">
+                {
+                  !formRes.status && formRes.err_status && formRes.error?.type == "utility" && formRes.error?.msg
+                    ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
+                    : ''
+                }
+                {
+                  formRes.status && formRes?.type == "utility" && formRes.msg
+                    ? <div className="text-success"><div>{formRes.msg}</div> </div>
+                    : ''
+                }
               </div>
             </div>
             <div className="search_result bg-white ">
