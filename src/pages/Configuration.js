@@ -115,14 +115,14 @@ const Configuration = (props) => {
           }
         })
         setSelTPS(tmpSelectedTPS)
-        /* add to framework list if selected */
-        let tmpFrmwrkList = [];
-        obj.frameWorks && obj.frameWorks.map(frmwrk =>{
-          if(frmwrk.is_selected == "Y"){
-            tmpFrmwrkList.push(frmwrk.id)
-          }
-        })
-        setAddFrameWorksList(tmpFrmwrkList)
+          /* add to framework list if selected */
+          let tmpFrmwrkList = [];
+          obj.frameWorks && obj.frameWorks.map(frmwrk =>{
+            if(frmwrk.is_selected == "Y"){
+              tmpFrmwrkList.push(frmwrk.id)
+            }
+          })
+          setAddFrameWorksList(tmpFrmwrkList)
 
         setTimeout(() => {
           setAllConfigs(oldVal => {
@@ -337,7 +337,7 @@ const Configuration = (props) => {
     let delMem = members[index]
     console.log(delMem)
     let payloadUrl = "configuration/deleteKeyMember"
-    let method = "POST";
+    let method = "DELETE";
     let formData = { emp_id: delMem.emp_id, org_id: orgId, project_id: accountsList[0].project_id }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
@@ -409,7 +409,7 @@ const Configuration = (props) => {
     let delPartner = servicePartners[index]
     console.log(delPartner)
     let payloadUrl = "configuration/deleteServicePartner"
-    let method = "POST";
+    let method = "DELETE";
     let formData = { emp_id: delPartner.emp_id, org_id: orgId, project_id: accountsList[0].project_id }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
@@ -492,7 +492,7 @@ const Configuration = (props) => {
     let delOwner = taskOwners[index]
     console.log(delOwner)
     let payloadUrl = "configuration/deleteTaskOwner"
-    let method = "POST";
+    let method = "DELETE";
     let formData = { emp_id: delOwner.emp_id, org_id: orgId, project_id: accountsList[0].project_id }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
