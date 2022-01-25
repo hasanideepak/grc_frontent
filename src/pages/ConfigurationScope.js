@@ -85,13 +85,13 @@ const ConfigurationScope = (props) => {
         //set accounts if added
 
         /* add to framework list if selected */
-        let tmpFrmwrkList = [];
-        obj.frameWorks && obj.frameWorks.map(frmwrk => {
-          if (frmwrk.is_selected == "Y") {
-            tmpFrmwrkList.push(frmwrk.id)
+        let tmpUtilityList = [];
+        obj.third_party_utilities && obj.third_party_utilities.map(utility => {
+          if (utility.is_selected == "Y") {
+            tmpUtilityList.push(utility.id)
           }
         })
-        setUtilitiesList(tmpFrmwrkList)
+        setUtilitiesList(tmpUtilityList)
 
         setTimeout(() => {
           setAllScopes(oldVal => {
@@ -250,6 +250,26 @@ const ConfigurationScope = (props) => {
     }, 3000);
 
   }
+
+  const delVendor = async (index = null) => {
+    if (index == null) {
+      return false;
+    }
+    let delVendor = getAllScopes.vendors[index]
+    console.log(delVendor)
+    let payloadUrl = `configuration/deleteVendorById/${delVendor.id}`
+    let method = "DELETE";
+    let formData = {}
+    let res = await ApiService.fetchData(payloadUrl, method, formData);
+    if (res && res.message == "Success") {
+      fetchInfo("all")
+    } else {
+      formRes['err_status'] = true
+      formRes['error']['msg'] = "Something Went Wrong!"
+      setFormRes(formRes)
+    }
+  }
+
   const createThirdPartyUtility = async () => {
     setFormSbmt(true)
     let formRes = { status: false, err_status: false, error: {} }
@@ -374,21 +394,6 @@ const ConfigurationScope = (props) => {
       return [...tempArr]
     })
   }
-  const delVendor = (index = null) => {
-    if (index == null) {
-      return false;
-    }
-    let tempArr = [];
-    for (let atIndex in tpsAccessTokens) {
-      if (index == atIndex) {
-        continue
-      }
-      tempArr.push(tpsAccessTokens[atIndex])
-    }
-    setAccessToken(oldVal => {
-      return [...tempArr]
-    })
-  }
 
   // console.log(watch("email")); // watch input value by passing the name of it
 
@@ -413,7 +418,7 @@ const ConfigurationScope = (props) => {
               <div className="row">
                 <div className="form-group col-md-6 formInline">
                   <label htmlFor="">Employees:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Employees" id="empInput" />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Employees" id="empInput" defaultValue={ getAllScopes.peoples && getAllScopes.peoples.length > 0 ? getAllScopes?.peoples[0]?.employees : '' } />
                   {
                     formRes.err_status && formRes.error?.employees?.required
                       ? <div className="text-danger"><div>{formRes.error?.employees?.msg}</div> </div>
@@ -422,7 +427,7 @@ const ConfigurationScope = (props) => {
                 </div>
                 <div className="form-group col-md-6 formInline" >
                   <label htmlFor="" className="pl-xl-5">Consultant:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Consultant" id="consultantInput" />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Consultant" id="consultantInput" defaultValue={ getAllScopes.peoples && getAllScopes?.peoples.length > 0 ? getAllScopes?.peoples[0]?.consultants : '' }/>
                   {
                     formRes.err_status && formRes.error?.consultants?.required
                       ? <div className="text-danger"><div>{formRes.error?.consultants?.msg}</div> </div>
@@ -461,7 +466,7 @@ const ConfigurationScope = (props) => {
               <div className="row">
                 <div className="form-group col-md-6 formInline">
                   <label htmlFor="">Endpoints:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Endpoints" id="epInput" />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Endpoints" id="epInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets.length > 0 ? getAllScopes?.technology_assets[0]?.endpoints : '' } />
                   {
                     formRes.err_status && formRes.error?.endPoints?.required
                       ? <div className="text-danger"><div>{formRes.error?.endPoints?.msg}</div> </div>
@@ -470,7 +475,7 @@ const ConfigurationScope = (props) => {
                 </div>
                 <div className="form-group col-md-6 formInline" >
                   <label htmlFor="" className="pl-xl-5">Servers:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Servers" id="serverInput" />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Servers" id="serverInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets.length > 0 ? getAllScopes?.technology_assets[0]?.servers : '' } />
                   {
                     formRes.err_status && formRes.error?.servers?.required
                       ? <div className="text-danger"><div>{formRes.error?.servers?.msg}</div> </div>
@@ -481,7 +486,7 @@ const ConfigurationScope = (props) => {
               <div className="row">
                 <div className="form-group col-md-6 formInline">
                   <label htmlFor="">Mobile Devices:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Mobile Devices" id="mdInput" />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Mobile Devices" id="mdInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets.length > 0 ? getAllScopes?.technology_assets[0]?.mobile_devices : '' } />
                   {
                     formRes.err_status && formRes.error?.mobileDevices?.required
                       ? <div className="text-danger"><div>{formRes.error?.mobileDevices?.msg}</div> </div>
@@ -555,7 +560,7 @@ const ConfigurationScope = (props) => {
               SaaS/Third Party Utility
             </a>
           </div>
-          <div className="ml-auto action_item">
+          <div className="ml-auto action_item mt-2">
               <a onClick={() => addThirdPartyUtilities()} className="btn btn-primary btn-sm">Save</a>
             </div>
           <div id="cp4" className="collapse bg-pink" data-parent="#accordion" >
