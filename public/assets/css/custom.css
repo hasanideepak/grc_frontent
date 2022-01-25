@@ -30,10 +30,28 @@
     height: 16px;
     background: #ffffff;
 }
+
 .accordion .card-header a > span.success_icon > i {
     font-size: 18px;
     color: #037e03;
     line-height: 1;
+}
+.accordion .card-header a > span.info_icon{
+    border-radius: 50%;
+    overflow: hidden;
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    opacity: 1;;
+}
+.accordion .card-header a > span.info_icon > i {
+    font-size: 18px;
+    line-height: 1;
+    background: transparent linear-gradient(143deg, #FCBA3F 0%, #DB2A5A 53%, #D9551A 100%) 0% 0% no-repeat padding-box;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .aDm_navigation li>a,

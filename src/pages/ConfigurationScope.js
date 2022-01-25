@@ -4,6 +4,7 @@ import { SetCookie, GetCookie, decryptData } from "../helpers/Helper";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 const ConfigurationScope = (props) => {
   const { token = '' } = useParams()
   // console.log(token)
@@ -346,9 +347,9 @@ const ConfigurationScope = (props) => {
     let formRes = { status: false, err_status: false, error: {} }
     setFormRes(formRes)
     setErrorMsg(false)
-    if (addUtilitiesList.length == 0) {
-      return false;
-    }
+    // if (addUtilitiesList.length == 0) {
+    //   return false;
+    // }
     let payloadUrl = "configuration/addThirdPartyUtilities"
     let method = "POST";
     let formData = { project_id: projectId, utility_ids: addUtilitiesList }
@@ -406,6 +407,21 @@ const ConfigurationScope = (props) => {
             <div className="card-header flex-grow-1" data-toggle="collapse" href="#cp1">
               <a className="card-title">
                 People
+                <OverlayTrigger
+                  key={"right"}
+                  placement={"right"}
+                  overlay={
+                    <Tooltip id={`tooltip-right`}>
+                      Tooltip for <strong>People</strong>.
+                    </Tooltip>
+                  }
+                >
+                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                </OverlayTrigger>
+                {getAllScopes && getAllScopes.peoples && getAllScopes.peoples.length > 0
+                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  : ''
+                }
               </a>
 
             </div>
@@ -418,7 +434,7 @@ const ConfigurationScope = (props) => {
               <div className="row">
                 <div className="form-group col-md-6 formInline">
                   <label htmlFor="">Employees:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Employees" id="empInput" defaultValue={ getAllScopes.peoples && getAllScopes.peoples.length > 0 ? getAllScopes?.peoples[0]?.employees : '' } />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Employees" id="empInput" defaultValue={ getAllScopes.peoples && getAllScopes?.peoples[0]?.employees ? getAllScopes?.peoples[0]?.employees : '' } />
                   {
                     formRes.err_status && formRes.error?.employees?.required
                       ? <div className="text-danger"><div>{formRes.error?.employees?.msg}</div> </div>
@@ -427,7 +443,7 @@ const ConfigurationScope = (props) => {
                 </div>
                 <div className="form-group col-md-6 formInline" >
                   <label htmlFor="" className="pl-xl-5">Consultant:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Consultant" id="consultantInput" defaultValue={ getAllScopes.peoples && getAllScopes?.peoples.length > 0 ? getAllScopes?.peoples[0]?.consultants : '' }/>
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Consultant" id="consultantInput" defaultValue={ getAllScopes.peoples &&  getAllScopes?.peoples[0]?.consultants ? getAllScopes?.peoples[0]?.consultants : '' }/>
                   {
                     formRes.err_status && formRes.error?.consultants?.required
                       ? <div className="text-danger"><div>{formRes.error?.consultants?.msg}</div> </div>
@@ -455,6 +471,21 @@ const ConfigurationScope = (props) => {
             <div className="card-header collapsed flex-grow-1" data-toggle="collapse" data-parent="#accordion" href="#cp2">
               <a className="card-title">
                 Technology Assets
+                <OverlayTrigger
+                  key={"right"}
+                  placement={"right"}
+                  overlay={
+                    <Tooltip id={`tooltip-right`}>
+                      Tooltip for <strong>Technology Assets</strong>.
+                    </Tooltip>
+                  }
+                >
+                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                </OverlayTrigger>
+                {getAllScopes && getAllScopes.technology_assets && getAllScopes.technology_assets.length > 0 && (getAllScopes.technology_assets[0].endpoints)
+                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  : ''
+                }
               </a>
             </div>
             <div className="ml-auto action_item">
@@ -466,7 +497,7 @@ const ConfigurationScope = (props) => {
               <div className="row">
                 <div className="form-group col-md-6 formInline">
                   <label htmlFor="">Endpoints:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Endpoints" id="epInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets.length > 0 ? getAllScopes?.technology_assets[0]?.endpoints : '' } />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Endpoints" id="epInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets[0].endpoints ? getAllScopes?.technology_assets[0]?.endpoints : '' } />
                   {
                     formRes.err_status && formRes.error?.endPoints?.required
                       ? <div className="text-danger"><div>{formRes.error?.endPoints?.msg}</div> </div>
@@ -475,7 +506,7 @@ const ConfigurationScope = (props) => {
                 </div>
                 <div className="form-group col-md-6 formInline" >
                   <label htmlFor="" className="pl-xl-5">Servers:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Servers" id="serverInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets.length > 0 ? getAllScopes?.technology_assets[0]?.servers : '' } />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Servers" id="serverInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets[0].servers ? getAllScopes?.technology_assets[0]?.servers : '' } />
                   {
                     formRes.err_status && formRes.error?.servers?.required
                       ? <div className="text-danger"><div>{formRes.error?.servers?.msg}</div> </div>
@@ -486,7 +517,7 @@ const ConfigurationScope = (props) => {
               <div className="row">
                 <div className="form-group col-md-6 formInline">
                   <label htmlFor="">Mobile Devices:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Mobile Devices" id="mdInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets.length > 0 ? getAllScopes?.technology_assets[0]?.mobile_devices : '' } />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Mobile Devices" id="mdInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets[0].mobile_devices ? getAllScopes?.technology_assets[0]?.mobile_devices : '' } />
                   {
                     formRes.err_status && formRes.error?.mobileDevices?.required
                       ? <div className="text-danger"><div>{formRes.error?.mobileDevices?.msg}</div> </div>
@@ -514,6 +545,21 @@ const ConfigurationScope = (props) => {
           <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp3">
             <a className="card-title">
               Vendors/Service providers
+              <OverlayTrigger
+                  key={"right"}
+                  placement={"right"}
+                  overlay={
+                    <Tooltip id={`tooltip-right`}>
+                      Tooltip for <strong>Vendors/Service providers</strong>.
+                    </Tooltip>
+                  }
+                >
+                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                </OverlayTrigger>
+                {getAllScopes && getAllScopes.vendors && getAllScopes.vendors.length > 0
+                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  : ''
+                }
             </a>
           </div>
           <div id="cp3" className="collapse bg-pink" data-parent="#accordion" >
@@ -558,6 +604,21 @@ const ConfigurationScope = (props) => {
           <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp4">
             <a className="card-title">
               SaaS/Third Party Utility
+              <OverlayTrigger
+                  key={"right"}
+                  placement={"right"}
+                  overlay={
+                    <Tooltip id={`tooltip-right`}>
+                      Tooltip for <strong>SaaS/Third Party Utility</strong>.
+                    </Tooltip>
+                  }
+                >
+                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                </OverlayTrigger>
+                {getAllScopes && getAllScopes.third_party_utilities && getAllScopes?.third_party_utilities.filter(util => util.is_selected == "Y").length > 0
+                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  : ''
+                }
             </a>
           </div>
           <div className="ml-auto action_item mt-2">
@@ -611,6 +672,21 @@ const ConfigurationScope = (props) => {
           <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp5">
             <a className="card-title">
               Asset Register
+              <OverlayTrigger
+                  key={"right"}
+                  placement={"right"}
+                  overlay={
+                    <Tooltip id={`tooltip-right`}>
+                      Tooltip for <strong>Assets</strong>.
+                    </Tooltip>
+                  }
+                >
+                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                </OverlayTrigger>
+                {getAllScopes && getAllScopes.peoples && getAllScopes.peoples.length > 0
+                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  : ''
+                }
             </a>
           </div>
           <div id="cp5" className="collapse" data-parent="#accordion" >
