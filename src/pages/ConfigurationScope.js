@@ -133,7 +133,7 @@ const ConfigurationScope = (props) => {
     }
     let payloadUrl = "configuration/addPeople"
     let method = "POST";
-    let formData = { employees: employees, consultants: consultants, project_id: 1 }
+    let formData = { employees: employees, consultants: consultants, project_id: projectId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       // let accListArr = [Object.assign(formData, { project_id: res.project_id })]
@@ -184,7 +184,7 @@ const ConfigurationScope = (props) => {
     }
     let payloadUrl = "configuration/addTechnologyAssets"
     let method = "POST";
-    let formData = { endpoints: endpoints, servers: servers, mobile_devices: mobileDevices, project_id: 1 }
+    let formData = { endpoints: endpoints, servers: servers, mobile_devices: mobileDevices, project_id: projectId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       // let accListArr = [Object.assign(formData, { project_id: res.project_id })]
@@ -226,7 +226,7 @@ const ConfigurationScope = (props) => {
     }
     let payloadUrl = "configuration/addVendor"
     let method = "POST";
-    let formData = { vendor: vendor, project_id: 1 }
+    let formData = { vendor: vendor, project_id: projectId}
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       // let accListArr = [Object.assign(formData, { project_id: res.project_id })]
@@ -479,7 +479,7 @@ const ConfigurationScope = (props) => {
                       : ''
                   }
                 </div>
-                <div ><a onClick={() => addVendor()} className=" info"> <img src="assets/img/gbl.gif" alt="" className="plus" /> </a></div>
+                <div ><a onClick={() => addVendor()} className=" info"> <img src="/assets/img/gbl.svg" alt="" className="plus" /> </a></div>
               </div>
               <div className="row m-0">
                 {
@@ -499,7 +499,7 @@ const ConfigurationScope = (props) => {
                 return (
                   <div ey={vIndex} className=" px-3">
                     <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{vendor.vendor}</div>
-                    <div className="mr-lg-3 mr-0"><a onClick={() => delVendor(vIndex)}> <img src="assets/img/gbl.gif" alt="" className="cls" />  </a></div>
+                    <div className="mr-lg-3 mr-0"><a onClick={() => delVendor(vIndex)}> <img src="/assets/img/gbl.svg" alt="" className="cls" />  </a></div>
                   </div>
                 )
               })}
