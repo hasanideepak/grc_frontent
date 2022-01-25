@@ -140,9 +140,10 @@ const ConfigurationScope = (props) => {
       // setAccountsList(oldVal => {
       //   return [...accListArr]
       // })
-      empInput.value = ""
-      consultantInput.value = ""
-      formRes = { status: true, err_status: false, type: "people", error: {}, msg: "Account added successfully" }
+
+      // empInput.value = ""
+      // consultantInput.value = ""
+      formRes = { status: true, err_status: false, type: "people", error: {}, msg: "People added successfully" }
       setFormRes(formRes)
     } else {
       formRes['err_status'] = true
@@ -191,8 +192,8 @@ const ConfigurationScope = (props) => {
       // setAccountsList(oldVal => {
       //   return [...accListArr]
       // })
-      endPointInput.value = ""
-      serversInput.value = ""
+      // endPointInput.value = ""
+      // serversInput.value = ""
       formRes = { status: true, err_status: false, type: "techAssets", error: {}, msg: "Asset added successfully" }
       setFormRes(formRes)
     } else {
@@ -292,11 +293,11 @@ const ConfigurationScope = (props) => {
   }
 
   const addToUtilityList = (ev = null, index = null) => {
-    if (ev == null || index == null || !getAllScopes.frameWorks[index]) {
+    if (ev == null || index == null || !getAllScopes.third_party_utilities[index]) {
       return
     }
 
-    let id = getAllScopes.frameWorks[index].id
+    let id = getAllScopes.third_party_utilities[index].id
     let tempArr = addUtilitiesList;
     tempArr.push(id)
     setUtilitiesList(oldVal => {
@@ -306,11 +307,11 @@ const ConfigurationScope = (props) => {
 
   }
   const removeFromUtilityList = (ev = null, index = null) => {
-    if (ev == null || index == null || !getAllScopes.frameWorks[index]) {
+    if (ev == null || index == null || !getAllScopes.third_party_utilities[index]) {
       return
     }
 
-    let id = getAllScopes.frameWorks[index].id
+    let id = getAllScopes.third_party_utilities[index].id
     let tempArr = addUtilitiesList;
     let tempArrIndex = tempArr.indexOf(id)
     tempArr.splice(tempArrIndex, 1)
@@ -330,7 +331,7 @@ const ConfigurationScope = (props) => {
     }
     let payloadUrl = "configuration/addThirdPartyUtilities"
     let method = "POST";
-    let formData = { project_id: projectId, framework_ids: addUtilitiesList }
+    let formData = { project_id: projectId, utility_ids: addUtilitiesList }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       formRes = { status: true, err_status: false, error: {}, type: "util", msg: "Framework added successfully" }
