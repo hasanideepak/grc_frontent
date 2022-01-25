@@ -17,11 +17,12 @@ export const decryptData = (token = '') =>{
     if(token == ''){
         return token
     }
+
     let iv = crypto.randomBytes(16).toString('hex').slice(0, 16);
     var mykey = crypto.createDecipheriv('aes-128-cbc', process.env.REACT_APP_ENCRYPT_KEY,iv);
-	var data = mykey.update(token, 'hex', 'utf8')
-	data += mykey.final('utf8');
-
+	  var data = mykey.update((token).toString(), 'hex', 'utf8')
+	  data += mykey.final('utf8');
+    // console.log(data)
     return data
 }
 

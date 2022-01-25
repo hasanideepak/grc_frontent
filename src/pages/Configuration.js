@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
-import { SetCookie, GetCookie } from "../helpers/Helper";
+import { SetCookie, GetCookie, encryptData } from "../helpers/Helper";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
@@ -1083,7 +1083,12 @@ const Configuration = (props) => {
         </div>
 
         <div className="d-flex justify-content-end yrscpe">
-          <Link to="/onboarding_scope" className="btn btn-primary submitBtn btn-lg">Define Your Scope</Link>
+          {
+            accountsList && accountsList.length > 0
+            ? <Link to={`/onboarding_scope/${encryptData(accountsList[0])}`} className="btn btn-primary submitBtn btn-lg">Define Your Scope</Link>
+            : ''
+          }
+          
         </div>
       </div>
     </>
