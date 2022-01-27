@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 
 
 const Header = (props) => {
+    const {defHeaderTitle = ''} = props
     const [headerTitle, setHeaderTitle] = useState('')
     const navigate = useNavigate();
     const location = useLocation()
@@ -25,6 +26,9 @@ const Header = (props) => {
             break;
             case "/task-manager":
                 setHeaderTitle("Task Manager")
+            break;
+            case "/task-details":
+                setHeaderTitle(defHeaderTitle || "Task Details")
             break;
             case "/evidence-manager":
                 setHeaderTitle("Evidence Manager")

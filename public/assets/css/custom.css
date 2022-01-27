@@ -10,6 +10,32 @@
 .text_color_3{
     color: #B21E18 !important;
 }
+.text_color_4{
+    color: #E26F03 !important;
+}
+.btn_1{
+    color: #1C204D;
+    border-color: #1C204D;
+    border-radius: 4px;
+    font-size: 12px;
+}
+.btn_wide{
+    min-width: 150px;
+}
+.btn_2{
+    color: #DB2C58;
+    border-color: #DB2C58;
+    border-radius: 4px;
+    font-size: 12px;
+}
+.btn_3{
+    color: #1C204D;
+    border-color: #7A8295;
+    border-radius: 4px;
+    font-size: 12px;
+    background: #7A8295;
+    opacity: 30%;
+}
 .navbar-nav a{
     color: #ffffff !important;
     cursor: pointer;
@@ -279,3 +305,123 @@ a.info{
     width: 300px;
 }
 /* task manager card view custom  css end */
+
+
+/* task details section css start */
+#taskDetails_sec  .card{
+    box-shadow: 0px 6px 12px #EFE9EA;
+    border: 1px solid #DBDFEA;
+    border-radius: 10px;
+}
+#taskDetails_sec  .card-body .card-title{
+    font-size: 14px;
+}
+#taskDetails_sec  .card-body .card-text{
+    font-size: 12px;
+    color: #606063;
+}
+#taskDetails_sec .card_box,
+#taskDetails_sec .control_box,
+#taskDetails_sec .stat_box{
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+#taskDetails_sec .control_box.show_bg{
+    background: #e9ebf194;
+}
+#taskDetails_sec .control_block .header h3{
+    font-size: 14px;
+    font-weight: 500;
+}
+#taskDetails_sec .control_box span+span,
+#taskDetails_sec .stat_box span+span{
+    color: #7A8295;
+}
+
+#taskDetails_sec .stat_box +  .stat_box{
+    margin-top: 10px;
+}
+#taskDetails_sec .stat_chips_block{
+    border-top: 1px solid #E4E5E8;
+}
+#taskDetails_sec .stat_chips_block .header h3{
+    font-size: 12px;
+    color: #4A5B72;
+}
+#taskDetails_sec .stat_chips_box{
+    width: 60px;
+    height: 20px;
+    background: #E4E5E8 0% 0% no-repeat padding-box;
+    border-radius: 4px;
+    color: #7A8295;
+    font-size: 8px;
+    line-height: 2.7;
+    text-align: center;
+    font-weight: 500;
+}
+
+
+#taskDetails_sec .card_block .header h3{
+    font-size: 14px;
+    font-weight: 500;
+}
+
+#taskDetails_sec .task_card_block.evidence_block .card_box{
+    font-size: 11px;
+    font-weight: 400;
+    color: #8693B1;
+}
+
+#taskDetails_sec .card_box,
+#taskDetails_sec .control_box{
+    padding: 10px;
+}
+#taskDetails_sec .card_box span>i{
+    color: #8693B1;
+    font-size: 15px;
+    margin-right: 5px;
+}
+
+
+#taskDetails_sec .assets_block .accordion .accordion-header{
+    line-height: 0.5;
+}
+#taskDetails_sec .assets_block .accordion .accordion-header button{
+    color: #1C204D;
+    font-size: 12px;
+    border: none;
+    background: transparent;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+#taskDetails_sec .assets_block .accordion .accordion-header button:before{
+    content: "";
+    background: url(../img/gbl.svg) 51.9px 1px;
+    height: 18px;
+    background-color: #9597B4;
+    width: 18px;
+    padding: 5px;
+    border-radius: 2px;
+    margin-right: 5px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#taskDetails_sec .assets_block .accordion .assets_list .assets_box .header{
+    color: #1C204D;
+    font-size: 13px;
+}
+#taskDetails_sec .assets_block .accordion .assets_list .assets_box ul li{
+    color: #606063;
+    font-size: 13px;
+}
+
+/* task details section css end */

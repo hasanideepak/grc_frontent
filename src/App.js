@@ -4,6 +4,7 @@ import './App.css';
 import Layout from './components/layouts/MainLayout';
 import PublicLayout from './components/layouts/PublicLayout';
 import { IsAuthenticated } from './helpers/Auth';
+import TaskDetails from './pages/TaskDetails';
 // import Login from './pages/Login';
 
 const Home = lazy(()=> import("./pages/Home"))
@@ -69,6 +70,7 @@ function App() {
                     <Route  path="/dashboard" element={<Dashboard />}></Route>
                     <Route  path="/onboarding" element={<Configuration user={authUser} />}></Route>
                     <Route  path="/task-manager" element={<TaskManager user={authUser} /> }></Route>
+                    <Route  path="/task-details" element={<TaskDetails user={authUser} /> }></Route>
                     <Route  path="/evidence-manager" element={<EvidenceManager /> }></Route>
                     <Route  path="/configuration" element={<Configuration user={authUser} /> }></Route>
                     <Route  path="/onboarding_scope/:token" element={<ConfigurationScope user={authUser} /> }></Route>
