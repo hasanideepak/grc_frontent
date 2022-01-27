@@ -12,18 +12,9 @@ const ConfigurationScope = (props) => {
   const projectId = Number(token);
   // const projectId = 1;
   const [getAllScopes, setAllScopes] = useState({})
-  const [accountsList, setAccountsList] = useState(null)
   const [addUtilitiesList, setUtilitiesList] = useState([])
 
   const [tpUtilities, setUtilities] = useState([])
-  const [tpServices, setTpServices] = useState([])
-  const [selectedTPS, setSelTPS] = useState([])
-  const [memberRoles, setMemberRoles] = useState([])
-  const [ownerRoles, setOwnerRoles] = useState([])
-  const [members, setMembers] = useState([])
-  const [servicePartners, setServicePartners] = useState([])
-  const [taskOwners, setTaskOwners] = useState([])
-  const [tpsAccessTokens, setAccessToken] = useState([])
   const navigate = useNavigate()
 
   // const { register, handleSubmit, watch, formState: { errors } } = useForm(); // initialize the hook
@@ -47,13 +38,6 @@ const ConfigurationScope = (props) => {
 
 
   }, [])
-
-  const getThirdPartySefvice = () => {
-    let tpsArr = [{ id: 1, name: "AWS" }]
-    setTpServices(oldVal => {
-      return [...tpsArr]
-    })
-  }
 
   const fetchInfo = async (type = '') => {
     if (type == '') {
@@ -144,6 +128,7 @@ const ConfigurationScope = (props) => {
 
       // empInput.value = ""
       // consultantInput.value = ""
+      changePanel(2)
       formRes = { status: true, err_status: false, type: "people", error: {}, msg: "People added successfully" }
       setFormRes(formRes)
     } else {
@@ -195,6 +180,7 @@ const ConfigurationScope = (props) => {
       // })
       // endPointInput.value = ""
       // serversInput.value = ""
+      changePanel(3)
       formRes = { status: true, err_status: false, type: "techAssets", error: {}, msg: "Asset added successfully" }
       setFormRes(formRes)
     } else {
@@ -237,6 +223,7 @@ const ConfigurationScope = (props) => {
       // })
       fetchInfo("all")
       vendorInput.value = ""
+      changePanel(4)
       formRes = { status: true, err_status: false, type: "vendor", error: {}, msg: "Vendor added successfully" }
       setFormRes(formRes)
     } else {
@@ -355,7 +342,8 @@ const ConfigurationScope = (props) => {
     let formData = { project_id: projectId, utility_ids: addUtilitiesList }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
-      formRes = { status: true, err_status: false, error: {}, type: "util", msg: "Framework added successfully" }
+      changePanel(5)
+      formRes = { status: true, err_status: false, error: {}, type: "util", msg: "Utilities added successfully" }
       setFormRes(formRes)
     } else {
       formRes['err_status'] = true
@@ -380,20 +368,12 @@ const ConfigurationScope = (props) => {
     }
   }
 
-  const delToken = (index = null) => {
-    if (index == null) {
-      return false;
+  const changePanel = (index = null) => {
+    if(index == null){
+      return false
     }
-    let tempArr = [];
-    for (let atIndex in tpsAccessTokens) {
-      if (index == atIndex) {
-        continue
-      }
-      tempArr.push(tpsAccessTokens[atIndex])
-    }
-    setAccessToken(oldVal => {
-      return [...tempArr]
-    })
+    let ele = document.getElementById(`ch${index}`)
+    ele.click()
   }
 
   // console.log(watch("email")); // watch input value by passing the name of it
@@ -404,7 +384,7 @@ const ConfigurationScope = (props) => {
       <div id="accordion" className="accordion pl-lg-3 pr-lg-3 accordianSec profileSec">
         <div className="card">
           <div className="d-flex align-items-center">
-            <div className="card-header flex-grow-1" data-toggle="collapse" href="#cp1">
+            <div id="ch1" className="card-header flex-grow-1" data-toggle="collapse" href="#cp1">
               <a className="card-title">
                 People
                 <OverlayTrigger
@@ -468,7 +448,7 @@ const ConfigurationScope = (props) => {
         </div>
         <div className="card ">
           <div className="d-flex align-items-center">
-            <div className="card-header collapsed flex-grow-1" data-toggle="collapse" data-parent="#accordion" href="#cp2">
+            <div id="ch2" className="card-header collapsed flex-grow-1" data-toggle="collapse" data-parent="#accordion" href="#cp2">
               <a className="card-title">
                 Technology Assets
                 <OverlayTrigger
@@ -542,7 +522,7 @@ const ConfigurationScope = (props) => {
           </div>
         </div>
         <div className="card">
-          <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp3">
+          <div id="ch3" className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp3">
             <a className="card-title">
               Vendors/Service providers
               <OverlayTrigger
@@ -601,7 +581,7 @@ const ConfigurationScope = (props) => {
           </div>
         </div>
         <div className="card">
-          <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp4">
+          <div id="ch4" className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp4">
             <a className="card-title">
               SaaS/Third Party Utility
               <OverlayTrigger
@@ -689,7 +669,7 @@ const ConfigurationScope = (props) => {
                 }
             </a>
           </div>
-          <div id="cp5" className="collapse" data-parent="#accordion" >
+          <div id="ch5" id="cp5" className="collapse" data-parent="#accordion" >
             <div className="p-3 d-flex justify-content-between">
               <div className="d-flex align-items-center">
                 <p className="mb-0 gLbl">Download the sample file from here.</p>

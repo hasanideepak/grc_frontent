@@ -206,6 +206,7 @@ const Configuration = (props) => {
       })
       accInput.value = ""
       accProjectInput.value = ""
+      changePanel(1)
       formRes = { status: true, err_status: false, type: "account", error: {}, msg: "Account added successfully" }
       setFormRes(formRes)
     } else {
@@ -268,6 +269,7 @@ const Configuration = (props) => {
         frameWork.is_selected = addFrameWorksList.includes(frameWork.id) ? "Y" : "N"
       })
       setAllConfigs(obj)
+      changePanel(2)
       formRes = { status: true, err_status: false, error: {}, type: "framework", msg: "Framework added successfully" }
       setFormRes(formRes)
     } else {
@@ -287,14 +289,24 @@ const Configuration = (props) => {
     let formRes = { status: false, err_status: false, error: {} }
     setFormRes(formRes)
     setErrorMsg(false)
+    let memFnInput = document.getElementById("memFnInp")
+    let memLnInput = document.getElementById("memLnInp")
     let memEmailInput = document.getElementById("memberEmail")
     let memRoleInput = document.getElementById("memberRole")
+    let memFirstName = memFnInput.value
+    let memLastName = memLnInput.value
     let memEmail = memEmailInput.value
     let memRole = memberRoles[memRoleInput.value]
     console.log(memberRoles, memRoleInput.value)
     console.log(memEmail, memRole)
-    if (!memEmail || !memRole) {
+    if (!memFirstName || !memLastName || !memEmail || !memRole) {
       formRes['err_status'] = true
+      if (!memFirstName) {
+        formRes['error']['memberFname'] = { required: true, msg: "First name is required!" }
+      }
+      if (!memLastName) {
+        formRes['error']['memberLname'] = { required: true, msg: "Last name is required!" }
+      }
       if (!memEmail) {
         formRes['error']['memberEmail'] = { required: true, msg: "Email is required!" }
       }
@@ -307,7 +319,7 @@ const Configuration = (props) => {
 
     let payloadUrl = "configuration/addKeyMember"
     let method = "POST";
-    let formData = { email: memEmail, department_name: memRole.name, authority_id: memRole.id, project_id: accountsList[0].project_id, org_id: props?.user?.currentUser?.org_id }
+    let formData = { first_name:memFirstName,last_name:memLastName, email: memEmail, department_name: memRole.name, authority_id: memRole.id, project_id: accountsList[0].project_id, org_id: props?.user?.currentUser?.org_id }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let memListArr = Object.assign([], members);
@@ -316,8 +328,11 @@ const Configuration = (props) => {
       setMembers(oldVal => {
         return [...memListArr]
       })
+      memFnInput.value = ""
+      memLnInput.value = ""
       memEmailInput.value = ""
       memRoleInput.value = ""
+      changePanel(3)
       formRes = { status: true, err_status: false, error: {}, type: "member", msg: "Member added successfully" }
       setFormRes(formRes)
     } else {
@@ -394,6 +409,7 @@ const Configuration = (props) => {
       partnerFnInput.value = ""
       partnerLnInput.value = ""
       partnerEmailInput.value = ""
+      changePanel(4)
       formRes = { status: true, err_status: false, error: {}, type: "partner", msg: "Member added successfully" }
       setFormRes(formRes)
     } else {
@@ -477,6 +493,7 @@ const Configuration = (props) => {
       toFnInput.value = ""
       toLnInput.value = ""
       toEmailInput.value = ""
+      changePanel(5)
       formRes = { status: true, err_status: false, error: {}, type: "owner", msg: "Task owner added successfully" }
       setFormRes(formRes)
     } else {
@@ -561,6 +578,7 @@ const Configuration = (props) => {
       })
       console.log(obj)
       setTpServices(obj)
+      changePanel(6)
       formRes = { status: true, err_status: false, error: {}, msg: "Framework added successfully" }
       setFormRes(formRes)
     } else {
@@ -641,6 +659,14 @@ const Configuration = (props) => {
     })
   }
 
+  const changePanel = (index = null) => {
+    if(index == null){
+      return false
+    }
+    let ele = document.getElementById(`ct${index}`)
+    ele.click()
+  }
+
   // console.log(watch("email")); // watch input value by passing the name of it
 
   return (
@@ -649,7 +675,7 @@ const Configuration = (props) => {
       <div id="accordion" className="accordion pl-lg-3 pr-lg-3 accordianSec">
         <div className="card ">
           <div className="d-flex align-items-center">
-            <div className="card-header flex-grow-1" data-toggle="collapse" href="#cp0" aria-expanded="true">
+            <div id="ct0" className="card-header flex-grow-1" data-toggle="collapse" href="#cp0" aria-expanded="true">
               <a className="card-title">
                 Account Setup
                 <OverlayTrigger
@@ -727,7 +753,7 @@ const Configuration = (props) => {
         </div>
         <div className="card ">
           <div className="d-flex align-items-center">
-            <div className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp1" aria-expanded="true">
+            <div id="ct1" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp1" aria-expanded="true">
               <a className="card-title">
                 Framework Setup
                 <OverlayTrigger
@@ -772,7 +798,7 @@ const Configuration = (props) => {
 
         <div className="card ">
           <div className="d-flex align-items-center">
-            <div className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp2" aria-expanded="true">
+            <div id="ct2" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp2" aria-expanded="true">
               <a className="card-title">
                 Key Members
                 <OverlayTrigger
@@ -801,16 +827,32 @@ const Configuration = (props) => {
               <div className="d-flex  align-items-start justify-content-between  flex-lg-row  ">
                 {/* <div className="mr-2 add_member">ADD MEMBER</div> */}
                 <div className="flex-grow-1 mr-2 w-75">
-                  <input id="memberEmail" type="text" className="form-control" placeholder="Email Address" />
+                  <input id="memFnInp" type="text" className="form-control" placeholder="First Name" />
                   {
                     formRes.err_status && formRes.error?.memberEmail?.required
                       ? <div className="text-danger"><div>{formRes.error?.memberEmail?.msg}</div> </div>
                       : ''
                   }
                 </div>
-                <div className="w-25 mr-2">
+                <div className="flex-grow-1 mr-2 w-75">
+                  <input id="memLnInp" type="text" className="form-control" placeholder="Last Name" />
+                  {
+                    formRes.err_status && formRes.error?.memberFname?.required
+                      ? <div className="text-danger"><div>{formRes.error?.memberFname?.msg}</div> </div>
+                      : ''
+                  }
+                </div>
+                <div className="flex-grow-1 mr-2 w-75">
+                  <input id="memberEmail" type="text" className="form-control" placeholder="Email Address" />
+                  {
+                    formRes.err_status && formRes.error?.memberLname?.required
+                      ? <div className="text-danger"><div>{formRes.error?.memberLname?.msg}</div> </div>
+                      : ''
+                  }
+                </div>
+                <div className="flex-grow-1 w-75 mr-2">
                   <select name="" id="memberRole" className="form-control">
-                    <option value="">Select Role</option>
+                    <option value="">Select Authority</option>
                     {memberRoles && memberRoles.length > 0 && memberRoles.map((role, mrIndex) => {
                       return (
                         <option key={mrIndex} value={mrIndex}>{role.name}</option>
@@ -838,16 +880,20 @@ const Configuration = (props) => {
             </div>
             <div className="search_result bg-white ">
               <div className="px-3 h_labels">
-                <div className="flex-grow-1 ml-lg-3">Email</div>
-                <div>Authority </div>
-                <div className="mr-lg-3" style={{ width: '20px' }}></div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">First Name</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0 text-left ">Last Name</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">Authority</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">Email</div>
+                <div className="mr-lg-3 w20" style={{ width: '20px' }}></div>
               </div>
               {members && members.length > 0 && members.map((member, mIndex) => {
                 return (
                   <div key={mIndex} className="px-3">
-                    <div className="flex-grow-1 ml-lg-3">{member.email}</div>
-                    <div>{member.department_name} </div>
-                    <div className="mr-lg-3"><a onClick={() => delMember(mIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">{member.first_name}</div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0 text-left">{member.last_name}</div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">{member.department_name}</div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">{member.email}</div>
+                    <div className="mr-lg-3 w20"><a onClick={() => delMember(mIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                   </div>
                 )
               })}
@@ -856,7 +902,7 @@ const Configuration = (props) => {
         </div>
         <div className="card">
           <div className="d-flex align-items-center">
-            <div className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp3" aria-expanded="true">
+            <div id="ct3" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp3" aria-expanded="true">
               <a className="card-title">
                 Invite Service Partners
                 <OverlayTrigger
@@ -923,8 +969,8 @@ const Configuration = (props) => {
             </div>
             <div className="search_result bg-white ">
               <div className="px-3 h_labels">
-                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">Firstname</div>
-                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">Lastname</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">First Name</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">Last Name</div>
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">Email</div>
                 <div className="mr-lg-3 w20"></div>
               </div>
@@ -943,7 +989,7 @@ const Configuration = (props) => {
         </div>
         <div className="card">
           <div className="d-flex align-items-center">
-            <div className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp4" aria-expanded="true">
+            <div id="ct4" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp4" aria-expanded="true">
               <a className="card-title">
                 Invite Task Owners
                 <OverlayTrigger
@@ -968,7 +1014,7 @@ const Configuration = (props) => {
             <div className="p-lg-3 m-lg-3 p-2 m-2 bg-white rounded">
               <div className="d-flex  align-items-start justify-content-between  flex-lg-row  ">
                 <div className="flex-grow-1 mr-2 w-75">
-                  <input id="toFirstname" type="text" className="form-control" placeholder="First name" />
+                  <input id="toFirstname" type="text" className="form-control" placeholder="First Name" />
                   {
                     formRes.err_status && formRes.error?.ownerFirstName?.required
                       ? <div className="text-danger"><div>{formRes.error?.ownerFirstName?.msg}</div> </div>
@@ -1021,8 +1067,8 @@ const Configuration = (props) => {
             </div>
             <div className="search_result bg-white ">
               <div className="px-3 h_labels">
-                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">Firstname</div>
-                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">Lastname</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">First Name</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">Last Name</div>
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right">Authority</div>
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">Email</div>
                 <div className="mr-lg-3 w20"></div>
@@ -1043,7 +1089,7 @@ const Configuration = (props) => {
         </div>
         <div className="card">
           <div className="d-flex align-items-center">
-            <div className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp5" aria-expanded="true">
+            <div id="ct5" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp5" aria-expanded="true">
               <a className="card-title">
                 Third Party Services
                 <OverlayTrigger
@@ -1087,7 +1133,7 @@ const Configuration = (props) => {
         </div>
         <div className="card">
           <div className="d-flex align-items-center">
-            <div className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp6" aria-expanded="true">
+            <div id="ct6" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp6" aria-expanded="true">
               <a className="card-title">
                 Access Token
                 <OverlayTrigger

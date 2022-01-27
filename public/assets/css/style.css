@@ -183,6 +183,13 @@ color: #db2c58!important;
 border-color: #db2c58;
 font-size: 12px!important;
 font-weight: 500;
+    max-width: 90px;
+    min-width: 90px;
+    width: 100%;
+}
+.strucBorder td, .strucBorder th
+{
+	border-color: transparent;
 }
 .btn-primary {
 background: transparent linear-gradient(110deg, #FCBA3F 0%, #DB2A5A 53%, #D9551A 100%) 0% 0% no-repeat padding-box;
@@ -191,6 +198,10 @@ border: none;
 opacity: 1;
 color: #fff!important;
 font-size: 12px!important;
+    max-width: 90px;
+    min-width: 90px;
+    width: 100%;
+
 }
 .form-control {
 border-color: transparent;
@@ -327,7 +338,7 @@ border-bottom: 1px solid #D1D2D9;
 }
 .aDm_navigation li>a {
 color: #7A8295;
-font-size: 14px;
+font-size: 13px;
 font-weight: 500;
 }
 .aDm_navigation .nav-item.active {
@@ -422,7 +433,7 @@ border-bottom-right-radius: 0!important;
 }
 .profileSec label {
 color: #717A86;
-font-size: 14px;
+font-size: 12px;
 font-weight: 500;
 margin-bottom: 0;
 white-space: nowrap;
@@ -433,10 +444,16 @@ width: 100%;
 {
 font-weight: 500;
 color: #1C204D;
-font-size: 14px;
+font-size: 12px;
 max-width: 100%;
 width: 100%;
 padding: 0;
+}
+.profileSec .form-control:disabled,.profileSec .form-control[readonly] {
+    background-color: transparent;
+    opacity: 1;
+    cursor: not-allowed;
+    color: #8693B1!important;
 }
 .profileSec .c_psd{
 position: absolute;
@@ -478,7 +495,7 @@ border-radius: 0!important;
 }
 .accordianSec .card-header a {
 color: #1C204D;
-font-size: 14px;
+font-size: 13px;
 margin-bottom: 0px;
 text-decoration: none;
 cursor: pointer;
@@ -514,7 +531,7 @@ position: relative;
 .mainContent:after {
 content: '';
 display: block;
-height: 70px;
+height: 70px; 
 }
 .minibar .sidebar {
 max-width: 50px;
@@ -865,7 +882,7 @@ padding-right: 5px;
 .gridcontainer>div {
 background: #FFFFFF 0% 0% no-repeat padding-box;
 box-shadow: 0px 6px 12px #EFE9EA;
-border: 1px solid #DBDFEA;
+/*border: 1px solid #DBDFEA;*/
 border-radius: 10px;
 opacity: 1;
 }
@@ -1105,6 +1122,8 @@ font-size: 14px;
 .gridcontainer>.grid_item>.card>.card-header,
 .gridcontainer>.grid_item>.card>.card-footer {
 padding: 0.75rem 10px;
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
 }
 .gridcontainer>.grid_item:nth-child(1)>.card>.card-header {
 background: #DA334C;
@@ -1262,14 +1281,14 @@ position: relative;
 display: block;
 padding: 0.5rem 0.75rem;
 margin-left: -1px;
-line-height: 1.25;
+line-height: 1;
 color: #8693b1;
 background-color: transparent;
 border: 1px solid #8693b1;
 max-width: 150px;
 min-width: 150px;
 text-align: center;
-font-size: 14px;
+font-size: 12px;
 }
 .filterview .page-item.active .page-link {
 z-index: 3;
@@ -1325,6 +1344,15 @@ max-height: 180px;
 height: 100%;
 min-height: 180px;
 overflow-x: hidden;
+font-size: 14px;
+line-height: 1.8;
+}
+#checkboxes label{
+display: flex!important;
+align-items: center;
+}
+#checkboxes label > img {
+margin: 0px 5px;
 }
 #accountsType{
 padding: 0;
@@ -1343,7 +1371,7 @@ top: 8px;
 #accountsType .typescroll {
 height: 225px;
 overflow-x: hidden;
-    overflow-y: auto;
+overflow-y: auto;
 }
 #checkboxes label,#accountsType .typescroll label {
 display: block;
@@ -1466,9 +1494,9 @@ max-width: 100%;
 margin-bottom: 1em;
 }
 .fc .fc-daygrid-day-frame {
-    position: relative;
-    min-height: 100%;
-    background: #fff;
+position: relative;
+min-height: 100%;
+background: #fff;
 }
 table.fc-col-header tr {
 background: #EDD8DD;

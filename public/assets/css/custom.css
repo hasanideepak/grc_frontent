@@ -136,3 +136,146 @@ a.info{
     margin-left: -2px;
 }
 /* calender design css end */
+
+
+/* task manager card view custom  css start */
+.card_container>.grid_item>.card>.card-body .gridBox.todo_Filter {
+    border-left: 2px solid #DA334C;
+}
+
+.card_container>.grid_item>.card>.card-body .gridBox.inProgress_Filter {
+    border-left: 2px solid #397AC6;
+}
+
+.card_container>.grid_item>.card>.card-body .gridBox.underReview_Filter {
+    border-left: 2px solid #FBBA33;
+}
+
+.card_container>.grid_item>.card>.card-body .gridBox.complete_Filter {
+    border-left: 2px solid #66C679;
+}
+
+.gridBox + .gridBox  {
+    margin-top: 15px;
+}
+
+.card_container>.grid_item>.card>.card-body .gridBox {
+    margin-bottom: 0px;
+}
+.gridcontainer>.grid_item>.card>.card-body .gridBox {
+    border: 1px solid #D1D2D9;
+    border-bottom: 0;
+    margin-bottom: 10px;
+}
+.card_container>.grid_item>.card>.card-body .gridBox>.gridboxbody {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: self-start;
+    justify-content: space-between;
+    min-height: 110px;
+    /* max-height: 110px; */
+    height: 100%;
+    background: #fff;
+}
+
+.card_container>.grid_item>.card>.card-body .gridBox.todo_Filter>.gridboxbody a {
+    background: #DA334C;
+}
+.card_container>.grid_item>.card>.card-body .gridBox.inProgress_Filter>.gridboxbody a {
+    background: #397AC6;
+}
+.card_container>.grid_item>.card>.card-body .gridBox.underReview_Filter>.gridboxbody a {
+    background: #FBBA33;
+}
+.card_container>.grid_item>.card>.card-body .gridBox.complete_Filter>.gridboxbody a {
+    background: #66C679;
+}
+.card_container>.grid_item>.card>.card-body .gridBox>.gridboxbody a {
+    width: auto;
+    height: 20px;
+    background: #ccc;
+    color: #fff;
+    border-radius: 9px;
+    padding: 3px 10px;
+    text-transform: uppercase;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.card_container>.grid_item>.card>.card-body .gridBox>.gridboxbody>p {
+    margin-bottom: 0px;
+}
+.gridcontainer>.grid_item>.card>.card-body .gridBox>.gridboxbody>p {
+    color: #8693B1;
+    font-size: 12px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+   text-overflow: ellipsis;
+}
+.gridcontainer>.grid_item>.card>.card-body .gridBox>.gridboxbody>p>span {
+   display: -webkit-box;
+   -webkit-line-clamp: 1;
+    line-clamp: 1; 
+   -webkit-box-orient: vertical;
+}
+
+.gridcontainer>.grid_item>.card>.card-body .gridBox>.gridboxbody img[alt="folder"] {
+    background: url("../img/gbl.svg") 194px -3px;
+    height: 12px;
+    width: 12px;
+}
+
+.gridcontainer>.grid_item>.card>.card-body .gridBox>.gridboxbody img[alt="date"] {
+    background: url("../img/gbl.svg") 173px -3px;
+    height: 12px;
+    width: 12px;
+}
+
+
+.card_container>.grid_item>.card>.card-body .gridBox.todo_Filter>.gridboxfooter {
+    background: #faf5f6;
+}
+
+.card_container>.grid_item>.card>.card-body .gridBox.inProgress_Filter>.gridboxfooter {
+    background: #e1ebf7;
+}
+
+.card_container>.grid_item>.card>.card-body .gridBox.underReview_Filter>.gridboxfooter {
+    background: #fef5e1;
+}
+
+.card_container>.grid_item>.card>.card-body .gridBox.complete_Filter>.gridboxfooter {
+    background: #e8f7eb;
+}
+
+.gridcontainer>.grid_item>.card>.card-body .gridBox>.gridboxfooter {
+    background: #E9EBF1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #D1D2D9;
+    border-width: 0px 0px 1px 0px;
+}
+
+.card_container>.grid_item>.card>.card-body .gridBox>.gridboxbody>h4 {
+    margin-bottom: 0;
+}
+.gridcontainer>.grid_item>.card>.card-body .gridBox>.gridboxbody>h4 {
+    color: #1C204D;
+    font-size: 14px;
+    display: -webkit-box;
+   -webkit-line-clamp: 2;
+    line-clamp: 2; 
+   -webkit-box-orient: vertical;
+   overflow: hidden;
+}
+.timecontainer>.grid_item>.card>.card-body>.gridBox>.gridboxbody>div>h4 {
+    width: 300px;
+}
+/* task manager card view custom  css end */
