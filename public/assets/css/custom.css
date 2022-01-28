@@ -36,6 +36,9 @@
     background: #7A8295;
     opacity: 30%;
 }
+.link_url{
+    cursor: pointer !important;
+}
 .navbar-nav a{
     color: #ffffff !important;
     cursor: pointer;
