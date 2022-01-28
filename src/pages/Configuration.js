@@ -970,7 +970,7 @@ const Configuration = (props) => {
             <div className="search_result bg-white ">
               <div className="px-3 h_labels">
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">First Name</div>
-                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">Last Name</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_2 mr-0">Last Name</div>
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_3 mr-2">Email</div>
                 <div className="mr-lg-3 w20"></div>
               </div>
@@ -978,7 +978,7 @@ const Configuration = (props) => {
                 return (
                   <div key={spIndex} className=" px-3">
                     <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">{partner.first_name} </div>
-                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">{partner.last_name} </div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_2 mr-0">{partner.last_name} </div>
                     <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_3 mr-2">{partner.email}</div>
                     <div className="mr-lg-3"><a onClick={() => delPartner(spIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                   </div>
