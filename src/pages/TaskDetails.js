@@ -243,23 +243,28 @@ const TaskDetails = (props) => {
 
                     <div className="stat_box">
                       <span>Task ID</span>
-                      <span>A54</span>
+                      <span>{taskDetails && taskDetails?.task && taskDetails?.task[0]?.task_id}</span>
                     </div>
                     <div className="stat_box">
                       <span>AUC ID</span>
-                      <span>25</span>
+                      <span>{taskDetails && taskDetails?.task && taskDetails?.task[0]?.auc_id}</span>
                     </div>
                     <div className="stat_box">
                       <span>Completion</span>
-                      <span className="text_color_4">25%</span>
+                      <span className="text_color_4">{taskDetails && taskDetails?.task && taskDetails?.task[0]?.completion_pct}%</span>
                     </div>
                     <div className="stat_box">
                       <span>Status</span>
-                      <span className="text-success">Completed</span>
+                      {
+                        taskDetails && taskDetails?.task && taskDetails?.task[0]?.task_status
+                        ? <span className={`text-${taskDetails?.task[0]?.task_status == "pending" ? 'danger' : (taskDetails?.task[0]?.task_status == 'in_progress' ? 'wraning' : (taskDetails?.task[0]?.task_status == 'review' ? 'secondary' : 'success'))}`}>{taskDetails?.task[0]?.task_status}</span>
+                        : ''
+                      }
+                      
                     </div>
                     <div className="stat_box">
                       <span>Due Date</span>
-                      <span>Dec 23, 2021</span>
+                      <span>{taskDetails && taskDetails?.task && taskDetails?.task[0]?.due_date}</span>
                     </div>
                   </div>
                   <div className="stat_chips_block p-3">
