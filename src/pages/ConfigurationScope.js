@@ -223,7 +223,7 @@ const ConfigurationScope = (props) => {
       // })
       fetchInfo("all")
       vendorInput.value = ""
-      changePanel(4)
+      // changePanel(4)
       formRes = { status: true, err_status: false, type: "vendor", error: {}, msg: "Vendor added successfully" }
       setFormRes(formRes)
     } else {
@@ -385,7 +385,7 @@ const ConfigurationScope = (props) => {
         <div className="card">
           <div className="d-flex align-items-center">
             <div id="ch1" className="card-header flex-grow-1" data-toggle="collapse" href="#cp1">
-              <a className="card-title">
+              <a className="card-title w-100 d-flex">
                 People
                 <OverlayTrigger
                   key={"right"}
@@ -399,7 +399,7 @@ const ConfigurationScope = (props) => {
                   <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {getAllScopes && getAllScopes.peoples && getAllScopes.peoples.length > 0
-                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
                   : ''
                 }
               </a>
@@ -449,7 +449,7 @@ const ConfigurationScope = (props) => {
         <div className="card ">
           <div className="d-flex align-items-center">
             <div id="ch2" className="card-header collapsed flex-grow-1" data-toggle="collapse" data-parent="#accordion" href="#cp2">
-              <a className="card-title">
+              <a className="card-title w-100 d-flex">
                 Technology Assets
                 <OverlayTrigger
                   key={"right"}
@@ -463,7 +463,7 @@ const ConfigurationScope = (props) => {
                   <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {getAllScopes && getAllScopes.technology_assets && getAllScopes.technology_assets.length > 0 && (getAllScopes.technology_assets[0].endpoints)
-                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
                   : ''
                 }
               </a>
@@ -477,7 +477,7 @@ const ConfigurationScope = (props) => {
               <div className="row">
                 <div className="form-group col-md-6 formInline">
                   <label htmlFor="">Endpoints:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Endpoints" id="epInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets[0].endpoints ? getAllScopes?.technology_assets[0]?.endpoints : '' } />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Endpoints" id="epInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets[0]?.endpoints ? getAllScopes?.technology_assets[0]?.endpoints : '' } />
                   {
                     formRes.err_status && formRes.error?.endPoints?.required
                       ? <div className="text-danger"><div>{formRes.error?.endPoints?.msg}</div> </div>
@@ -486,7 +486,7 @@ const ConfigurationScope = (props) => {
                 </div>
                 <div className="form-group col-md-6 formInline" >
                   <label htmlFor="" className="pl-xl-5">Servers:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Servers" id="serverInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets[0].servers ? getAllScopes?.technology_assets[0]?.servers : '' } />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Servers" id="serverInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets[0]?.servers ? getAllScopes?.technology_assets[0]?.servers : '' } />
                   {
                     formRes.err_status && formRes.error?.servers?.required
                       ? <div className="text-danger"><div>{formRes.error?.servers?.msg}</div> </div>
@@ -497,7 +497,7 @@ const ConfigurationScope = (props) => {
               <div className="row">
                 <div className="form-group col-md-6 formInline">
                   <label htmlFor="">Mobile Devices:</label>
-                  <input type="text" className="form-control bg-transparent" placeholder="No. of Mobile Devices" id="mdInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets[0].mobile_devices ? getAllScopes?.technology_assets[0]?.mobile_devices : '' } />
+                  <input type="text" className="form-control bg-transparent" placeholder="No. of Mobile Devices" id="mdInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets[0]?.mobile_devices ? getAllScopes?.technology_assets[0]?.mobile_devices : '' } />
                   {
                     formRes.err_status && formRes.error?.mobileDevices?.required
                       ? <div className="text-danger"><div>{formRes.error?.mobileDevices?.msg}</div> </div>
@@ -523,7 +523,7 @@ const ConfigurationScope = (props) => {
         </div>
         <div className="card">
           <div id="ch3" className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp3">
-            <a className="card-title">
+            <a className="card-title w-100 d-flex">
               Vendors/Service providers
               <OverlayTrigger
                   key={"right"}
@@ -537,7 +537,7 @@ const ConfigurationScope = (props) => {
                   <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {getAllScopes && getAllScopes.vendors && getAllScopes.vendors.length > 0
-                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
                   : ''
                 }
             </a>
@@ -582,7 +582,7 @@ const ConfigurationScope = (props) => {
         </div>
         <div className="card">
           <div id="ch4" className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp4">
-            <a className="card-title">
+            <a className="card-title w-100 d-flex">
               SaaS/Third Party Utility
               <OverlayTrigger
                   key={"right"}
@@ -596,7 +596,7 @@ const ConfigurationScope = (props) => {
                   <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {getAllScopes && getAllScopes.third_party_utilities && getAllScopes?.third_party_utilities.filter(util => util.is_selected == "Y").length > 0
-                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
                   : ''
                 }
             </a>
@@ -650,7 +650,7 @@ const ConfigurationScope = (props) => {
         </div>
         <div className="card">
           <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp5">
-            <a className="card-title">
+            <a className="card-title w-100 d-flex">
               Asset Register
               <OverlayTrigger
                   key={"right"}
@@ -664,7 +664,7 @@ const ConfigurationScope = (props) => {
                   <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {getAllScopes && getAllScopes.peoples && getAllScopes.peoples.length > 0
-                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
                   : ''
                 }
             </a>
@@ -682,9 +682,9 @@ const ConfigurationScope = (props) => {
             </div>
           </div>
         </div>
-        <div className="d-flex justify-content-end yrscpe">
+        {/* <div className="d-flex justify-content-end yrscpe">
           <a href="#" className="btn btn-primary submitBtn btn-lg">Submit</a>
-        </div>
+        </div> */}
       </div>
     </>
   )

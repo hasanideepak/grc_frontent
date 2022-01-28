@@ -300,8 +300,8 @@ const TaskManager = (props) => {
                               return (
                                 <div key={pIndex} className="gridBox">
                                   <div className="gridboxbody">
-                                    <h4>{ip_task.title}</h4>
-                                    <p><img src="assets/img/gbl.gif" alt="folder" /> <span>Task Name</span></p>
+                                    <h4>{ip_task.description}</h4>
+                                    <p><img src="assets/img/gbl.gif" alt="folder" /> <span>{ip_task.title}</span></p>
                                     <p><img src="assets/img/gbl.gif" alt="date" /><span>Created {ip_task.created_at}</span> </p>
 
                                   </div>
@@ -325,8 +325,8 @@ const TaskManager = (props) => {
                               return (
                                 <div key={pIndex} className="gridBox">
                                   <div className="gridboxbody">
-                                    <h4>{ur_task.title}</h4>
-                                    <p><img src="assets/img/gbl.gif" alt="folder" /> <span>Task Name</span></p>
+                                    <h4>{ur_task.description}</h4>
+                                    <p><img src="assets/img/gbl.gif" alt="folder" /> <span>{ur_task.title}</span></p>
                                     <p><img src="assets/img/gbl.gif" alt="date" /><span>Created {ur_task.created_at}</span> </p>
 
                                   </div>
@@ -350,8 +350,8 @@ const TaskManager = (props) => {
                               return (
                                 <div key={pIndex} className="gridBox">
                                   <div className="gridboxbody">
-                                    <h4>{c_task.title}</h4>
-                                    <p><img src="assets/img/gbl.gif" alt="folder" /> <span>Task Name</span></p>
+                                    <h4>{c_task.description}</h4>
+                                    <p><img src="assets/img/gbl.gif" alt="folder" /> <span>{c_task.title}</span></p>
                                     <p><img src="assets/img/gbl.gif" alt="date" /><span>Created {c_task.created_at}</span> </p>
 
                                   </div>
@@ -414,13 +414,13 @@ const TaskManager = (props) => {
                                     <div key={tIndex} className={`gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
                                       <div className="gridboxbody">
                                         <h4>{task.description}</h4>
-                                        <a href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
+                                        <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
                                         <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
                                         <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Created {task.created_at}</span> </p>
 
                                       </div>
                                       <div className="gridboxfooter">
-                                        <p>{task.project_task_id}</p>
+                                        <p className="m-0">{task.project_task_id}</p>
                                         <a href="#"><img src="assets/img/boxuser.svg" alt="" /></a>
                                       </div>
                                     </div>
@@ -434,13 +434,13 @@ const TaskManager = (props) => {
                                     <div key={tIndex} className={`gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
                                       <div className="gridboxbody">
                                         <h4>{task.description}</h4>
-                                        <a href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
+                                        <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
                                         <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
                                         <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Created {task.created_at}</span> </p>
 
                                       </div>
                                       <div className="gridboxfooter">
-                                        <p>{task.project_task_id}</p>
+                                        <p className="m-0">{task.project_task_id}</p>
                                         <a href="#"><img src="assets/img/boxuser.svg" alt="" /></a>
                                       </div>
                                     </div>
@@ -454,13 +454,13 @@ const TaskManager = (props) => {
                                     <div key={tIndex} className={`gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
                                       <div className="gridboxbody">
                                         <h4>{task.description}</h4>
-                                        <a href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
+                                        <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
                                         <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
                                         <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Created {task.created_at}</span> </p>
 
                                       </div>
                                       <div className="gridboxfooter">
-                                        <p>{task.project_task_id}</p>
+                                        <p className="m-0">{task.project_task_id}</p>
                                         <a href="#"><img src="assets/img/boxuser.svg" alt="" /></a>
                                       </div>
                                     </div>

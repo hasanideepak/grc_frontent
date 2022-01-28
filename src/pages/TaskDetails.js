@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
 import { SetCookie, GetCookie } from "../helpers/Helper";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
@@ -11,152 +11,40 @@ import moment from "moment";
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Calendar } from 'react-date-range';
-import { Accordion, Button, Card,useAccordionButton } from "react-bootstrap";
+import { Accordion, Button, Card, useAccordionButton } from "react-bootstrap";
 const TaskDetails = (props) => {
   const orgId = props?.user?.currentUser?.org_id || 0;
-  const [projectId, setProjectId] = useState(0)
+  const { taskId = 0 } = useParams()
   const accessRole = props?.user?.currentUser?.access_role || '';
-  const [viewType, setViewType] = useState({ board: true })
-  const [cardView, setCardViewe] = useState('all')
-  const [tasks, setTasks] = useState([]);
-  const [tasksByDates, setTasksByDates] = useState([]);
-  const [pendingTasks, setPendingTasks] = useState([]);
-  const [inProgresstasks, setInProgressTasks] = useState([]);
-  const [underReviewtasks, setUnderReviewTasks] = useState([]);
-  const [completedtasks, setCompletedTasks] = useState([]);
-  const [timelineDates, settimelineDates] = useState([]);
-  const [dates, setDates] = useState({});
+  const [taskDetails, setTaskDetails] = useState({})
+
   const navigate = useNavigate()
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   useEffect(() => {
-    if (projectId == 0) {
-      getProjectInfo()
+    if (Object.keys(taskDetails).length == 0 && taskId != 0) {
+      getTaskDetails()
     }
-    if (Object.keys(dates).length == 0) {
-      // initDates()
-    }
-    // if (tasks.length == 0) {
-    //   fetchInfo("all_tasks")
-    // }
-  }, []);
+  });
 
 
 
-  const getProjectInfo = async () => {
-
-
-    let payloadUrl = `configuration/getConfiguration/${orgId}`
+  const getTaskDetails = async () => {
+    let payloadUrl = `tasks/getTaskDetails/${taskId}`
     let method = "GET";
     let formData = {};
-
     let res = await ApiService.fetchData(payloadUrl, method);
     if (res && res.message == "Success") {
-      let obj = {
-        accounts_and_projects: res.accounts_and_projects,
-        frameWorks: res.frameworks,
-        keymembers: res.keymembers,
-        service_partners: res.service_partners,
-        task_owners: res.task_owners,
-        third_party_connectors: res.third_party_connectors,
-      }
-      setProjectId(res.accounts_and_projects[0].project_id)
+      let { task, evidence_needed, applicable_assets } = res
+      setTaskDetails(oldVal => {
+        let obj = { task: task, evidence_needed: evidence_needed, applicable_assets: applicable_assets }
+        return { ...obj }
+      })
       // fetchInfo("all_tasks",res.accounts_and_projects[0].project_id)
     }
+
   }
 
-
-  const fetchInfo = async (type = '', project_id = 0) => {
-    if (type == '') {
-      return false
-    };
-
-    let payloadUrl = ""
-    let method = "POST";
-    let formData = {};
-    let now = new Date()
-    let numDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
-    let startDate = new Date(now.getFullYear(), now.getMonth() + 1, 1)
-    startDate = `${startDate.getFullYear()}-${('00' + startDate.getMonth()).slice(-2)}-${('00' + startDate.getDate()).slice(-2)}`
-    let endDate = new Date(now.getFullYear(), now.getMonth() + 1, numDays)
-    endDate = `${endDate.getFullYear()}-${('00' + endDate.getMonth()).slice(-2)}-${('00' + endDate.getDate()).slice(-2)}`
-    if (type == 'all_tasks') {
-      // https://zp5ffmsibc.us-east-1.awsapprunner.com/tasks/listTasks
-      payloadUrl = `tasks/listTasks`
-      method = "POST";
-      formData = { project_id: projectId || project_id, authority: accessRole, start_date: startDate, end_date: endDate, task_status: "all" }
-    } else {
-      // https://zp5ffmsibc.us-east-1.awsapprunner.com/tasks/listTasks
-      payloadUrl = `tasks/listTasks/`
-      method = "POST";
-      formData = { project_id: projectId || project_id, authority: accessRole, start_date: startDate, end_date: endDate, task_status: type }
-    }
-
-    let res = await ApiService.fetchData(payloadUrl, method, formData);
-    if (res && res.message == "Success") {
-      // if (type == 'all_tasks') {
-      let allTasks = res.results;
-      setTasks(oldVal => {
-        return { ...allTasks }
-      })
-      let tmpPendingArr = [],
-        tmpInProgressArr = [],
-        tmpUnderReviewArr = [],
-        tmpCompletedArr = [],
-        tmpTimelineDates = [],
-        tmpTasksByDates = [];
-
-      allTasks && allTasks.map(task => {
-        if (task.task_status == "pending") {
-          tmpPendingArr.push(task)
-        } else if (task.task_status == "in_progress") {
-          tmpInProgressArr.push(task)
-        } else if (task.task_status == "review") {
-          tmpUnderReviewArr.push(task)
-        } else if (task.task_status == "completed") {
-          tmpCompletedArr.push(task)
-        }
-        if (!tmpTimelineDates.includes(task.created_at)) {
-          tmpTimelineDates.push(task.created_at)
-        }
-
-        if (!Object.keys(tmpTasksByDates).includes(task.created_at)) {
-          tmpTasksByDates[task.created_at] = []
-        }
-        tmpTasksByDates[task.created_at].push(task)
-      })
-      setPendingTasks(tmpPendingArr)
-      setInProgressTasks(tmpInProgressArr)
-      setUnderReviewTasks(tmpUnderReviewArr)
-      setCompletedTasks(tmpCompletedArr)
-      settimelineDates(tmpTimelineDates)
-      setTasksByDates(tmpTasksByDates)
-    }
-    // }
-  }
-
-  const onSubmit = async (data) => {
-    console.log(data);
-    if (!data.email || data.email == '' || !data.password || data.password == '') {
-      return false
-    };
-    console.log(!data.email || data.email == '' || !data.password || data.password == '');
-    let payload = data
-    let res = await ApiService.post(payload.type, payload, TaskDetails);
-    if (res && res.status == true) {
-      SetCookie('currentUser', JSON.stringify(res.data))
-      navigate('/home')
-    }
-  }
-
-  const selectionRange = {
-    'Today': [moment(), moment()],
-    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-    'This Month': [moment().startOf('month'), moment().endOf('month')],
-    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-  }
 
   const handleSelect = (ranges) => {
     console.log(ranges);
@@ -168,42 +56,9 @@ const TaskDetails = (props) => {
     // }
   }
 
-  const changeView = (view = "") => {
-    if (view == "") {
-      return false
-    }
-    let obj = {}
-    obj["board"] = false;
-    obj["card"] = false;
-    obj["timeline"] = false;
-    obj["calender"] = false;
-    obj[view] = true;
-    setViewType(oldVal => {
-      return { ...obj }
-    })
-  }
-  const changeCardView = (view = "") => {
-    if (view == "") {
-      return false
-    }
-    if (view == "all") {
-      fetchInfo('all_tasks')
-    } else if (view == 'pending') {
-      fetchInfo('pending')
-    } else if (view == 'inProgress') {
-      fetchInfo('in_progress')
-    } else if (view == 'review') {
-      fetchInfo('review')
-    } else if (view == 'completed') {
-      fetchInfo('completed')
-    }
-    setCardViewe(view)
-  }
-
-  const CustomToggle = useAccordionButton("1");
 
   // console.log(watch("email")); // watch input value by passing the name of it
-
+  console.log(taskDetails)
   return (
     <>
       <Header />
@@ -214,7 +69,7 @@ const TaskDetails = (props) => {
               <div class="card-body">
                 <h5 class="card-title">Description</h5>
                 <p class="card-text">
-                  It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content her… Read more
+                  {taskDetails && taskDetails?.task && taskDetails?.task[0]?.description}
                 </p>
 
               </div>
@@ -224,75 +79,105 @@ const TaskDetails = (props) => {
                 <div className="task_card_block assets_block">
                   <div className="card_block p-3">
                     <Accordion defaultActiveKey="0">
-                    <Accordion.Item eventKey="0">
-                      <Accordion.Header>Applicable Assets</Accordion.Header>
-                      <Accordion.Body>
-                        <div className="assets_list pl-2">
-                          <div className="assets_box pt-3">
-                            <div className="header">People</div>
-                            <ul className="m-0 pl-2">
-                              <li className="d-flex justify-content-between">
-                                <span>Employees:</span>
-                                <span>07</span>
-                              </li>
-                              <li className="d-flex justify-content-between">
-                                <span>Consultants:</span>
-                                <span>10</span>
-                              </li>
-                            </ul>
+                      <Accordion.Item eventKey="0">
+                        <Accordion.Header>Applicable Assets</Accordion.Header>
+                        <Accordion.Body>
+                          <div className="assets_list pl-2">
+                            {(() => {
+                              if (taskDetails && taskDetails?.applicable_assets && taskDetails?.applicable_assets?.peoples.length > 0) {
+                                return (
+                                  <>
+                                    <div className="assets_box pt-3">
+                                      <div className="header">People</div>
+                                      <ul className="m-0 pl-2">
+                                        <li className="d-flex justify-content-between">
+                                          <span>Employees:</span>
+                                          <span>{taskDetails?.applicable_assets?.peoples[0]?.employees ? taskDetails?.applicable_assets?.peoples[0]?.employees : 0}</span>
+                                        </li>
+                                        <li className="d-flex justify-content-between">
+                                          <span>Consultants:</span>
+                                          <span>{taskDetails?.applicable_assets?.peoples[0]?.consultants ? taskDetails?.applicable_assets?.peoples[0]?.consultants : 0}</span>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </>
+                                )
+                              }
+                            })()}
+                            {(() => {
+                              if (taskDetails && taskDetails?.applicable_assets && taskDetails?.applicable_assets?.technology_assets.length > 0) {
+                                return (
+                                  <>
+                                    <div className="assets_box pt-3">
+                                      <div className="header">Technology Assets</div>
+                                      <ul className="m-0 pl-2">
+                                        <li className="d-flex justify-content-between">
+                                          <span>Endpoints:</span>
+                                          <span>{taskDetails?.applicable_assets?.technology_assets[0]?.endpoints ? taskDetails?.applicable_assets?.technology_assets[0]?.endpoints : 0}</span>
+                                        </li>
+                                        <li className="d-flex justify-content-between">
+                                          <span>Mobile Devices:</span>
+                                          <span>{taskDetails?.applicable_assets?.technology_assets[0]?.mobile_devices ? taskDetails?.applicable_assets?.technology_assets[0]?.mobile_devices : 0}</span>
+                                        </li>
+                                        <li className="d-flex justify-content-between">
+                                          <span>Servers:</span>
+                                          <span>{taskDetails?.applicable_assets?.technology_assets[0]?.servers ? taskDetails?.applicable_assets?.technology_assets[0]?.servers : 0}</span>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </>
+                                )
+                              }
+                            })()}
+                            {(() => {
+                              if (taskDetails && taskDetails?.applicable_assets && taskDetails?.applicable_assets?.vendors.length > 0) {
+                                return (
+                                  <>
+                                    <div className="assets_box pt-3">
+                                      <div className="header">Vendors/Service Providers</div>
+                                      <ul className="m-0 pl-2">
+                                        {taskDetails?.applicable_assets?.vendors && taskDetails?.applicable_assets?.vendors.map((vendor, vIndex) => {
+                                          return (
+                                            <li key={vIndex} className="d-flex justify-content-between">
+                                              <span>{vendor.vendor}</span>
+                                              <span></span>
+                                            </li>
+                                          )
+                                        })}
+                                      </ul>
+                                    </div>
+
+                                  </>
+                                )
+                              }
+                            })()}
+                            {(() => {
+                              if (taskDetails && taskDetails?.applicable_assets && taskDetails?.applicable_assets?.third_party_utilities.length > 0 && taskDetails?.applicable_assets?.third_party_utilities.filter(ut => ut.is_selected == "Y").length > 0) {
+                                return (
+                                  <>
+                                    <div className="assets_box pt-3">
+                                      <div className="header">Saas/Third Party Utility</div>
+                                      <ul className="m-0 pl-2">
+                                        {taskDetails?.applicable_assets?.third_party_utilities && taskDetails?.applicable_assets?.third_party_utilities.map((utility, uIndex) => {
+                                          if (utility.is_selected == 'Y') {
+                                            return (
+                                              <li key={uIndex} className="d-flex justify-content-between">
+                                                <span>{utility.name}</span>
+                                                <span></span>
+                                              </li>
+                                            )
+                                          }
+                                        })}
+                                      </ul>
+                                    </div>
+                                  </>
+                                )
+                              }
+                            })()}
                           </div>
-                          <div className="assets_box pt-3">
-                            <div className="header">Technology Assets</div>
-                            <ul className="m-0 pl-2">
-                              <li className="d-flex justify-content-between">
-                                <span>Endpoints:</span>
-                                <span>06</span>
-                              </li>
-                              <li className="d-flex justify-content-between">
-                                <span>Mobile Devices:</span>
-                                <span>03</span>
-                              </li>
-                              <li className="d-flex justify-content-between">
-                                <span>Servers:</span>
-                                <span>02</span>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="assets_box pt-3">
-                            <div className="header">Vendors/Service Providers</div>
-                            <ul className="m-0 pl-2">
-                              <li className="d-flex justify-content-between">
-                                <span>icloud.com</span>
-                                <span></span>
-                              </li>
-                              <li className="d-flex justify-content-between">
-                                <span>gmail.com</span>
-                                <span></span>
-                              </li>
-                              <li className="d-flex justify-content-between">
-                                <span>yahoo.com</span>
-                                <span></span>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="assets_box pt-3">
-                            <div className="header">Saas/Third Party Utility</div>
-                            <ul className="m-0 pl-2">
-                              <li className="d-flex justify-content-between">
-                                <span>Jeera 1</span>
-                                <span></span>
-                              </li>
-                              <li className="d-flex justify-content-between">
-                                <span>Asana</span>
-                                <span></span>
-                              </li>
-                            </ul>
-                          </div>
-                          
-                        </div>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                      
+                        </Accordion.Body>
+                      </Accordion.Item>
+
                       {/* <Card>
                         <Card.Header>
                           <span onClick={useAccordionButton("1", () =>console.log('totally custom!'))}>Applicable Assets</span>
@@ -314,26 +199,14 @@ const TaskDetails = (props) => {
                     <div className="header my-2">
                       <h3 className="m-0">Evidence Needed</h3>
                     </div>
-                    <div className="card_box px-0">
-                      <span> <i class="fa fa-file" aria-hidden="true"></i> Security Awareness Training Screenshots</span>
-                      <span>Uploded</span>
-                    </div>
-                    <div className="card_box px-0">
-                      <span><i class="fa fa-file" aria-hidden="true"></i> Phishing test Results</span>
-                      <span>Uploded</span>
-                    </div>
-                    <div className="card_box px-0">
-                      <span><i class="fa fa-file" aria-hidden="true"></i> New Employees of the quarter added</span>
-                      <span className="">Uploded</span>
-                    </div>
-                    <div className="card_box px-0">
-                      <span><i class="fa fa-file" aria-hidden="true"></i> Policy</span>
-                      <span className="">Uploded</span>
-                    </div>
-                    <div className="card_box px-0">
-                      <span><i class="fa fa-file" aria-hidden="true"></i> Procedure</span>
-                      <span className="">Uploded</span>
-                    </div>
+                    {taskDetails && taskDetails?.evidence_needed && taskDetails?.evidence_needed.map((evidence, eIndex) => {
+                      return (
+                        <div key={eIndex} className="card_box px-0">
+                          <span> <i class="fa fa-file" aria-hidden="true"></i> {evidence.evidence_name}</span>
+                          <span>Uploded</span>
+                        </div>
+                      )
+                    })}
                   </div>
                   <div className="w-100 px-3 pb-2">
                     <div className="control_button_block">
@@ -414,14 +287,31 @@ const TaskDetails = (props) => {
             </div>
             <div class="card mt-4">
               <div class="card-body p-0">
-                <div className="task_control_block">
+                <div className="task_card_block task_control_block">
+                  <div className="card_block control_block py-3 pb-5">
+                    <Accordion defaultActiveKey="0">
+                      <Accordion.Item eventKey="0">
+                        <Accordion.Header>Controls & Mapping</Accordion.Header>
+                        <Accordion.Body>
+                          <div className="card_box control_box">
+                            <span>SOC2</span>
+                            <span>AIR</span>
+                          </div>
+                        </Accordion.Body>
+                      </Accordion.Item>
+                    </Accordion>
+
+                  </div>
+                </div>
+
+                {/* <div className="task_control_block">
                   <div className="control_block py-3 pb-5">
                     <div className="header my-2">
                       <h3 className="m-0 pl-2">Controls & Mapping</h3>
                     </div>
                     <div className="control_box">
-                      <span>ISO 2 to 1</span>
-                      <span>Request 11.4</span>
+                      <span>SOC2</span>
+                      <span>AIR</span>
                     </div>
                     <div className="control_box show_bg">
                       <span>ISO 1</span>
@@ -437,8 +327,8 @@ const TaskDetails = (props) => {
                     </div>
 
                   </div>
-                  
-                </div>
+
+                </div> */}
               </div>
             </div>
           </div>

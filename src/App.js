@@ -70,7 +70,7 @@ function App() {
                     <Route  path="/dashboard" element={<Dashboard />}></Route>
                     <Route  path="/onboarding" element={<Configuration user={authUser} />}></Route>
                     <Route  path="/task-manager" element={<TaskManager user={authUser} /> }></Route>
-                    <Route  path="/task-details" element={<TaskDetails user={authUser} /> }></Route>
+                    <Route  path="/task-details/:taskId" element={<TaskDetails user={authUser} /> }></Route>
                     <Route  path="/evidence-manager" element={<EvidenceManager /> }></Route>
                     <Route  path="/configuration" element={<Configuration user={authUser} /> }></Route>
                     <Route  path="/onboarding_scope/:token" element={<ConfigurationScope user={authUser} /> }></Route>

@@ -332,7 +332,7 @@ const Configuration = (props) => {
       memLnInput.value = ""
       memEmailInput.value = ""
       memRoleInput.value = ""
-      changePanel(3)
+      // changePanel(3)
       formRes = { status: true, err_status: false, error: {}, type: "member", msg: "Member added successfully" }
       setFormRes(formRes)
     } else {
@@ -409,7 +409,7 @@ const Configuration = (props) => {
       partnerFnInput.value = ""
       partnerLnInput.value = ""
       partnerEmailInput.value = ""
-      changePanel(4)
+      // changePanel(4)
       formRes = { status: true, err_status: false, error: {}, type: "partner", msg: "Member added successfully" }
       setFormRes(formRes)
     } else {
@@ -493,7 +493,7 @@ const Configuration = (props) => {
       toFnInput.value = ""
       toLnInput.value = ""
       toEmailInput.value = ""
-      changePanel(5)
+      // changePanel(5)
       formRes = { status: true, err_status: false, error: {}, type: "owner", msg: "Task owner added successfully" }
       setFormRes(formRes)
     } else {
@@ -676,7 +676,7 @@ const Configuration = (props) => {
         <div className="card ">
           <div className="d-flex align-items-center">
             <div id="ct0" className="card-header flex-grow-1" data-toggle="collapse" href="#cp0" aria-expanded="true">
-              <a className="card-title">
+              <a className="card-title w-100 d-flex">
                 Account Setup
                 <OverlayTrigger
                   key={"right"}
@@ -690,7 +690,7 @@ const Configuration = (props) => {
                   <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {accountsList && accountsList.length > 0
-                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
                   : ''
                 }
               </a>
@@ -754,7 +754,7 @@ const Configuration = (props) => {
         <div className="card ">
           <div className="d-flex align-items-center">
             <div id="ct1" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp1" aria-expanded="true">
-              <a className="card-title">
+              <a className="card-title w-100 d-flex">
                 Framework Setup
                 <OverlayTrigger
                   key={"right"}
@@ -768,7 +768,7 @@ const Configuration = (props) => {
                   <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {getAllConfigs && getAllConfigs?.frameWorks && getAllConfigs?.frameWorks.filter(frameWork => frameWork.is_selected == "Y").length > 0
-                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
                   : ''
                 }
               </a>
@@ -799,7 +799,7 @@ const Configuration = (props) => {
         <div className="card ">
           <div className="d-flex align-items-center">
             <div id="ct2" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp2" aria-expanded="true">
-              <a className="card-title">
+              <a className="card-title w-100 d-flex">
                 Key Members
                 <OverlayTrigger
                   key={"right"}
@@ -813,7 +813,7 @@ const Configuration = (props) => {
                   <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {members && members.length > 0
-                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
                   : ''
                 }
               </a>
@@ -903,7 +903,7 @@ const Configuration = (props) => {
         <div className="card">
           <div className="d-flex align-items-center">
             <div id="ct3" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp3" aria-expanded="true">
-              <a className="card-title">
+              <a className="card-title w-100 d-flex">
                 Invite Service Partners
                 <OverlayTrigger
                   key={"right"}
@@ -917,7 +917,7 @@ const Configuration = (props) => {
                   <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {servicePartners && servicePartners.length > 0
-                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
                   : ''
                 }
               </a>
@@ -990,7 +990,7 @@ const Configuration = (props) => {
         <div className="card">
           <div className="d-flex align-items-center">
             <div id="ct4" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp4" aria-expanded="true">
-              <a className="card-title">
+              <a className="card-title w-100 d-flex">
                 Invite Task Owners
                 <OverlayTrigger
                   key={"right"}
@@ -1004,7 +1004,7 @@ const Configuration = (props) => {
                   <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {taskOwners && taskOwners.length > 0
-                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
                   : ''
                 }
               </a>
@@ -1090,7 +1090,7 @@ const Configuration = (props) => {
         <div className="card">
           <div className="d-flex align-items-center">
             <div id="ct5" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp5" aria-expanded="true">
-              <a className="card-title">
+              <a className="card-title w-100 d-flex">
                 Third Party Services
                 <OverlayTrigger
                   key={"right"}
@@ -1104,7 +1104,7 @@ const Configuration = (props) => {
                   <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {tpServices && tpServices.filter(tpService => tpService.is_selected == "Y").length > 0
-                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
                   : ''
                 }
               </a>
@@ -1134,7 +1134,7 @@ const Configuration = (props) => {
         <div className="card">
           <div className="d-flex align-items-center">
             <div id="ct6" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp6" aria-expanded="true">
-              <a className="card-title">
+              <a className="card-title w-100 d-flex">
                 Access Token
                 <OverlayTrigger
                   key={"right"}
@@ -1148,7 +1148,7 @@ const Configuration = (props) => {
                   <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {tpServices && tpServices.filter(tpService => tpService.is_token_added == "Y").length > 0
-                  ? <span className="success_icon d-inline-block ml-2"><i className="fa fa-check-circle"></i></span>
+                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
                   : ''
                 }
               </a>

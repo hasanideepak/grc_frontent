@@ -66,18 +66,23 @@
     border-radius: 50%;
     overflow: hidden;
     vertical-align: middle;
-    width: 16px;
-    height: 16px;
+    width: 11px;
+    height: 12px;
     background: #fff;
-    opacity: 1;;
+    opacity: 1;
+    line-height: 1;
 }
 .accordion .card-header a > span.info_icon > i {
-    font-size: 18px;
+    font-size: 13px;
     line-height: 1;
     background: transparent linear-gradient(143deg, #FCBA3F 0%, #DB2A5A 53%, #D9551A 100%) 0% 0% no-repeat padding-box;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.accordion .card-header:not(.collapsed) span.success_icon  {
+    display: none !important;
 }
 
 .aDm_navigation li>a,
@@ -165,6 +170,9 @@ a.info{
 
 
 /* task manager card view custom  css start */
+.timecontainer>.grid_item>.card>.card-body {
+    min-height: 150px !important;
+}
 .card_container>.grid_item>.card>.card-body .gridBox.todo_Filter {
     border-left: 2px solid #DA334C;
 }
@@ -387,10 +395,10 @@ a.info{
 }
 
 
-#taskDetails_sec .assets_block .accordion .accordion-header{
+#taskDetails_sec .task_card_block .accordion .accordion-header{
     line-height: 0.5;
 }
-#taskDetails_sec .assets_block .accordion .accordion-header button{
+#taskDetails_sec .task_card_block .accordion .accordion-header button{
     color: #1C204D;
     font-size: 12px;
     border: none;
@@ -399,7 +407,7 @@ a.info{
     vertical-align: middle;
 }
 
-#taskDetails_sec .assets_block .accordion .accordion-header button:before{
+#taskDetails_sec .task_card_block .accordion .accordion-header button:before{
     content: "";
     background: url(../img/gbl.svg) 51.9px 1px;
     height: 18px;
@@ -415,11 +423,11 @@ a.info{
     cursor: pointer;
 }
 
-#taskDetails_sec .assets_block .accordion .assets_list .assets_box .header{
+#taskDetails_sec .task_card_block .accordion .assets_list .assets_box .header{
     color: #1C204D;
     font-size: 13px;
 }
-#taskDetails_sec .assets_block .accordion .assets_list .assets_box ul li{
+#taskDetails_sec .task_card_block .accordion .assets_list .assets_box ul li{
     color: #606063;
     font-size: 13px;
 }
