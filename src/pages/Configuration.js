@@ -323,7 +323,7 @@ const Configuration = (props) => {
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let memListArr = Object.assign([], members);
-      let memObj = { emp_id: res.emp_id, email: formData.email, department_name: formData.department_name }
+      let memObj = { emp_id: res.emp_id,first_name:formData.first_name,last_name:formData.last_name, email: formData.email, department_name: formData.department_name }
       memListArr.push(memObj)
       setMembers(oldVal => {
         return [...memListArr]
@@ -397,11 +397,11 @@ const Configuration = (props) => {
 
     let payloadUrl = "configuration/addServicePartner"
     let method = "POST";
-    let formData = { full_name: partnerFn, email: partnerEmail, project_id: accountsList[0].project_id }
+    let formData = { first_name: partnerFn,last_name:partnerLn, email: partnerEmail, project_id: accountsList[0].project_id }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let listArr = Object.assign([], servicePartners);
-      let partnerObj = { emp_id: res.emp_id, partner_id: res.partner_id, email: formData.email, full_name: formData.full_name }
+      let partnerObj = { emp_id: res.emp_id, partner_id: res.partner_id, email: formData.email, first_name: formData.first_name,last_name:formData.last_name }
       listArr.push(partnerObj)
       setServicePartners(oldVal => {
         return [...listArr]
