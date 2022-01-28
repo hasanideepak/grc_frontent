@@ -1068,8 +1068,8 @@ const Configuration = (props) => {
             <div className="search_result bg-white ">
               <div className="px-3 h_labels">
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">First Name</div>
-                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">Last Name</div>
-                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right">Authority</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_2 mr-0">Last Name</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left">Authority</div>
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_3 mr-2">Email</div>
                 <div className="mr-lg-3 w20"></div>
               </div>
@@ -1077,9 +1077,9 @@ const Configuration = (props) => {
                 return (
                   <div key={toIndex} className=" px-3">
                     <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 ">{owner.first_name}</div>
-                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">{owner.last_name}</div>
-                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right">{owner.department_name}</div>
-                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-lefttext_color_3 mr-2">{owner.email}</div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_2 mr-0">{owner.last_name}</div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left">{owner.department_name}</div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_3 mr-2">{owner.email}</div>
                     <div className="mr-lg-3 w20"><a onClick={() => delTaskOwner(toIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                   </div>
                 )
