@@ -396,7 +396,7 @@ const ConfigurationScope = (props) => {
                     </Tooltip>
                   }
                 >
-                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {getAllScopes && getAllScopes.peoples && getAllScopes.peoples.length > 0
                   ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
@@ -460,7 +460,7 @@ const ConfigurationScope = (props) => {
                     </Tooltip>
                   }
                 >
-                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {getAllScopes && getAllScopes.technology_assets && getAllScopes.technology_assets.length > 0 && (getAllScopes.technology_assets[0].endpoints)
                   ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
@@ -534,7 +534,7 @@ const ConfigurationScope = (props) => {
                     </Tooltip>
                   }
                 >
-                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {getAllScopes && getAllScopes.vendors && getAllScopes.vendors.length > 0
                   ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
@@ -593,7 +593,7 @@ const ConfigurationScope = (props) => {
                     </Tooltip>
                   }
                 >
-                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {getAllScopes && getAllScopes.third_party_utilities && getAllScopes?.third_party_utilities.filter(util => util.is_selected == "Y").length > 0
                   ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
@@ -649,7 +649,7 @@ const ConfigurationScope = (props) => {
           </div>
         </div>
         <div className="card">
-          <div className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp5">
+          <div id="ch5" className="card-header collapsed" data-toggle="collapse" data-parent="#accordion" href="#cp5">
             <a className="card-title w-100 d-flex">
               Asset Register
               <OverlayTrigger
@@ -661,7 +661,7 @@ const ConfigurationScope = (props) => {
                     </Tooltip>
                   }
                 >
-                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {getAllScopes && getAllScopes.peoples && getAllScopes.peoples.length > 0
                   ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
@@ -669,7 +669,7 @@ const ConfigurationScope = (props) => {
                 }
             </a>
           </div>
-          <div id="ch5" id="cp5" className="collapse" data-parent="#accordion" >
+          <div id="cp5" className="collapse" data-parent="#accordion" >
             <div className="p-3 d-flex justify-content-between">
               <div className="d-flex align-items-center">
                 <p className="mb-0 gLbl">Download the sample file from here.</p>

@@ -687,7 +687,7 @@ const Configuration = (props) => {
                     </Tooltip>
                   }
                 >
-                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {accountsList && accountsList.length > 0
                   ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
@@ -765,7 +765,7 @@ const Configuration = (props) => {
                     </Tooltip>
                   }
                 >
-                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {getAllConfigs && getAllConfigs?.frameWorks && getAllConfigs?.frameWorks.filter(frameWork => frameWork.is_selected == "Y").length > 0
                   ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
@@ -810,7 +810,7 @@ const Configuration = (props) => {
                     </Tooltip>
                   }
                 >
-                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {members && members.length > 0
                   ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
@@ -883,7 +883,7 @@ const Configuration = (props) => {
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">First Name</div>
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0 text-left ">Last Name</div>
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">Authority</div>
-                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">Email</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_3 mr-2">Email</div>
                 <div className="mr-lg-3 w20" style={{ width: '20px' }}></div>
               </div>
               {members && members.length > 0 && members.map((member, mIndex) => {
@@ -892,7 +892,7 @@ const Configuration = (props) => {
                     <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">{member.first_name}</div>
                     <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0 text-left">{member.last_name}</div>
                     <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">{member.department_name}</div>
-                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">{member.email}</div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_3 mr-2">{member.email}</div>
                     <div className="mr-lg-3 w20"><a onClick={() => delMember(mIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                   </div>
                 )
@@ -914,7 +914,7 @@ const Configuration = (props) => {
                     </Tooltip>
                   }
                 >
-                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {servicePartners && servicePartners.length > 0
                   ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
@@ -971,15 +971,15 @@ const Configuration = (props) => {
               <div className="px-3 h_labels">
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">First Name</div>
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">Last Name</div>
-                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">Email</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_3 mr-2">Email</div>
                 <div className="mr-lg-3 w20"></div>
               </div>
               {servicePartners && servicePartners.length > 0 && servicePartners.map((partner, spIndex) => {
                 return (
                   <div key={spIndex} className=" px-3">
-                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">{partner.full_name} </div>
-                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">{partner.full_name} </div>
-                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">{partner.email}</div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">{partner.first_name} </div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">{partner.last_name} </div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_3 mr-2">{partner.email}</div>
                     <div className="mr-lg-3"><a onClick={() => delPartner(spIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                   </div>
                 )
@@ -1001,7 +1001,7 @@ const Configuration = (props) => {
                     </Tooltip>
                   }
                 >
-                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {taskOwners && taskOwners.length > 0
                   ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
@@ -1070,7 +1070,7 @@ const Configuration = (props) => {
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0">First Name</div>
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">Last Name</div>
                 <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right">Authority</div>
-                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">Email</div>
+                <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-left text_color_3 mr-2">Email</div>
                 <div className="mr-lg-3 w20"></div>
               </div>
               {taskOwners && taskOwners.length > 0 && taskOwners.map((owner, toIndex) => {
@@ -1079,7 +1079,7 @@ const Configuration = (props) => {
                     <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 ">{owner.first_name}</div>
                     <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text_color_2 mr-0">{owner.last_name}</div>
                     <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right">{owner.department_name}</div>
-                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-right text_color_3 mr-2">{owner.email}</div>
+                    <div className="w-20 flex-grow-1 ml-lg-3 ml-md-0 text-lefttext_color_3 mr-2">{owner.email}</div>
                     <div className="mr-lg-3 w20"><a onClick={() => delTaskOwner(toIndex)}> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div>
                   </div>
                 )
@@ -1101,7 +1101,7 @@ const Configuration = (props) => {
                     </Tooltip>
                   }
                 >
-                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {tpServices && tpServices.filter(tpService => tpService.is_selected == "Y").length > 0
                   ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
@@ -1145,7 +1145,7 @@ const Configuration = (props) => {
                     </Tooltip>
                   }
                 >
-                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
                 </OverlayTrigger>
                 {tpServices && tpServices.filter(tpService => tpService.is_token_added == "Y").length > 0
                   ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>

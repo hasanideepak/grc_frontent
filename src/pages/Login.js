@@ -73,7 +73,7 @@ const Login = (props) => {
                       <label htmlFor="" className="checkbox">
                         <input type="checkbox" /> Remember me
                       </label>
-                      <Link to="/forgotpassword" className="link" >Forget password?</Link>
+                      <Link to="/forgotpassword" className="link" >Forgot password?</Link>
                     </div>
                     <button className="btn btn-primary btn-block mb-lg-4 mb-md-4 mb-2" type="submit"> sign in</button>
                   </form>
