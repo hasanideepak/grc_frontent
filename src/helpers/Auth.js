@@ -6,7 +6,7 @@ export const IsAuthenticated = (fetchUser = false) => {
     let userData = GetCookie('currentUser')
     userData  = userData ? JSON.parse(userData) : false;
     let result = {isLoggedIn : false,currentUser: null,token: ''}
-    console.log(userData)
+    // console.log(userData)
     if(userData){
         result.isLoggedIn = true;
         result.currentUser = fetchUser ? userData.user : null;

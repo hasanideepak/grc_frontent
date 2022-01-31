@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
 import { SetCookie, GetCookie } from "../helpers/Helper";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
@@ -12,9 +12,10 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Calendar } from 'react-date-range';
 const TaskManager = (props) => {
-  const orgId = props?.user?.currentUser?.org_id || 0;
+  const {user = {}} = useOutletContext()
+  const orgId = user?.currentUser?.org_id || 0;
   const [projectId, setProjectId] = useState(0)
-  const accessRole = props?.user?.currentUser?.access_role || '';
+  const accessRole = user?.currentUser?.access_role || '';
   const [viewType, setViewType] = useState({ board: true })
   const [cardView, setCardViewe] = useState('all')
   const [tasks, setTasks] = useState([]);

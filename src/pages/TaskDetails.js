@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
 import { SetCookie, GetCookie } from "../helpers/Helper";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
@@ -13,9 +13,10 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Calendar } from 'react-date-range';
 import { Accordion, Button, Card, useAccordionButton } from "react-bootstrap";
 const TaskDetails = (props) => {
-  const orgId = props?.user?.currentUser?.org_id || 0;
+  const {user = {}} = useOutletContext()
+  const orgId = user?.currentUser?.org_id || 0;
   const { taskId = 0 } = useParams()
-  const accessRole = props?.user?.currentUser?.access_role || '';
+  const accessRole = user?.currentUser?.access_role || '';
   const [taskDetails, setTaskDetails] = useState({})
 
   const navigate = useNavigate()

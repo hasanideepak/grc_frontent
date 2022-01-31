@@ -1,12 +1,13 @@
 import React, {Suspense, lazy, useState} from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet, Navigate} from 'react-router-dom'
 import './App.css';
-import Layout from './components/layouts/MainLayout';
-import PublicLayout from './components/layouts/PublicLayout';
+// import Layout from './components/layouts/MainLayout';
+// import PublicLayout from './components/layouts/PublicLayout';
 import { IsAuthenticated } from './helpers/Auth';
-import TaskDetails from './pages/TaskDetails';
 // import Login from './pages/Login';
 
+const Layout = lazy(()=> import("./components/layouts/MainLayout"))
+const PublicLayout = lazy(()=> import("./components/layouts/PublicLayout"))
 const Home = lazy(()=> import("./pages/Home"))
 const Login = lazy(()=> import("./pages/Login"))
 const Configuration = lazy(()=> import("./pages/Configuration"))
@@ -15,23 +16,21 @@ const Dashboard = lazy(()=> import("./pages/Dashboard"))
 const EvidenceManager = lazy(()=> import("./pages/EvidenceManager"))
 const Onboarding = lazy(()=> import("./pages/Onboarding"))
 const TaskManager = lazy(()=> import("./pages/TaskManager"))
+const TaskDetails = lazy(()=> import("./pages/TaskDetails"))
 const ForgotPassword = lazy(()=> import("./pages/ForgotPassword"))
 const ResetPassword = lazy(()=> import("./pages/ResetPassword"))
-const  getAuthUser = IsAuthenticated(true)
+const Page404 = lazy(()=> import("./pages/Page404"))
 function App() {
-  const [authUser, setAuthUser] = useState(null);
   const  RouterOutlet = ({layout:Layout,...rest}) =>{
-    let location = window.location.pathname
+    
     let {isPublic = false,roles = 'admin'} = rest
     let  getAuthUser = IsAuthenticated(true)
-    if(authUser == null && getAuthUser.isLoggedIn){
-      setAuthUser(getAuthUser)
-    }
+    
     let isAuth = (isPublic || (!isPublic && getAuthUser.isLoggedIn)) ? true : false;
-  
+    // console.log(getAuthUser)
     return isAuth ? (
-        <Layout location={location}>
-          <Outlet />
+        <Layout>
+          <Outlet context={{user:getAuthUser,abc:"abc"}} />
         </Layout>
       ) : (
           <Navigate to="/login" replace />
@@ -68,12 +67,12 @@ function App() {
                   <Route path="/" element={<RouterOutlet layout={Layout} />}>
                     <Route exact path="/home" element={<Home />}></Route>
                     <Route  path="/dashboard" element={<Dashboard />}></Route>
-                    <Route  path="/onboarding" element={<Configuration user={authUser} />}></Route>
-                    <Route  path="/task-manager" element={<TaskManager user={authUser} /> }></Route>
-                    <Route  path="/task-details/:taskId" element={<TaskDetails user={authUser} /> }></Route>
+                    <Route  path="/onboarding" element={<Configuration />}></Route>
+                    <Route  path="/task-manager" element={<TaskManager /> }></Route>
+                    <Route  path="/task-details/:taskId" element={<TaskDetails /> }></Route>
                     <Route  path="/evidence-manager" element={<EvidenceManager /> }></Route>
-                    <Route  path="/configuration" element={<Configuration user={authUser} /> }></Route>
-                    <Route  path="/onboarding_scope/:token" element={<ConfigurationScope user={authUser} /> }></Route>
+                    <Route  path="/configuration" element={<Configuration  /> }></Route>
+                    <Route  path="/onboarding_scope/:token" element={<ConfigurationScope /> }></Route>
                   </Route>
 
 
@@ -82,6 +81,8 @@ function App() {
                     <Route exact path="/forgotpassword" element={<ForgotPassword />}></Route>
                     <Route exact path="/resetpassword/:token" element={<ResetPassword />}></Route>
                   </Route>
+
+                  <Route path="*" element={<PublicLayout><Page404 /> </PublicLayout>}></Route>
 
                   
                   

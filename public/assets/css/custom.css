@@ -39,6 +39,12 @@
 .link_url{
     cursor: pointer !important;
 }
+
+.page404_img {
+    max-height: 75vh;
+    object-fit: contain;
+}
+
 .navbar-nav a{
     color: #ffffff !important;
     cursor: pointer;

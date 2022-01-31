@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
 import { SetCookie, GetCookie, encryptData } from "../helpers/Helper";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 const Configuration = (props) => {
-  const orgId = props?.user?.currentUser?.org_id || 0;
+  const {user = {}} = useOutletContext()
+  const orgId = user?.currentUser?.org_id || 0;
   const [getAllConfigs, setAllConfigs] = useState({})
   const [accountsList, setAccountsList] = useState(null)
   const [addFrameWorksList, setAddFrameWorksList] = useState([])
@@ -21,7 +22,6 @@ const Configuration = (props) => {
   const [taskOwners, setTaskOwners] = useState([])
   const [tpsAccessTokens, setAccessToken] = useState([])
   const navigate = useNavigate()
-
   // const { register, handleSubmit, watch, formState: { errors } } = useForm(); // initialize the hook
   const [formSubmitted, setFormSbmt] = useState(false)
   const [formRes, setFormRes] = useState({ status: false, err_status: false, error: {} })
@@ -31,7 +31,7 @@ const Configuration = (props) => {
     // if (frameWorks.length == 0) {
     //   fetchInfo("frameworks")
     // }
-    if (Object.keys(getAllConfigs).length == 0) {
+    if (Object.keys(getAllConfigs).length == 0 && user?.currentUser?.is_onboard == "Y") {
       fetchInfo("all")
     }
     if (memberRoles.length == 0) {
@@ -68,10 +68,7 @@ const Configuration = (props) => {
       payloadUrl = `configuration/getConfiguration/${orgId}`
       method = "GET";
     }
-    // else if (type == 'frameworks') {
-    //   payloadUrl = 'reference/getFrameworks'
-    //   method = "GET";
-    // }
+   
     else if (type == 'member_roles') {
       payloadUrl = 'reference/getAuthorities/Y'
       method = "GET";
@@ -79,10 +76,6 @@ const Configuration = (props) => {
       payloadUrl = 'reference/getAuthorities/N'
       method = "GET";
     }
-    // else if (type == 'get_tps') {
-    //   payloadUrl = 'reference/getThirdPartyConnectors'
-    //   method = "GET";
-    // }
 
     let res = await ApiService.fetchData(payloadUrl, method);
     if (res && res.message == "Success") {
@@ -197,7 +190,7 @@ const Configuration = (props) => {
     }
     let payloadUrl = "configuration/setupAccount"
     let method = "POST";
-    let formData = { account_name: accName, project_name: accProject, org_id: props?.user?.currentUser?.org_id }
+    let formData = { account_name: accName, project_name: accProject, org_id: orgId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let accListArr = [Object.assign(formData, { project_id: res.project_id })]
@@ -209,6 +202,7 @@ const Configuration = (props) => {
       changePanel(1)
       formRes = { status: true, err_status: false, type: "account", error: {}, msg: "Account added successfully" }
       setFormRes(formRes)
+      fetchInfo('all')
     } else {
       formRes['err_status'] = true
       formRes['error']['type'] = "account"
@@ -268,7 +262,9 @@ const Configuration = (props) => {
       obj.frameWorks && obj.frameWorks.map(frameWork => {
         frameWork.is_selected = addFrameWorksList.includes(frameWork.id) ? "Y" : "N"
       })
-      setAllConfigs(obj)
+      setAllConfigs(oldVal =>{
+        return {...obj}
+      })
       changePanel(2)
       formRes = { status: true, err_status: false, error: {}, type: "framework", msg: "Framework added successfully" }
       setFormRes(formRes)
@@ -319,7 +315,7 @@ const Configuration = (props) => {
 
     let payloadUrl = "configuration/addKeyMember"
     let method = "POST";
-    let formData = { first_name:memFirstName,last_name:memLastName, email: memEmail, department_name: memRole.name, authority_id: memRole.id, project_id: accountsList[0].project_id, org_id: props?.user?.currentUser?.org_id }
+    let formData = { first_name:memFirstName,last_name:memLastName, email: memEmail, department_name: memRole.name, authority_id: memRole.id, project_id: accountsList[0].project_id, org_id: orgId}
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let memListArr = Object.assign([], members);
@@ -481,7 +477,7 @@ const Configuration = (props) => {
 
     let payloadUrl = "configuration/addTaskOwner"
     let method = "POST";
-    let formData = { first_name: toFn, last_name: toLn, email: toEmail, department_name: oRole.name, authority_id: oRole.id, project_id: accountsList[0].project_id, org_id: props?.user?.currentUser?.org_id }
+    let formData = { first_name: toFn, last_name: toLn, email: toEmail, department_name: oRole.name, authority_id: oRole.id, project_id: accountsList[0].project_id, org_id: orgId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let listArr = Object.assign([], taskOwners);

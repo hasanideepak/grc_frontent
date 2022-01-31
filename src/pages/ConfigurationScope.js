@@ -1,14 +1,15 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
 import { SetCookie, GetCookie, decryptData } from "../helpers/Helper";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useOutletContext, useParams } from "react-router-dom";
 import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 const ConfigurationScope = (props) => {
+  const {user = {}} = useOutletContext()
   const { token = '' } = useParams()
   // console.log(token)
-  const orgId = props?.user?.currentUser?.org_id || 0;
+  const orgId = user?.currentUser?.org_id || 0;
   const projectId = Number(token);
   // const projectId = 1;
   const [getAllScopes, setAllScopes] = useState({})
