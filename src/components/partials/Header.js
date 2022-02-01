@@ -17,30 +17,33 @@ const Header = (props) => {
         navigate(url)
     }
     const setPageHeader = () =>{
-        switch (location.pathname) {
-            case "/home":
+        switch (true) {
+            case location.pathname == "/home":
                 setHeaderTitle("Home")
             break;
-            case "/dashboard":
+            case location.pathname == "/dashboard":
                 setHeaderTitle("Dashboard")
             break;
-            case "/task-manager":
+            case location.pathname == "/task-manager":
                 setHeaderTitle("Task Manager")
             break;
-            case "/task-details":
+            case location.pathname == "/task-details":
                 setHeaderTitle(defHeaderTitle || "Task Details")
             break;
-            case "/evidence-manager":
+            case location.pathname == "/evidence-manager":
                 setHeaderTitle("Evidence Manager")
             break;
-            case "/onboarding":
-                setHeaderTitle("Onboarding")
+            case location.pathname == "/onboarding":
+                setHeaderTitle("On Boarding")
             break;
-            case "/configuration":
+            case location.pathname == "/configuration":
                 setHeaderTitle("Configuration")
             break;
-            case "/onboarding":
-                setHeaderTitle("Onboarding")
+            case location.pathname.indexOf("/onboarding_scope") != -1 :
+                setHeaderTitle("On Boarding Scope")
+            break;
+            case location.pathname.indexOf("/onboarding_scope") != -1:
+                setHeaderTitle("Configuration Scope")
             break;
             default:
             break;

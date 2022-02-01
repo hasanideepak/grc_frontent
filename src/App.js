@@ -1,9 +1,11 @@
-import React, {Suspense, lazy, useState} from 'react';
+import React, {Suspense, lazy, useState, createContext} from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet, Navigate} from 'react-router-dom'
 import './App.css';
+import { LayoutContext } from './ContextProviders/LayoutContext';
 // import Layout from './components/layouts/MainLayout';
 // import PublicLayout from './components/layouts/PublicLayout';
 import { IsAuthenticated } from './helpers/Auth';
+import TestPage from './pages/TestPage';
 // import Login from './pages/Login';
 
 const Layout = lazy(()=> import("./components/layouts/MainLayout"))
@@ -20,18 +22,21 @@ const TaskDetails = lazy(()=> import("./pages/TaskDetails"))
 const ForgotPassword = lazy(()=> import("./pages/ForgotPassword"))
 const ResetPassword = lazy(()=> import("./pages/ResetPassword"))
 const Page404 = lazy(()=> import("./pages/Page404"))
+// const {LayoutContext} = lazy(()=> import("./ContextProviders/LayoutContext"))
 function App() {
   const  RouterOutlet = ({layout:Layout,...rest}) =>{
-    
     let {isPublic = false,roles = 'admin'} = rest
     let  getAuthUser = IsAuthenticated(true)
-    
     let isAuth = (isPublic || (!isPublic && getAuthUser.isLoggedIn)) ? true : false;
+    const [showLoader, setShowLoader] = useState(false)
     // console.log(getAuthUser)
+    let lContextObj = {showLoader,setShowLoader}
     return isAuth ? (
-        <Layout>
-          <Outlet context={{user:getAuthUser,abc:"abc"}} />
-        </Layout>
+        <LayoutContext.Provider value={lContextObj}>
+          <Layout showLoader>
+            <Outlet context={{user:getAuthUser}} />
+          </Layout>
+        </LayoutContext.Provider>
       ) : (
           <Navigate to="/login" replace />
       );
@@ -73,6 +78,7 @@ function App() {
                     <Route  path="/evidence-manager" element={<EvidenceManager /> }></Route>
                     <Route  path="/configuration" element={<Configuration  /> }></Route>
                     <Route  path="/onboarding_scope/:token" element={<ConfigurationScope /> }></Route>
+                    <Route  path="/configuration_scope/:token" element={<ConfigurationScope /> }></Route>
                   </Route>
 
 
@@ -82,6 +88,7 @@ function App() {
                     <Route exact path="/resetpassword/:token" element={<ResetPassword />}></Route>
                   </Route>
 
+                  <Route path="/test" element={<PublicLayout><TestPage /> </PublicLayout>}></Route>
                   <Route path="*" element={<PublicLayout><Page404 /> </PublicLayout>}></Route>
 
                   

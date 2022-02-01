@@ -45,6 +45,10 @@
     object-fit: contain;
 }
 
+.loader_sec .loader_block{
+    width: 50px;
+}
+
 .navbar-nav a{
     color: #ffffff !important;
     cursor: pointer;

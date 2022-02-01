@@ -3,9 +3,14 @@ import ApiService from "../services/ApiServices";
 import { SetCookie, GetCookie, encryptData } from "../helpers/Helper";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import Header from "../components/partials/Header";
-import { useEffect, useState } from "react";
+import { lazy, useContext, useEffect, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+
+const LayoutContext = lazy(()=> import("../ContextProviders/LayoutContext"))
+
+
 const Configuration = (props) => {
+  // const {setShowLoader} = useContext(LayoutContext)
   const {user = {}} = useOutletContext()
   const orgId = user?.currentUser?.org_id || 0;
   const [getAllConfigs, setAllConfigs] = useState({})
@@ -26,6 +31,7 @@ const Configuration = (props) => {
   const [formSubmitted, setFormSbmt] = useState(false)
   const [formRes, setFormRes] = useState({ status: false, err_status: false, error: {} })
   const [errorMsg, setErrorMsg] = useState(false);
+  const showLoader = false
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
   useEffect(() => {
     // if (frameWorks.length == 0) {

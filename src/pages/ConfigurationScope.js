@@ -122,16 +122,14 @@ const ConfigurationScope = (props) => {
     let formData = { employees: employees, consultants: consultants, project_id: projectId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
-      // let accListArr = [Object.assign(formData, { project_id: res.project_id })]
-      // setAccountsList(oldVal => {
-      //   return [...accListArr]
-      // })
-
-      // empInput.value = ""
-      // consultantInput.value = ""
-      changePanel(2)
       formRes = { status: true, err_status: false, type: "people", error: {}, msg: "People added successfully" }
       setFormRes(formRes)
+
+      let scopes = getAllScopes
+      scopes.peoples = [{employees:formData.employees,consultants: formData.consultants}]
+      setAllScopes(scopes)
+      changePanel(2)
+      
     } else {
       formRes['err_status'] = true
       formRes['error']['type'] = "people"
@@ -175,15 +173,12 @@ const ConfigurationScope = (props) => {
     let formData = { endpoints: endpoints, servers: servers, mobile_devices: mobileDevices, project_id: projectId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
-      // let accListArr = [Object.assign(formData, { project_id: res.project_id })]
-      // setAccountsList(oldVal => {
-      //   return [...accListArr]
-      // })
-      // endPointInput.value = ""
-      // serversInput.value = ""
-      changePanel(3)
-      formRes = { status: true, err_status: false, type: "techAssets", error: {}, msg: "Asset added successfully" }
+      formRes = { status: true, err_status: false, type: "techAssets", error: {}, msg: "Assets added successfully" }
       setFormRes(formRes)
+      let scopes = getAllScopes
+      scopes.technology_assets = [{endpoints:formData.endpoints,servers: formData.servers,mobile_devices: formData.mobileDevices}]
+      setAllScopes(scopes)
+      changePanel(3)
     } else {
       formRes['err_status'] = true
       formRes['error']['type'] = "techAssets"
@@ -343,9 +338,10 @@ const ConfigurationScope = (props) => {
     let formData = { project_id: projectId, utility_ids: addUtilitiesList }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
-      changePanel(5)
       formRes = { status: true, err_status: false, error: {}, type: "util", msg: "Utilities added successfully" }
       setFormRes(formRes)
+      fetchInfo("all")
+      changePanel(5)
     } else {
       formRes['err_status'] = true
       formRes['error']['type'] = "util"
@@ -572,7 +568,7 @@ const ConfigurationScope = (props) => {
             <div className="search_result bg-white ">
               {getAllScopes && getAllScopes?.vendors && getAllScopes?.vendors.length > 0 && getAllScopes?.vendors.map((vendor, vIndex) => {
                 return (
-                  <div ey={vIndex} className=" px-3">
+                  <div key={vIndex} className=" px-3">
                     <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{vendor.vendor}</div>
                     <div className="mr-lg-3 mr-0"><a onClick={() => delVendor(vIndex)}> <img src="/assets/img/gbl.svg" alt="" className="cls" />  </a></div>
                   </div>

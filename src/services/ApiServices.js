@@ -97,7 +97,7 @@ class ApiService {
                 // body: formData,
                 headers:{'Content-Type': 'application/json'},
               }
-            if(method == 'POST' || method == 'PATCH'){
+            if(method == 'POST' || method == 'PATCH' || method == 'DELETE'){
               config.body = formData
             }
             let userData = GetCookie('currentUser')
