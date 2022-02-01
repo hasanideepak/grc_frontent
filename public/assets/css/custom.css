@@ -61,6 +61,18 @@
     right: 18px;
 }
 
+.accordion .card-header:before, .addtask:before{
+    background: url(../img/gbl.svg) 116.9px 1px;
+    background-color: transparent !important;
+    transition: transform 0.2s ease-in-out;
+}
+
+.accordion .card-header.collapsed:before, .addtask:before {
+    background: url(../img/gbl.svg) 115px 60.5px;
+    background-color: transparent !important;
+    transform: translate(3px,-1px) rotateZ(-90deg);
+}
+
 .accordion .card-header a > span.success_icon{
     border-radius: 50%;
     overflow: hidden;
@@ -110,6 +122,19 @@ a.info{
     color: #4A5B72;
     font-weight: 400 !important;
 }
+
+
+/* sticky div css start */
+/* div.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    padding: 50px;
+    font-size: 20px;
+    z-index: 99;
+
+  } */
+/* sticky div css end */
 
 /* calender design css start */
 .customDateLayout .rdrMonth{
@@ -420,11 +445,11 @@ a.info{
     vertical-align: middle;
 }
 
-#taskDetails_sec .task_card_block .accordion .accordion-header button:before{
+#taskDetails_sec .task_card_block .accordion .accordion-header .accordion-button:before{
     content: "";
-    background: url(../img/gbl.svg) 51.9px 1px;
+    /* background: url(../img/gbl.svg) 51.9px 1px; */
     height: 18px;
-    background-color: #9597B4;
+    /* background-color: #9597B4; */
     width: 18px;
     padding: 5px;
     border-radius: 2px;
@@ -434,6 +459,15 @@ a.info{
     color: #fff;
     font-size: 12px;
     cursor: pointer;
+    background: url(../img/gbl.svg) 116.9px 1px;
+    background-color: transparent !important;
+    transition: transform 0.2s ease-in-out;
+}
+
+#taskDetails_sec .task_card_block .accordion .accordion-header .accordion-button.collapsed:before{
+    background: url(../img/gbl.svg) 115px 60.5px;
+    background-color: transparent !important;
+    transform: translate(3px,-1px) rotateZ(-90deg);
 }
 
 #taskDetails_sec .task_card_block .accordion .assets_list .assets_box .header{

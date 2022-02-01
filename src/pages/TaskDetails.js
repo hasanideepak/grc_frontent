@@ -79,7 +79,8 @@ const TaskDetails = (props) => {
               <div class="card-body p-0">
                 <div className="task_card_block assets_block">
                   <div className="card_block p-3">
-                    <Accordion defaultActiveKey="0">
+                    {/* <Accordion defaultActiveKey="0"> */}
+                    <Accordion >
                       <Accordion.Item eventKey="0">
                         <Accordion.Header>Applicable Assets</Accordion.Header>
                         <Accordion.Body>
@@ -209,26 +210,28 @@ const TaskDetails = (props) => {
                       )
                     })}
                   </div>
-                  <div className="w-100 px-3 pb-2">
-                    <div className="control_button_block">
-                      <Button className="btn_2" variant="outline-dark">Sample Evidence library</Button>
+                  <div className="sticky">
+                    <div className="w-100 px-3 pb-2">
+                      <div className="control_button_block">
+                        <Button className="btn_2" variant="outline-dark">Sample Evidence library</Button>
+                      </div>
                     </div>
-                  </div>
-                  <div className="w-100 px-3 d-flex py-4 pb-5">
-                    <div className="card_button_block ">
-                      <Button className="btn_1 btn_wide " variant="outline-dark">Re-Assign</Button>
-                    </div>
-                    <div className="card_button_block pl-3">
-                      <Button className="btn_1 btn_wide" variant="outline-dark">Save</Button>
-                    </div>
-                    <div className="card_button_block pl-3">
-                      <Button className="btn_1 btn_wide" variant="outline-dark">Mark Completed</Button>
-                    </div>
-                    <div className="card_button_block pl-3">
-                      <Button className="btn_1" variant="outline-dark">Reduce Frequency</Button>
-                    </div>
-                    <div className="card_button_block pl-3">
-                      <Button className="btn_3 btn_wide" variant="outline-dark">Approved</Button>
+                    <div className="w-100 px-3 d-flex py-4 pb-5">
+                      <div className="card_button_block ">
+                        <Button className="btn_1 btn_wide " variant="outline-dark">Re-Assign</Button>
+                      </div>
+                      <div className="card_button_block pl-3">
+                        <Button className="btn_1 btn_wide" variant="outline-dark">Save</Button>
+                      </div>
+                      <div className="card_button_block pl-3">
+                        <Button className="btn_1 btn_wide" variant="outline-dark">Mark Completed</Button>
+                      </div>
+                      <div className="card_button_block pl-3">
+                        <Button className="btn_1" variant="outline-dark">Reduce Frequency</Button>
+                      </div>
+                      <div className="card_button_block pl-3">
+                        <Button className="btn_3 btn_wide" variant="outline-dark">Approved</Button>
+                      </div>
                     </div>
                   </div>
 
@@ -239,63 +242,76 @@ const TaskDetails = (props) => {
           <div className="col-md-3 col-12 pl-0 pr-0 pl-lg-3 pr-lg-3 pl-xl-3 pr-xl-3">
             <div class="card">
               <div class="card-body p-0">
-                <div className="task_status_block">
-                  <div className="stat_block p-3">
+              <div className="task_card_block task_status_block">
+                <div className="card_block status_block py-3 pb-5">
+                  <Accordion >
+                    <Accordion.Item eventKey="0">
+                      <Accordion.Header>Task Info</Accordion.Header>
+                      <Accordion.Body>
+                          <div className="stat_block p-3">
 
-                    <div className="stat_box">
-                      <span>Task ID</span>
-                      <span>{taskDetails && taskDetails?.task && taskDetails?.task[0]?.task_id}</span>
-                    </div>
-                    <div className="stat_box">
-                      <span>AUC ID</span>
-                      <span>{taskDetails && taskDetails?.task && taskDetails?.task[0]?.auc_id}</span>
-                    </div>
-                    <div className="stat_box">
-                      <span>Completion</span>
-                      <span className="text_color_4">{taskDetails && taskDetails?.task && taskDetails?.task[0]?.completion_pct}%</span>
-                    </div>
-                    <div className="stat_box">
-                      <span>Status</span>
-                      {
-                        taskDetails && taskDetails?.task && taskDetails?.task[0]?.task_status
-                        ? <span className={`text-${taskDetails?.task[0]?.task_status == "pending" ? 'danger' : (taskDetails?.task[0]?.task_status == 'in_progress' ? 'wraning' : (taskDetails?.task[0]?.task_status == 'review' ? 'secondary' : 'success'))}`}>{taskDetails?.task[0]?.task_status}</span>
-                        : ''
-                      }
-                      
-                    </div>
-                    <div className="stat_box">
-                      <span>Due Date</span>
-                      <span>{taskDetails && taskDetails?.task && taskDetails?.task[0]?.due_date}</span>
-                    </div>
-                  </div>
-                  <div className="stat_chips_block p-3">
-                    <div className="header mb-3">
-                      <h3 className="m-0">Tags</h3>
-                    </div>
+                            <div className="stat_box">
+                              <span>Task ID</span>
+                              <span>{taskDetails && taskDetails?.task && taskDetails?.task[0]?.task_id}</span>
+                            </div>
+                            <div className="stat_box">
+                              <span>AUC ID</span>
+                              <span>{taskDetails && taskDetails?.task && taskDetails?.task[0]?.auc_id}</span>
+                            </div>
+                            <div className="stat_box">
+                              <span>Completion</span>
+                              <span className="text_color_4">{taskDetails && taskDetails?.task && taskDetails?.task[0]?.completion_pct}%</span>
+                            </div>
+                            <div className="stat_box">
+                              <span>Status</span>
+                              {
+                                taskDetails && taskDetails?.task && taskDetails?.task[0]?.task_status
+                                ? <span className={`text-${taskDetails?.task[0]?.task_status == "pending" ? 'danger' : (taskDetails?.task[0]?.task_status == 'in_progress' ? 'wraning' : (taskDetails?.task[0]?.task_status == 'review' ? 'secondary' : 'success'))}`}>{taskDetails?.task[0]?.task_status}</span>
+                                : ''
+                              }
+                              
+                            </div>
+                            <div className="stat_box">
+                              <span>Due Date</span>
+                              <span>{taskDetails && taskDetails?.task && taskDetails?.task[0]?.due_date}</span>
+                            </div>
+                          </div>
+                          <div className="stat_chips_block p-3">
+                            <div className="header mb-3">
+                              <h3 className="m-0">Tags</h3>
+                            </div>
 
-                    <div className="d-flex justify-content-between">
-                      <div className="stat_chips_box">
-                        <span>Data Flow ..</span>
-                      </div>
-                      <div className="stat_chips_box">
-                        <span>Solution ...</span>
-                      </div>
-                      <div className="stat_chips_box">
-                        <span>Audit Syst...</span>
-                      </div>
-                      <div className="stat_chips_box">
-                        <span>Monitor Au..</span>
-                      </div>
-                    </div>
-                  </div>
+                            <div className="d-flex justify-content-between">
+                              <div className="stat_chips_box">
+                                <span>Data Flow ..</span>
+                              </div>
+                              <div className="stat_chips_box">
+                                <span>Solution ...</span>
+                              </div>
+                              <div className="stat_chips_box">
+                                <span>Audit Syst...</span>
+                              </div>
+                              <div className="stat_chips_box">
+                                <span>Monitor Au..</span>
+                              </div>
+                            </div>
+                          </div>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
                 </div>
+              </div>
+              
+
+                
               </div>
             </div>
             <div class="card mt-4">
               <div class="card-body p-0">
                 <div className="task_card_block task_control_block">
                   <div className="card_block control_block py-3 pb-5">
-                    <Accordion defaultActiveKey="0">
+                    {/* <Accordion defaultActiveKey="0"> */}
+                    <Accordion>
                       <Accordion.Item eventKey="0">
                         <Accordion.Header>Controls & Mapping</Accordion.Header>
                         <Accordion.Body>
