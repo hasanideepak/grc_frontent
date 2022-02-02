@@ -124,16 +124,31 @@ a.info{
 }
 
 
+/* Bootstrap custom modal css start */
+.btn-close {
+    box-sizing: content-box;
+    width: 1em;
+    height: 1em;
+    padding: 0.25em;
+    color: #000;
+    background: transparent url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3E%3Cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3E%3C/svg%3E") 50%/1em auto no-repeat;
+    border: 0;
+    border-radius: 0.25rem;
+    opacity: .5;
+}
+/* Bootstrap custom modal css end */
+
+
 /* sticky div css start */
-/* div.sticky {
+.sticky {
     position: -webkit-sticky;
     position: sticky;
-    top: 0;
-    padding: 50px;
-    font-size: 20px;
+    bottom: 51px;
     z-index: 99;
+    background: #fff;
+    box-shadow: none !important;
 
-  } */
+}
 /* sticky div css end */
 
 /* calender design css start */
@@ -350,6 +365,18 @@ a.info{
 .timecontainer>.grid_item>.card>.card-body>.gridBox>.gridboxbody>div>h4 {
     width: 300px;
 }
+
+.task_details_modal .modal-dialog {
+    margin-right: 20px;
+}
+
+a.taskDetailPage_link {
+    color: #606063;
+    font-size: 18px;
+    top: 17px;
+    right: 65px;
+    cursor: pointer;
+}
 /* task manager card view custom  css end */
 
 
@@ -435,6 +462,7 @@ a.info{
 
 #taskDetails_sec .task_card_block .accordion .accordion-header{
     line-height: 0.5;
+    margin: 0;
 }
 #taskDetails_sec .task_card_block .accordion .accordion-header button{
     color: #1C204D;
@@ -478,5 +506,30 @@ a.info{
     color: #606063;
     font-size: 13px;
 }
+
+#taskDetails_sec .taskDetails_btn.sticky {
+    bottom: 51px;
+}
+
+
+#taskDetails_sec .taskDetails_btn_block {
+    min-height: 130px;
+}
+
+#taskDetails_sec .widget_box {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+#taskDetails_sec .task_overview_block .task_name{
+    font-size: 14px;
+    font-weight: 700;
+}
+#taskDetails_sec .widget_box span:nth-child(2){
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
 
 /* task details section css end */

@@ -27,8 +27,8 @@ const Header = (props) => {
             case location.pathname == "/task-manager":
                 setHeaderTitle("Task Manager")
             break;
-            case location.pathname == "/task-details":
-                setHeaderTitle(defHeaderTitle || "Task Details")
+            case location.pathname.indexOf("/task-details") != -1 :
+                setHeaderTitle(defHeaderTitle || "")
             break;
             case location.pathname == "/evidence-manager":
                 setHeaderTitle("Evidence Manager")
@@ -84,12 +84,12 @@ const Header = (props) => {
                     <div className="mdw"><a href="#"><img src="/assets/img/gbl.svg" alt="notification" className="img-fluid" /></a></div>
                 </div>
             </div>
-            <div className="align-items-center d-flex justify-content-between aDm_navigation pl-lg-3 border-0">
+            <div className="align-items-center d-flex justify-content-between aDm_navigation pl-lg-3 border-0 mb-3">
                 <div className="userProfile">
-                    <h6 className="mr-0">{headerTitle}</h6>
+                    {headerTitle ? <h6 className="mr-0 pt-3">{headerTitle}</h6> : ''}
                 </div>
                 <div>
-                    <ul className="breadcrumb mb-0 bg-transparent invisible">
+                    <ul className="breadcrumb mb-0 bg-transparent invisible d-none">
                         <li className="breadcrumb-item"><a href="#">Configuration</a></li>
                         <li className="breadcrumb-item"><a href="#">Home</a></li>
 

@@ -11,8 +11,9 @@ import moment from "moment";
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Calendar } from 'react-date-range';
+import AirModal from "../elements/AirModal";
 const TaskManager = (props) => {
-  const {user = {}} = useOutletContext()
+  const { user = {} } = useOutletContext()
   const orgId = user?.currentUser?.org_id || 0;
   const [projectId, setProjectId] = useState(0)
   const accessRole = user?.currentUser?.access_role || '';
@@ -27,13 +28,16 @@ const TaskManager = (props) => {
   const [timelineDates, settimelineDates] = useState([]);
   const [dates, setDates] = useState({});
   const navigate = useNavigate()
+  const [modalType,setModalType] = useState(null)
+  const [openModal, setShowModal] = useState(false);
+  const [taskDetails, setTaskDetails] = useState({})
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   useEffect(() => {
-    if(projectId == 0){
+    if (projectId == 0) {
       getProjectInfo()
     }
-    if(Object.keys(dates).length == 0){
+    if (Object.keys(dates).length == 0) {
       // initDates()
     }
     // if (tasks.length == 0) {
@@ -44,7 +48,7 @@ const TaskManager = (props) => {
 
 
   const getProjectInfo = async () => {
-    
+
 
     let payloadUrl = `configuration/getConfiguration/${orgId}`
     let method = "GET";
@@ -52,22 +56,22 @@ const TaskManager = (props) => {
 
     let res = await ApiService.fetchData(payloadUrl, method);
     if (res && res.message == "Success") {
-        let obj = {
-          accounts_and_projects: res.accounts_and_projects,
-          frameWorks: res.frameworks,
-          keymembers: res.keymembers,
-          service_partners: res.service_partners,
-          task_owners: res.task_owners,
-          third_party_connectors: res.third_party_connectors,
-        }
-        setProjectId(res.accounts_and_projects[0].project_id)
-        console.log(res.accounts_and_projects[0].project_id)
-        fetchInfo("all_tasks",res.accounts_and_projects[0].project_id)
+      let obj = {
+        accounts_and_projects: res.accounts_and_projects,
+        frameWorks: res.frameworks,
+        keymembers: res.keymembers,
+        service_partners: res.service_partners,
+        task_owners: res.task_owners,
+        third_party_connectors: res.third_party_connectors,
+      }
+      setProjectId(res.accounts_and_projects[0].project_id)
+      console.log(res.accounts_and_projects[0].project_id)
+      fetchInfo("all_tasks", res.accounts_and_projects[0].project_id)
     }
   }
 
 
-  const fetchInfo = async (type = '',project_id = 0) => {
+  const fetchInfo = async (type = '', project_id = 0) => {
     if (type == '') {
       return false
     };
@@ -76,21 +80,21 @@ const TaskManager = (props) => {
     let method = "POST";
     let formData = {};
     let now = new Date()
-    let numDays = new Date(now.getFullYear(),now.getMonth()+1,0).getDate()
-    let startDate = new Date(now.getFullYear(),now.getMonth()+1,1)
-    startDate  = `${startDate.getFullYear()}-${('00'+startDate.getMonth()).slice(-2)}-${('00'+startDate.getDate()).slice(-2)}`
-    let endDate = new Date(now.getFullYear(),now.getMonth()+1,numDays)
-    endDate  = `${endDate.getFullYear()}-${('00'+endDate.getMonth()).slice(-2)}-${('00'+endDate.getDate()).slice(-2)}`
+    let numDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
+    let startDate = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+    startDate = `${startDate.getFullYear()}-${('00' + startDate.getMonth()).slice(-2)}-${('00' + startDate.getDate()).slice(-2)}`
+    let endDate = new Date(now.getFullYear(), now.getMonth() + 1, numDays)
+    endDate = `${endDate.getFullYear()}-${('00' + endDate.getMonth()).slice(-2)}-${('00' + endDate.getDate()).slice(-2)}`
     if (type == 'all_tasks') {
       // https://zp5ffmsibc.us-east-1.awsapprunner.com/tasks/listTasks
       payloadUrl = `tasks/listTasks`
       method = "POST";
-      formData = { project_id: projectId || project_id, authority: accessRole, start_date:startDate, end_date:endDate, task_status: "all" }
+      formData = { project_id: projectId || project_id, authority: accessRole, start_date: startDate, end_date: endDate, task_status: "all" }
     } else {
       // https://zp5ffmsibc.us-east-1.awsapprunner.com/tasks/listTasks
       payloadUrl = `tasks/listTasks/`
       method = "POST";
-      formData = { project_id: projectId || project_id, authority: accessRole, start_date:startDate, end_date:endDate, task_status: type }
+      formData = { project_id: projectId || project_id, authority: accessRole, start_date: startDate, end_date: endDate, task_status: type }
     }
 
     let res = await ApiService.fetchData(payloadUrl, method, formData);
@@ -201,6 +205,47 @@ const TaskManager = (props) => {
     setCardViewe(view)
   }
 
+
+  const getTaskDetails = async (taskId = null) => {
+    if(taskId == null){
+      return false
+    }
+    let payloadUrl = `tasks/getTaskDetails/${taskId}`
+    let method = "GET";
+    let formData = {};
+    let res = await ApiService.fetchData(payloadUrl, method);
+    if (res && res.message == "Success") {
+        let { task, evidence_needed, applicable_assets } = res
+        setTaskDetails(oldVal => {
+            let obj = { task: task, evidence_needed: evidence_needed, applicable_assets: applicable_assets }
+            return { ...obj }
+        })
+        showModal('view_task_details')
+        // fetchInfo("all_tasks",res.accounts_and_projects[0].project_id)
+    }
+}
+
+  const showModal = async (modalName = null)=>{
+    if(modalName == null){
+      return false
+    }
+
+    switch(modalName){
+      case 'view_task_details':
+        setModalType(modalName)
+        setShowModal(true)
+      break;
+      
+    }
+  }
+
+  const hideModal = ()=>{
+    setModalType(null)
+    setShowModal(false)
+  }
+
+
+
   // console.log(watch("email")); // watch input value by passing the name of it
 
   return (
@@ -274,7 +319,8 @@ const TaskManager = (props) => {
                           <div className="card-body">
                             {pendingTasks && pendingTasks.length > 0 && pendingTasks.map((p_task, pIndex) => {
                               return (
-                                <div key={pIndex} className="gridBox link_url" onClick={()=>navigate(`/task-details/${p_task.project_task_id}`)}>
+                                // <div key={pIndex} className="gridBox link_url" onClick={() => navigate(`/task-details/${p_task.project_task_id}`)}>
+                                <div key={pIndex} className="gridBox link_url" onClick={() => getTaskDetails(p_task.project_task_id)}>
                                   <div className="gridboxbody">
                                     <h4>{p_task.description}</h4>
                                     <p><img src="assets/img/gbl.gif" alt="folder" /> <span>{p_task.title}</span></p>
@@ -299,7 +345,7 @@ const TaskManager = (props) => {
                           <div className="card-body">
                             {inProgresstasks && inProgresstasks.length > 0 && inProgresstasks.map((ip_task, pIndex) => {
                               return (
-                                <div key={pIndex} className="gridBox link_url" onClick={()=>navigate(`/task-details/${ip_task.project_task_id}`)}>
+                                <div key={pIndex} className="gridBox link_url" onClick={() => navigate(`/task-details/${ip_task.project_task_id}`)}>
                                   <div className="gridboxbody">
                                     <h4>{ip_task.description}</h4>
                                     <p><img src="assets/img/gbl.gif" alt="folder" /> <span>{ip_task.title}</span></p>
@@ -324,7 +370,7 @@ const TaskManager = (props) => {
                           <div className="card-body">
                             {underReviewtasks && underReviewtasks.length > 0 && underReviewtasks.map((ur_task, pIndex) => {
                               return (
-                                <div key={pIndex} className="gridBox link_url" onClick={()=>navigate(`/task-details/${ur_task.project_task_id}`)}>
+                                <div key={pIndex} className="gridBox link_url" onClick={() => navigate(`/task-details/${ur_task.project_task_id}`)}>
                                   <div className="gridboxbody">
                                     <h4>{ur_task.description}</h4>
                                     <p><img src="assets/img/gbl.gif" alt="folder" /> <span>{ur_task.title}</span></p>
@@ -349,7 +395,7 @@ const TaskManager = (props) => {
                           <div className="card-body">
                             {completedtasks && completedtasks.length > 0 && completedtasks.map((c_task, pIndex) => {
                               return (
-                                <div key={pIndex} className="gridBox link_url" onClick={()=>navigate(`/task-details/${c_task.project_task_id}`)}>
+                                <div key={pIndex} className="gridBox link_url" onClick={() => navigate(`/task-details/${c_task.project_task_id}`)}>
                                   <div className="gridboxbody">
                                     <h4>{c_task.description}</h4>
                                     <p><img src="assets/img/gbl.gif" alt="folder" /> <span>{c_task.title}</span></p>
@@ -376,11 +422,11 @@ const TaskManager = (props) => {
                     <div className="align-items-center d-flex justify-content-between my-3">
                       <div>
                         <ul className="pagination mb-0 filterview">
-                          <li className={`page-item ${cardView == 'all' ? 'active' : '' }`}><a onClick={() => changeCardView('all')} className="page-link">All Task</a></li>
-                          <li className={`page-item ${cardView == 'pending' ? 'active' : '' }`}><a onClick={() => changeCardView('pending')} className="page-link">To Do</a></li>
-                          <li className={`page-item ${cardView == 'inProgress' ? 'active' : '' }`}><a onClick={() => changeCardView('inProgress')} className="page-link">In Progress</a></li>
-                          <li className={`page-item ${cardView == 'review' ? 'active' : '' }`}><a onClick={() => changeCardView('review')} className="page-link">Under Review</a></li>
-                          <li className={`page-item ${cardView == 'completed' ? 'active' : '' }`}><a onClick={() => changeCardView('completed')} className="page-link">Complete</a></li>
+                          <li className={`page-item ${cardView == 'all' ? 'active' : ''}`}><a onClick={() => changeCardView('all')} className="page-link">All Task</a></li>
+                          <li className={`page-item ${cardView == 'pending' ? 'active' : ''}`}><a onClick={() => changeCardView('pending')} className="page-link">To Do</a></li>
+                          <li className={`page-item ${cardView == 'inProgress' ? 'active' : ''}`}><a onClick={() => changeCardView('inProgress')} className="page-link">In Progress</a></li>
+                          <li className={`page-item ${cardView == 'review' ? 'active' : ''}`}><a onClick={() => changeCardView('review')} className="page-link">Under Review</a></li>
+                          <li className={`page-item ${cardView == 'completed' ? 'active' : ''}`}><a onClick={() => changeCardView('completed')} className="page-link">Complete</a></li>
                         </ul>
                       </div>
                     </div>
@@ -391,80 +437,80 @@ const TaskManager = (props) => {
                             <div className="flex-fill w-25">
                               {pendingTasks && pendingTasks.length > 0 && pendingTasks.map((task, tIndex) => {
                                 return (
-                                  
-                                    <div key={tIndex} onClick={()=>navigate(`/task-details/${task.project_task_id}`)} className={`link_url gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
-                                      <div className="gridboxbody">
-                                        <h4>{task.description}</h4>
-                                        <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
-                                        <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> &nbsp;<span>{task.title}</span></p>
-                                        <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" />&nbsp; <span>Created {task.created_at}</span> </p>
 
-                                      </div>
-                                      <div className="gridboxfooter">
-                                        <p className="m-0">{task.project_task_id}</p>
-                                        <a href="#"><img src="assets/img/boxuser.svg" alt="" /></a>
-                                      </div>
+                                  <div key={tIndex} onClick={() => getTaskDetails(task.project_task_id)} className={`link_url gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
+                                    <div className="gridboxbody">
+                                      <h4>{task.description}</h4>
+                                      <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
+                                      <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> &nbsp;<span>{task.title}</span></p>
+                                      <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" />&nbsp; <span>Created {task.created_at}</span> </p>
+
                                     </div>
+                                    <div className="gridboxfooter">
+                                      <p className="m-0">{task.project_task_id}</p>
+                                      <a href="#"><img src="assets/img/boxuser.svg" alt="" /></a>
+                                    </div>
+                                  </div>
                                 )
                               })}
                             </div>
                             <div className="flex-fill w-25">
                               {inProgresstasks && inProgresstasks.length > 0 && inProgresstasks.map((task, tIndex) => {
                                 return (
-                                  
-                                    <div key={tIndex} onClick={()=>navigate(`/task-details/${task.project_task_id}`)} className={`link_url gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
-                                      <div className="gridboxbody">
-                                        <h4>{task.description}</h4>
-                                        <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
-                                        <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
-                                        <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Created {task.created_at}</span> </p>
 
-                                      </div>
-                                      <div className="gridboxfooter">
-                                        <p className="m-0">{task.project_task_id}</p>
-                                        <a href="#"><img src="assets/img/boxuser.svg" alt="" /></a>
-                                      </div>
+                                  <div key={tIndex} onClick={() => getTaskDetails(task.project_task_id)} className={`link_url gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
+                                    <div className="gridboxbody">
+                                      <h4>{task.description}</h4>
+                                      <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
+                                      <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
+                                      <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Created {task.created_at}</span> </p>
+
                                     </div>
+                                    <div className="gridboxfooter">
+                                      <p className="m-0">{task.project_task_id}</p>
+                                      <a href="#"><img src="assets/img/boxuser.svg" alt="" /></a>
+                                    </div>
+                                  </div>
                                 )
                               })}
                             </div>
                             <div className="flex-fill w-25">
                               {underReviewtasks && underReviewtasks.length > 0 && underReviewtasks.map((task, tIndex) => {
                                 return (
-                                  
-                                    <div key={tIndex} onClick={()=>navigate(`/task-details/${task.project_task_id}`)} className={`link_url gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
-                                      <div className="gridboxbody">
-                                        <h4>{task.description}</h4>
-                                        <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
-                                        <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
-                                        <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Created {task.created_at}</span> </p>
 
-                                      </div>
-                                      <div className="gridboxfooter">
-                                        <p className="m-0">{task.project_task_id}</p>
-                                        <a href="#"><img src="assets/img/boxuser.svg" alt="" /></a>
-                                      </div>
+                                  <div key={tIndex} onClick={() => getTaskDetails(task.project_task_id)} className={`link_url gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
+                                    <div className="gridboxbody">
+                                      <h4>{task.description}</h4>
+                                      <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
+                                      <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
+                                      <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Created {task.created_at}</span> </p>
+
                                     </div>
+                                    <div className="gridboxfooter">
+                                      <p className="m-0">{task.project_task_id}</p>
+                                      <a href="#"><img src="assets/img/boxuser.svg" alt="" /></a>
+                                    </div>
+                                  </div>
                                 )
                               })}
                             </div>
                             <div className="flex-fill w-25">
                               {completedtasks && completedtasks.length > 0 && completedtasks.map((task, tIndex) => {
                                 return (
-                                  
-                                    <div key={tIndex} onClick={()=>navigate(`/task-details/${task.project_task_id}`)} className={`link_url gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
-                                      <div className="gridboxbody">
-                                        <h4>{task.description}</h4>
-                                        <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
-                                        <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
-                                        <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Created {task.created_at}</span> </p>
 
-                                      </div>
-                                      <div className="gridboxfooter">
-                                        <p className="m-0">{task.project_task_id}</p>
-                                        <a href="#"><img src="assets/img/boxuser.svg" alt="" /></a>
-                                      </div>
+                                  <div key={tIndex} onClick={() => getTaskDetails(task.project_task_id)} className={`link_url gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
+                                    <div className="gridboxbody">
+                                      <h4>{task.description}</h4>
+                                      <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
+                                      <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
+                                      <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Created {task.created_at}</span> </p>
+
                                     </div>
+                                    <div className="gridboxfooter">
+                                      <p className="m-0">{task.project_task_id}</p>
+                                      <a href="#"><img src="assets/img/boxuser.svg" alt="" /></a>
+                                    </div>
+                                  </div>
                                 )
                               })}
                             </div>
@@ -486,11 +532,11 @@ const TaskManager = (props) => {
                     <div className="align-items-center d-flex justify-content-between my-3">
                       <div>
                         <ul className="pagination mb-0 filterview">
-                        <li className={`page-item ${cardView == 'all' ? 'active' : '' }`}><a onClick={() => changeCardView('all')} className="page-link">All Task</a></li>
-                          <li className={`page-item ${cardView == 'pending' ? 'active' : '' }`}><a onClick={() => changeCardView('pending')} className="page-link">To Do</a></li>
-                          <li className={`page-item ${cardView == 'inProgress' ? 'active' : '' }`}><a onClick={() => changeCardView('inProgress')} className="page-link">In Progress</a></li>
-                          <li className={`page-item ${cardView == 'review' ? 'active' : '' }`}><a onClick={() => changeCardView('review')} className="page-link">Under Review</a></li>
-                          <li className={`page-item ${cardView == 'completed' ? 'active' : '' }`}><a onClick={() => changeCardView('completed')} className="page-link">Complete</a></li>
+                          <li className={`page-item ${cardView == 'all' ? 'active' : ''}`}><a onClick={() => changeCardView('all')} className="page-link">All Task</a></li>
+                          <li className={`page-item ${cardView == 'pending' ? 'active' : ''}`}><a onClick={() => changeCardView('pending')} className="page-link">To Do</a></li>
+                          <li className={`page-item ${cardView == 'inProgress' ? 'active' : ''}`}><a onClick={() => changeCardView('inProgress')} className="page-link">In Progress</a></li>
+                          <li className={`page-item ${cardView == 'review' ? 'active' : ''}`}><a onClick={() => changeCardView('review')} className="page-link">Under Review</a></li>
+                          <li className={`page-item ${cardView == 'completed' ? 'active' : ''}`}><a onClick={() => changeCardView('completed')} className="page-link">Complete</a></li>
                         </ul>
                       </div>
                     </div>
@@ -505,7 +551,7 @@ const TaskManager = (props) => {
                               <div className="card-body">
                                 {tasksByDates && tasksByDates[date] && tasksByDates[date].length > 0 && tasksByDates[date].map((task, tIndex) => {
                                   return (
-                                    <div key={tIndex} onClick={()=>navigate(`/task-details/${task.project_task_id}`)} className={`link_url gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
+                                    <div key={tIndex} onClick={() => getTaskDetails(task.project_task_id)} className={`link_url gridBox ${task.task_status == "pending" ? 'todo_Filter' : (task.task_status == "in_progress" ? 'inProgress_Filter' : (task.task_status == "review" ? 'underReview_Filter' : (task.task_status == "completed" ? 'complete_Filter' : '')))}`}>
                                       <div className="gridboxbody">
                                         <div>
                                           <p>{task.project_task_id}</p>
@@ -557,6 +603,19 @@ const TaskManager = (props) => {
           </div>
         </div>
       </div>
+
+      {(() => {
+        if (modalType && modalType != '' && modalType != null) {
+          if (modalType == 'view_task_details') {
+            return <AirModal
+              show={openModal}
+              modalType={modalType}
+              hideModal={hideModal}
+              modalData={{taskDetails}}
+              formSubmit={() =>{}} />
+          } 
+        }
+      })()}
     </>
   )
 }
