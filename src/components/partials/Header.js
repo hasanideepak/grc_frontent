@@ -1,52 +1,52 @@
-import {useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
 
 const Header = (props) => {
-    const {defHeaderTitle = ''} = props
+    const { defHeaderTitle = '' } = props
     const [headerTitle, setHeaderTitle] = useState('')
     const navigate = useNavigate();
     const location = useLocation()
     useEffect(() => {
         setPageHeader()
-    },[])
+    }, [])
     const goToUrl = (url = '') => {
         if (url == '') {
             return false
         }
         navigate(url)
     }
-    const setPageHeader = () =>{
+    const setPageHeader = () => {
         switch (true) {
             case location.pathname == "/home":
                 setHeaderTitle("Home")
-            break;
+                break;
             case location.pathname == "/dashboard":
                 setHeaderTitle("Dashboard")
-            break;
+                break;
             case location.pathname == "/task-manager":
                 setHeaderTitle("Task Manager")
-            break;
-            case location.pathname.indexOf("/task-details") != -1 :
+                break;
+            case location.pathname.indexOf("/task-details") != -1:
                 setHeaderTitle(defHeaderTitle || "")
-            break;
+                break;
             case location.pathname == "/evidence-manager":
                 setHeaderTitle("Evidence Manager")
-            break;
+                break;
             case location.pathname == "/onboarding":
                 setHeaderTitle("On Boarding")
-            break;
+                break;
             case location.pathname == "/configuration":
                 setHeaderTitle("Configuration")
-            break;
-            case location.pathname.indexOf("/onboarding_scope") != -1 :
+                break;
+            case location.pathname.indexOf("/onboarding_scope") != -1:
                 setHeaderTitle("On Boarding Scope")
-            break;
+                break;
             case location.pathname.indexOf("/onboarding_scope") != -1:
                 setHeaderTitle("Configuration Scope")
-            break;
+                break;
             default:
-            break;
+                break;
         }
     }
     return (
@@ -79,8 +79,18 @@ const Header = (props) => {
                         </ul>
                     </div>
                 </nav>
-                <div className="userProfile pr-2">
-                    <div className="mdw bg-transparent p-0 shadow-none"><img src="/assets/img/userProfile.png" alt="profile" className="img-fluid" /></div>
+                <div className="userProfile pr-2 ml-sm-auto">
+                    <div className="mdw bg-transparent p-0 shadow-none">
+                        <div className="dropdown">
+                            <a className="dropdown-toggle profileSet" data-toggle="dropdown">
+                                <img src="/assets/img/userProfile.png" alt="profile" className="img-fluid" />
+                            </a>
+                            <div className="dropdown-menu">
+                                <a className="dropdown-item" onClick={()=> {}}>Company Profile</a>
+                                <a className="dropdown-item" onClick={()=> navigate(`/change-password`)}>Change Password</a>
+                            </div>
+                        </div>
+                    </div>
                     <div className="mdw"><a href="#"><img src="/assets/img/gbl.svg" alt="notification" className="img-fluid" /></a></div>
                 </div>
             </div>

@@ -22,6 +22,7 @@ const TaskDetails = lazy(()=> import("./pages/TaskDetails"))
 const ForgotPassword = lazy(()=> import("./pages/ForgotPassword"))
 const ResetPassword = lazy(()=> import("./pages/ResetPassword"))
 const Page404 = lazy(()=> import("./pages/Page404"))
+const ChangePassword = lazy(()=> import("./pages/ChangePassword"))
 // const {LayoutContext} = lazy(()=> import("./ContextProviders/LayoutContext"))
 function App() {
   const  RouterOutlet = ({layout:Layout,...rest}) =>{
@@ -71,6 +72,7 @@ function App() {
                   {/* <Route exact path="/" element={<Home />}></Route> */}
                   <Route path="/" element={<RouterOutlet layout={Layout} />}>
                     <Route exact path="/home" element={<Home />}></Route>
+                    <Route exact path="/change-password" element={<ChangePassword />}></Route>
                     <Route  path="/dashboard" element={<Dashboard />}></Route>
                     <Route  path="/onboarding" element={<Configuration />}></Route>
                     <Route  path="/task-manager" element={<TaskManager /> }></Route>
@@ -86,6 +88,7 @@ function App() {
                     <Route exact path="/login" element={<Login />}></Route>
                     <Route exact path="/forgotpassword" element={<ForgotPassword />}></Route>
                     <Route exact path="/resetpassword/:token" element={<ResetPassword />}></Route>
+                    <Route exact path="/setpassword/:token" element={<ResetPassword />}></Route>
                   </Route>
 
                   <Route path="/test" element={<PublicLayout><TestPage /> </PublicLayout>}></Route>

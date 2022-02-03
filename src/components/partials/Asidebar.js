@@ -34,7 +34,7 @@ const Asidebar = (props) => {
                                 <li><a href="#"><img src="/assets/img/gbl.svg" alt="about" className="img-fluid" /><span>About us</span></a></li>
                                 <li className="navHeader">SETTINGS</li>
                                 <li><a href="#"><img src="/assets/img/gbl.svg" alt="myProfile" className="img-fluid" /><span>My Profile</span></a></li>
-                                <li><a href="#"><img src="/assets/img/gbl.svg" alt="newAccount" className="img-fluid" /><span>New Account / Project</span></a></li>
+                                <li><a href="#"><img src="/assets/img/gbl.svg" alt="newAccount" className="img-fluid" /><span>New Project</span></a></li>
                                 <li><a onClick={() => logOut()}><img src="/assets/img/gbl.svg" alt="logout" className="img-fluid" /><span>Logout</span></a></li>
                             </ul>
                         </div>

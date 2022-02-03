@@ -11,6 +11,7 @@ const ResetPassword = (props) => {
   const {token = ""} = useParams()
   const [formRes, setFormRes] = useState({ status: false, err_status: false, error: {} })
   const [formSubmitted, setFormSbmt] = useState(false)
+  const passRegex = new RegExp(/((?=.*\d)(?=.*[A-Z])(?=.*\W).{9,32})/)
   useEffect(() => {
     if(token == ""){
       // setViewType("token_err")
@@ -57,7 +58,7 @@ const ResetPassword = (props) => {
   }
 
   // console.log(watch("email")); // watch input value by passing the name of it
-  console.log(formRes)
+  console.log(errors)
   return (
     <>
       <div className=" container-fluid">
@@ -86,12 +87,13 @@ const ResetPassword = (props) => {
                       <>
                         <div className="col-md-12 col-12 col-xl-7 col-md-6 col-sm-12 d-flex justify-content-center align-items-center pl-md-0">
                           <form className="w-100 mx-lg-5 mx-md-5 mx-xl-5 my-md-4 mx-2 my-2" name="form1" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-                            <h6 className="f-12 fw-600">Reset Password</h6>
-                            <p>Enter your registered email below to receive password reset instruction</p>
+                            <h6 className="f-12 mb-3 fw-600">Reset Password</h6>
+                            {/* <p>Enter your registered email below to receive password reset instruction</p> */}
                             <div className="form-group">
                               <label htmlFor="password">New Password</label>
-                              <input type="password" className="form-control mb-1" {...register("password",{required:true})} name="password" autoComplete="off" defaultValue="" />
+                              <input type="password" className="form-control mb-1" {...register("password",{required:true,pattern:passRegex})} name="password" autoComplete="off" defaultValue="" />
                               {errors.password?.type === 'required' && <div className="error_block text-danger">*Password is required</div>} 
+                              {errors.password?.type === 'pattern' && <div className="error_block text-danger">*Password should be alphanumeric, must contain atleast 1 uppercase and 1 special character and should have atleast 10 characters </div>}
                               {
                                 formRes.err_status && formRes.error?.pass_not_match?.required
                                 ? <div className="text-danger"><div>{formRes.error?.pass_not_match?.msg}</div> </div>
@@ -101,12 +103,12 @@ const ResetPassword = (props) => {
                             <div className="form-group">
                               <label htmlFor="conf_password">Confirm Password</label>
                               <input type="password" className="form-control mb-1" {...register("conf_password",{required:true})} name="conf_password" autoComplete="off" defaultValue="" />
-                              {errors.password?.type === 'required' && <div className="error_block text-danger">*Confirm password is required</div>}
+                              {errors.conf_password?.type === 'required' && <div className="error_block text-danger">*Confirm password is required</div>}
                             </div>
-                            <div className="d-flex justify-content-end form-group">
+                            {/* <div className="d-flex justify-content-end form-group">
                               <span>Remember password? &nbsp;</span>
                               <Link to="/login" className="link" >Login</Link>
-                            </div>
+                            </div> */}
                             <button className="btn btn-primary btn-block mb-lg-4 mb-md-4 mb-2" type="submit" disabled={formSubmitted}> Reset Password</button>
                             {
                               !formRes.status && formRes.err_status && formRes.error?.type =="reset_pass" && formRes.error?.msg

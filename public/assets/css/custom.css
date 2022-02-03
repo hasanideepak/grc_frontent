@@ -301,14 +301,14 @@ a.info{
     margin-bottom: 8px;
     display: flex;
     align-items: center;
-    overflow: hidden;
+    overflow: initial;
    text-overflow: ellipsis;
 }
 .gridcontainer>.grid_item>.card>.card-body .gridBox>.gridboxbody>p>span {
-   display: -webkit-box;
-   -webkit-line-clamp: 1;
-    line-clamp: 1; 
-   -webkit-box-orient: vertical;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .gridcontainer>.grid_item>.card>.card-body .gridBox>.gridboxbody img[alt="folder"] {
@@ -521,9 +521,17 @@ a.taskDetailPage_link {
     font-weight: 500;
 }
 
-#taskDetails_sec .task_overview_block .task_name{
+#taskDetails_sec .task_overview_block .task_name_block{
     font-size: 14px;
     font-weight: 700;
+}
+#taskDetails_sec .task_overview_block .task_name{
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: middle;
 }
 #taskDetails_sec .widget_box span:nth-child(2){
     font-size: 12px;

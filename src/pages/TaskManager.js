@@ -322,9 +322,14 @@ const TaskManager = (props) => {
                                 // <div key={pIndex} className="gridBox link_url" onClick={() => navigate(`/task-details/${p_task.project_task_id}`)}>
                                 <div key={pIndex} className="gridBox link_url" onClick={() => getTaskDetails(p_task.project_task_id)}>
                                   <div className="gridboxbody">
-                                    <h4>{p_task.description}</h4>
-                                    <p><img src="assets/img/gbl.gif" alt="folder" /> <span>{p_task.title}</span></p>
+                                    <h4 className="d-flex">{p_task.description}</h4>
+                                    <p>
+                                      <img src="assets/img/gbl.gif" alt="folder" /> 
+                                      <span>{p_task.title}</span>
+                                      <label className={`m-0 badge badge-pill badge-${p_task.priority.toLowerCase() == 'low' ? 'success' : (p_task.priority.toLowerCase() == 'medium' ? 'warning' :'danger')} ml-auto`}>{p_task.priority.toUpperCase()}</label>
+                                    </p>
                                     <p><img src="assets/img/gbl.gif" alt="date" /><span>Created {p_task.created_at}</span> </p>
+                                    <p><img src="assets/img/gbl.gif" alt="date" /><span>Due Date {p_task.due_date}</span> </p>
 
                                   </div>
                                   <div className="gridboxfooter">
@@ -442,8 +447,9 @@ const TaskManager = (props) => {
                                     <div className="gridboxbody">
                                       <h4>{task.description}</h4>
                                       <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
-                                      <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> &nbsp;<span>{task.title}</span></p>
+                                      <p className="w-100"><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> &nbsp;<span>{task.title}</span><label className={`m-0 badge badge-pill badge-${task.priority.toLowerCase() == 'low' ? 'success' : (task.priority.toLowerCase() == 'medium' ? 'warning' :'danger')} ml-auto`}>{task.priority.toUpperCase()}</label></p>
                                       <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" />&nbsp; <span>Created {task.created_at}</span> </p>
+                                      <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" />&nbsp; <span>Due Date {task.due_date}</span> </p>
 
                                     </div>
                                     <div className="gridboxfooter">
@@ -462,8 +468,9 @@ const TaskManager = (props) => {
                                     <div className="gridboxbody">
                                       <h4>{task.description}</h4>
                                       <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
-                                      <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
+                                      <p className="w-100"><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span><label className={`m-0 badge badge-pill badge-${task.priority.toLowerCase() == 'low' ? 'success' : (task.priority.toLowerCase() == 'medium' ? 'warning' :'danger')} ml-auto`}>{task.priority.toUpperCase()}</label></p>
                                       <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Created {task.created_at}</span> </p>
+                                      <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Due Date {task.due_date}</span> </p>
 
                                     </div>
                                     <div className="gridboxfooter">
@@ -482,8 +489,9 @@ const TaskManager = (props) => {
                                     <div className="gridboxbody">
                                       <h4>{task.description}</h4>
                                       <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
-                                      <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
+                                      <p className="w-100"><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span> <label className={`m-0 badge badge-pill badge-${task.priority.toLowerCase() == 'low' ? 'success' : (task.priority.toLowerCase() == 'medium' ? 'warning' :'danger')} ml-auto`}>{task.priority.toUpperCase()}</label></p>
                                       <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Created {task.created_at}</span> </p>
+                                      <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Due Date {task.due_date}</span> </p>
 
                                     </div>
                                     <div className="gridboxfooter">
@@ -502,8 +510,9 @@ const TaskManager = (props) => {
                                     <div className="gridboxbody">
                                       <h4>{task.description}</h4>
                                       <a className="my-2" href="#">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a>
-                                      <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
+                                      <p><img src="assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span><label className={`m-0 badge badge-pill badge-${task.priority.toLowerCase() == 'low' ? 'success' : (task.priority.toLowerCase() == 'medium' ? 'warning' :'danger')} ml-auto`}>{task.priority.toUpperCase()}</label></p>
                                       <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Created {task.created_at}</span> </p>
+                                      <p><img src="assets/img/gbl.gif" alt="date" height="1" width="1" /><span>Due Date {task.due_date}</span> </p>
 
                                     </div>
                                     <div className="gridboxfooter">
@@ -557,7 +566,7 @@ const TaskManager = (props) => {
                                           <p>{task.project_task_id}</p>
                                           <h4>{task.description}</h4>
                                         </div>
-                                        <p><img src="/assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span></p>
+                                        <p><img src="/assets/img/gbl.gif" alt="folder" height="1" width="1" /> <span>{task.title}</span><label className={`m-0 badge badge-pill badge-${task.priority.toLowerCase() == 'low' ? 'success' : (task.priority.toLowerCase() == 'medium' ? 'warning' :'danger')} ml-auto`}>{task.priority.toUpperCase()}</label></p>
                                         <p> <a href="" className="statusClr">{task.task_status == "pending" ? 'To Do' : (task.task_status == "in_progress" ? 'In Progress' : (task.task_status == "review" ? 'Under Review' : (task.task_status == "completed" ? 'Completed' : '')))}</a></p>
                                         <p> <a href="#" className="active"><img src="/assets/img/boxuser.svg" alt="" /></a> </p>
                                       </div>
