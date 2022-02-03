@@ -78,7 +78,7 @@ const AirModal = (intialData) => {
                                                         <div className="card_block py-3">
                                                             <div className="d-flex justify-content-between align-items-center px-3">
                                                                 <div className="task_name_block">
-                                                                    <span className="task_name">{taskDetails && taskDetails?.task && taskDetails?.task[0]?.title}</span> 
+                                                                    <span className="task_name mr-2">{taskDetails && taskDetails?.task && taskDetails?.task[0]?.title}</span> 
                                                                     <label className={`m-0 badge badge-pill badge-${taskDetails && taskDetails?.task && taskDetails?.task[0] && taskDetails?.task[0]?.priority.toLowerCase() == 'low' ? 'success' : (taskDetails && taskDetails?.task &&  taskDetails?.task[0] && taskDetails?.task[0]?.priority.toLowerCase() == 'medium' ? 'warning' :'danger')} ml-auto`}>{taskDetails && taskDetails?.task &&  taskDetails?.task[0] && taskDetails?.task[0]?.priority.toUpperCase()}</label>
                                                                 </div>
                                                                 <div className="widget_box d-flex flex-column text-right">
