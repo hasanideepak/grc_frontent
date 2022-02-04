@@ -5,6 +5,7 @@ import { LayoutContext } from './ContextProviders/LayoutContext';
 // import Layout from './components/layouts/MainLayout';
 // import PublicLayout from './components/layouts/PublicLayout';
 import { IsAuthenticated } from './helpers/Auth';
+import Project from './pages/Project';
 import TestPage from './pages/TestPage';
 // import Login from './pages/Login';
 
@@ -73,6 +74,7 @@ function App() {
                   <Route path="/" element={<RouterOutlet layout={Layout} />}>
                     <Route exact path="/home" element={<Home />}></Route>
                     <Route exact path="/change-password" element={<ChangePassword />}></Route>
+                    <Route exact path="/add-project" element={<Project />}></Route>
                     <Route  path="/dashboard" element={<Dashboard />}></Route>
                     <Route  path="/onboarding" element={<Configuration />}></Route>
                     <Route  path="/task-manager" element={<TaskManager /> }></Route>

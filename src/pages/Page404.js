@@ -17,9 +17,9 @@ const Page404 = (props) => {
             <img src="/assets/img/userProfile.png" alt="profile" className="img-fluid" />
           </div> */}
         </div>
-        <section class="w-100">
-          <div class="page404block d-flex align-items-center justify-content-center">
-            <img alt="404 img" src="/assets/img/404.png" class="img-fluid page404_img" />
+        <section className="w-100">
+          <div className="page404block d-flex align-items-center justify-content-center">
+            <img alt="404 img" src="/assets/img/404.png" className="img-fluid page404_img" />
           </div>
         </section>
       </div>

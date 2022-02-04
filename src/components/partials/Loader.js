@@ -11,9 +11,9 @@ const Loader = (props) => {
         if(showLoader){
           return(
             <div className="container-fluid vh-100">
-                <section class="loader_sec h-100 d-flex align-items-center justify-content-center">
-                  <div class="loader_block">
-                    <img alt="loader" src="/assets/img/loader.svg" class="img-fluid page404_img" />
+                <section className="loader_sec h-100 d-flex align-items-center justify-content-center">
+                  <div className="loader_block">
+                    <img alt="loader" src="/assets/img/loader.svg" className="img-fluid page404_img" />
                   </div>
                 </section>
             </div>

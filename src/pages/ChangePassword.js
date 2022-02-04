@@ -69,16 +69,16 @@ const ChangePassword = (props) => {
   return (
     <>
       <Header />
-      <div id="accordion" class="profileSec pl-lg-3 pr-lg-3 accordianSec  mt-3">
-        <div class="card">
+      <div id="accordion" className="profileSec pl-lg-3 pr-lg-3 accordianSec  mt-3">
+        <div className="card">
           <form onSubmit={handleSubmit(updatePassword)}>
-            <div class="card-header justify-content-between py-4">
-              <a class="card-title">Change Password</a>
-              <button class="btn btn-primary" type="submit">Update</button>
+            <div className="card-header justify-content-between py-4">
+              <a className="card-title">Change Password</a>
+              <button className="btn btn-primary" type="submit">Update</button>
             </div>
-            <div class="card-body">
-              <div class="row mb-4">
-                <div class="col-md-6">
+            <div className="card-body">
+              <div className="row mb-4">
+                <div className="col-md-6">
                   <div className="formInline m-0">
                     <label htmlFor="">Current Password:</label>
                     <input type="password" className="form-control" {...register("oldPass",{required:true})} name="oldPass" autoComplete="off" defaultValue="" />
@@ -86,8 +86,8 @@ const ChangePassword = (props) => {
                   {errors.oldPass?.type === 'required' && <div className="error_block text-danger">*Old assword is required</div>} 
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-6">
+              <div className="row">
+                <div className="col-md-6">
                   <div className="formInline m-0">
                     <label htmlFor="">New Password:</label>
                     <input type="password" className="form-control bg-transparent" {...register("newPass",{required:true,pattern:passRegex})} name="newPass" autoComplete="off" defaultValue="" />
@@ -100,7 +100,7 @@ const ChangePassword = (props) => {
                     : ''
                   }
                 </div>
-                <div class="col-md-6">
+                <div className="col-md-6">
                   <div className="formInline m-0">
                     <label htmlFor="">Confirm Password:</label>
                     <input type="password" className="form-control bg-transparent"{...register("confPass",{required:true})} name="confPass" autoComplete="off" defaultValue="" />

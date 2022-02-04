@@ -6,12 +6,12 @@ import Header from "../components/partials/Header";
 import { lazy, useContext, useEffect, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
-const LayoutContext = lazy(()=> import("../ContextProviders/LayoutContext"))
+const LayoutContext = lazy(() => import("../ContextProviders/LayoutContext"))
 
 
 const Configuration = (props) => {
   // const {setShowLoader} = useContext(LayoutContext)
-  const {user = {}} = useOutletContext()
+  const { user = {} } = useOutletContext()
   const orgId = user?.currentUser?.org_id || 0;
   const [getAllConfigs, setAllConfigs] = useState({})
   const [accountsList, setAccountsList] = useState(null)
@@ -74,7 +74,7 @@ const Configuration = (props) => {
       payloadUrl = `configuration/getConfiguration/${orgId}`
       method = "GET";
     }
-   
+
     else if (type == 'member_roles') {
       payloadUrl = 'reference/getAuthorities/Y'
       method = "GET";
@@ -268,8 +268,8 @@ const Configuration = (props) => {
       obj.frameWorks && obj.frameWorks.map(frameWork => {
         frameWork.is_selected = addFrameWorksList.includes(frameWork.id) ? "Y" : "N"
       })
-      setAllConfigs(oldVal =>{
-        return {...obj}
+      setAllConfigs(oldVal => {
+        return { ...obj }
       })
       changePanel(2)
       formRes = { status: true, err_status: false, error: {}, type: "framework", msg: "Framework added successfully" }
@@ -321,11 +321,11 @@ const Configuration = (props) => {
 
     let payloadUrl = "configuration/addKeyMember"
     let method = "POST";
-    let formData = { first_name:memFirstName,last_name:memLastName, email: memEmail, department_name: memRole.name, authority_id: memRole.id, project_id: accountsList[0].project_id, org_id: orgId}
+    let formData = { first_name: memFirstName, last_name: memLastName, email: memEmail, department_name: memRole.name, authority_id: memRole.id, project_id: accountsList[0].project_id, org_id: orgId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let memListArr = Object.assign([], members);
-      let memObj = { emp_id: res.emp_id,first_name:formData.first_name,last_name:formData.last_name, email: formData.email, department_name: formData.department_name }
+      let memObj = { emp_id: res.emp_id, first_name: formData.first_name, last_name: formData.last_name, email: formData.email, department_name: formData.department_name }
       memListArr.push(memObj)
       setMembers(oldVal => {
         return [...memListArr]
@@ -399,11 +399,11 @@ const Configuration = (props) => {
 
     let payloadUrl = "configuration/addServicePartner"
     let method = "POST";
-    let formData = { first_name: partnerFn,last_name:partnerLn, email: partnerEmail, project_id: accountsList[0].project_id }
+    let formData = { first_name: partnerFn, last_name: partnerLn, email: partnerEmail, project_id: accountsList[0].project_id }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let listArr = Object.assign([], servicePartners);
-      let partnerObj = { emp_id: res.emp_id, partner_id: res.partner_id, email: formData.email, first_name: formData.first_name,last_name:formData.last_name }
+      let partnerObj = { emp_id: res.emp_id, partner_id: res.partner_id, email: formData.email, first_name: formData.first_name, last_name: formData.last_name }
       listArr.push(partnerObj)
       setServicePartners(oldVal => {
         return [...listArr]
@@ -662,7 +662,7 @@ const Configuration = (props) => {
   }
 
   const changePanel = (index = null) => {
-    if(index == null){
+    if (index == null) {
       return false
     }
     let ele = document.getElementById(`ct${index}`)
@@ -675,84 +675,91 @@ const Configuration = (props) => {
     <>
       <Header />
       <div id="accordion" className="accordion pl-lg-3 pr-lg-3 accordianSec">
-        <div className="card ">
-          <div className="d-flex align-items-center">
-            <div id="ct0" className="card-header flex-grow-1" data-toggle="collapse" href="#cp0" aria-expanded="true">
-              <a className="card-title w-100 d-flex">
-                Account Setup
-                <OverlayTrigger
-                  key={"right"}
-                  placement={"right"}
-                  overlay={
-                    <Tooltip id={`tooltip-right`}>
-                      Tooltip for <strong>Account</strong>.
-                    </Tooltip>
-                  }
-                >
-                  <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
-                </OverlayTrigger>
-                {accountsList && accountsList.length > 0
-                  ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
-                  : ''
-                }
-              </a>
-            </div>
-            <div className="ml-auto action_item">
-              <a onClick={() => addAccount()} className={`btn btn-primary btn-sm ml-2 ${accountsList && accountsList.length > 0 ? 'd-none' : ''}`} >Save</a>
-            </div>
-          </div>
-          <div id="cp0" className="card-body p-0 collapse show" data-parent="#accordion">
-
-            <div className={`p-lg-3 m-lg-3 p-2 m-2 bg-white rounded ${accountsList && accountsList.length > 0 ? 'd-none' : ''}`}>
-              <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
-                <div className="flex-grow-1 mr-2 w-75">
-                  <input id="accName" type="text" className="form-control" placeholder="Enter Account name" disabled={accountsList && accountsList.length > 0} />
-                  {
-                    formRes.err_status && formRes.error?.account_name?.required
-                      ? <div className="text-danger"><div>{formRes.error?.account_name?.msg}</div> </div>
-                      : ''
-                  }
-
-                </div>
-                <div className="flex-grow-1 mr-2 w-75">
-                  <input id="accProject" type="text" className="form-control" placeholder="Enter Project" disabled={accountsList && accountsList.length > 0} />
-                  {
-                    formRes.err_status && formRes.error?.project_name?.required
-                      ? <div className="text-danger"><div>{formRes.error?.account_name?.msg}</div> </div>
-                      : ''
-                  }
-                </div>
-                {/* <div><a href="" className=" info"> <img src="assets/img/plus.svg" alt="" className="plus" /> </a></div> */}
-              </div>
-              {
-                !formRes.status && formRes.err_status && formRes.error?.type == "account" && formRes.error?.msg
-                  ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
-                  : ''
-              }
-              {
-                formRes.status && formRes?.type == "account" && formRes.msg
-                  ? <div className="text-success"><div>{formRes.msg}</div> </div>
-                  : ''
-              }
-            </div>
-            <div className="search_result bg-white ">
-              <div className="px-3 h_labels">
-                <div className="flex-grow-1 ml-lg-3 ml-md-0 ">Account Name</div>
-                <div>Project Name </div>
-                {/* <div className="mr-lg-3"><a href="#"> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div> */}
-              </div>
-              {accountsList && accountsList.length > 0 && accountsList.map((account, accIndex) => {
-                return (
-                  <div key={accIndex} className=" px-3">
-                    <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{account.account_name}</div>
-                    <div>{account.project_name} </div>
-                    {/* <div className="mr-lg-3"><a href="#"> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div> */}
+        {(() => {
+          if (user?.currentUser?.is_onboard == "N") {
+            return (
+              <div className="card ">
+                <div className="d-flex align-items-center">
+                  <div id="ct0" className="card-header flex-grow-1" data-toggle="collapse" href="#cp0" aria-expanded="true">
+                    <a className="card-title w-100 d-flex">
+                      Account Setup
+                      <OverlayTrigger
+                        key={"right"}
+                        placement={"right"}
+                        overlay={
+                          <Tooltip id={`tooltip-right`}>
+                            Tooltip for <strong>Account</strong>.
+                          </Tooltip>
+                        }
+                      >
+                        <span className="info_icon d-inline-block ml-1 mt-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                      </OverlayTrigger>
+                      {accountsList && accountsList.length > 0
+                        ? <span className="success_icon d-inline-block ml-auto"><i className="fa fa-check-circle"></i></span>
+                        : ''
+                      }
+                    </a>
                   </div>
-                )
-              })}
-            </div>
-          </div>
-        </div>
+                  <div className="ml-auto action_item">
+                    <a onClick={() => addAccount()} className={`btn btn-primary btn-sm ml-2 ${accountsList && accountsList.length > 0 ? 'd-none' : ''}`} >Save</a>
+                  </div>
+                </div>
+                <div id="cp0" className="card-body p-0 collapse show" data-parent="#accordion">
+
+                  <div className={`p-lg-3 m-lg-3 p-2 m-2 bg-white rounded ${accountsList && accountsList.length > 0 ? 'd-none' : ''}`}>
+                    <div className="d-flex  align-items-center justify-content-between  flex-lg-row  ">
+                      <div className="flex-grow-1 mr-2 w-75">
+                        <input id="accName" type="text" className="form-control" placeholder="Enter Account name" disabled={accountsList && accountsList.length > 0} />
+                        {
+                          formRes.err_status && formRes.error?.account_name?.required
+                            ? <div className="text-danger"><div>{formRes.error?.account_name?.msg}</div> </div>
+                            : ''
+                        }
+
+                      </div>
+                      <div className="flex-grow-1 mr-2 w-75">
+                        <input id="accProject" type="text" className="form-control" placeholder="Enter Project" disabled={accountsList && accountsList.length > 0} />
+                        {
+                          formRes.err_status && formRes.error?.project_name?.required
+                            ? <div className="text-danger"><div>{formRes.error?.account_name?.msg}</div> </div>
+                            : ''
+                        }
+                      </div>
+                      {/* <div><a href="" className=" info"> <img src="assets/img/plus.svg" alt="" className="plus" /> </a></div> */}
+                    </div>
+                    {
+                      !formRes.status && formRes.err_status && formRes.error?.type == "account" && formRes.error?.msg
+                        ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
+                        : ''
+                    }
+                    {
+                      formRes.status && formRes?.type == "account" && formRes.msg
+                        ? <div className="text-success"><div>{formRes.msg}</div> </div>
+                        : ''
+                    }
+                  </div>
+                  <div className="search_result bg-white ">
+                    <div className="px-3 h_labels">
+                      <div className="flex-grow-1 ml-lg-3 ml-md-0 ">Account Name</div>
+                      <div>Project Name </div>
+                      {/* <div className="mr-lg-3"><a href="#"> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div> */}
+                    </div>
+                    {accountsList && accountsList.length > 0 && accountsList.map((account, accIndex) => {
+                      return (
+                        <div key={accIndex} className=" px-3">
+                          <div className="flex-grow-1 ml-lg-3 ml-md-0 ">{account.account_name}</div>
+                          <div>{account.project_name} </div>
+                          {/* <div className="mr-lg-3"><a href="#"> <img src="/assets/img/times.svg" alt="" className="plus" />  </a></div> */}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            )
+          }
+        })()}
+
         <div className="card ">
           <div className="d-flex align-items-center">
             <div id="ct1" className={`card-header flex-grow-1 collapsed`} data-toggle={accountsList && accountsList.length > 0 ? "collapse" : ""} href="#cp1" aria-expanded="true">

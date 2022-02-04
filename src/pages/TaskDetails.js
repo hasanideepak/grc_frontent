@@ -66,14 +66,14 @@ const TaskDetails = (props) => {
       <div className="container-fluid">
         <div id="taskDetails_sec">
           <div className="task_overview_block">
-            {/* <div class="card">
-              <div class="card-body p-0">
+            {/* <div className="card">
+              <div className="card-body p-0">
                 <div className="task_card_block">
                   <div className="card_block py-3"> */}
             <div className="row">
               <div className="col-md-9 col-12 pl-0 pr-0 pl-lg-3 pr-lg-3 pl-xl-3 pr-xl-3">
-                <div class="card">
-                  <div class="card-body p-0">
+                <div className="card">
+                  <div className="card-body p-0">
                     <div className="task_card_block">
                       <div className="card_block py-3">
                         <div className="d-flex justify-content-between align-items-center px-3">
@@ -92,8 +92,8 @@ const TaskDetails = (props) => {
                 </div>
               </div>
               <div className="col-md-3 col-12 pl-0 pr-0 pl-lg-3 pr-lg-3 pl-xl-3 pr-xl-3">
-                <div class="card">
-                  <div class="card-body p-0">
+                <div className="card">
+                  <div className="card-body p-0">
                     <div className="task_card_block">
                       <div className="card_block py-3">
                         <div className="d-flex justify-content-between align-items-center px-3">
@@ -123,17 +123,17 @@ const TaskDetails = (props) => {
           </div>
           <div className="row mt-3">
             <div className="col-md-9 col-12 pl-0 pr-0 pl-lg-3 pr-lg-3 pl-xl-3 pr-xl-3">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Description</h5>
-                  <p class="card-text">
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title">Description</h5>
+                  <p className="card-text">
                     {taskDetails && taskDetails?.task && taskDetails?.task[0]?.description}
                   </p>
 
                 </div>
               </div>
-              <div class="card mt-4">
-                <div class="card-body p-0">
+              <div className="card mt-4">
+                <div className="card-body p-0">
                   <div className="task_card_block assets_block">
                     <div className="card_block p-3">
                       {/* <Accordion defaultActiveKey="0"> */}
@@ -251,8 +251,8 @@ const TaskDetails = (props) => {
                   </div>
                 </div>
               </div>
-              <div class="card mt-4">
-                <div class="card-body p-0">
+              <div className="card mt-4">
+                <div className="card-body p-0">
                   <div className="task_card_block evidence_block">
                     <div className="card_block p-3">
                       <div className="header my-2">
@@ -261,7 +261,7 @@ const TaskDetails = (props) => {
                       {taskDetails && taskDetails?.evidence_needed && taskDetails?.evidence_needed.map((evidence, eIndex) => {
                         return (
                           <div key={eIndex} className="card_box px-0">
-                            <span> <i class="fa fa-file" aria-hidden="true"></i> {evidence.evidence_name}</span>
+                            <span> <i className="fa fa-file" aria-hidden="true"></i> {evidence.evidence_name}</span>
                             <span>Uploded</span>
                           </div>
                         )
@@ -275,8 +275,8 @@ const TaskDetails = (props) => {
                   </div>
                 </div>
               </div>
-              <div class="card mt-4 taskDetails_btn sticky">
-                <div class="card-body p-0">
+              <div className="card mt-4 taskDetails_btn sticky">
+                <div className="card-body p-0">
                   <div className="task_card_block">
                     <div className="taskDetails_btn_block px-3 d-flex py-4 flex-wrap justify-content-center align-items-center">
                       <div className="card_button_block ">
@@ -300,8 +300,8 @@ const TaskDetails = (props) => {
               </div>
             </div>
             <div className="col-md-3 col-12 pl-0 pr-0 pl-lg-3 pr-lg-3 pl-xl-3 pr-xl-3">
-              <div class="card">
-                <div class="card-body p-0">
+              <div className="card">
+                <div className="card-body p-0">
                   <div className="task_card_block task_status_block">
                     <div className="card_block status_block py-3">
                       <Accordion >
@@ -363,8 +363,8 @@ const TaskDetails = (props) => {
                   </div>
                 </div>
               </div>
-              <div class="card mt-4">
-                <div class="card-body p-0">
+              <div className="card mt-4">
+                <div className="card-body p-0">
                   <div className="task_card_block task_control_block">
                     <div className="card_block control_block py-3">
                       {/* <Accordion defaultActiveKey="0"> */}

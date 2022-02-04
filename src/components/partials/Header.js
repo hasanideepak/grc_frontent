@@ -1,14 +1,21 @@
 import { useState, useEffect } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom"
+import ApiService from "../../services/ApiServices"
 
 
 const Header = (props) => {
+    const {user = {}} = useOutletContext()
+    const AccountId = user?.currentUser?.org_id || 0;
     const { defHeaderTitle = '' } = props
     const [headerTitle, setHeaderTitle] = useState('')
+    const [projects, setProjects] = useState([])
     const navigate = useNavigate();
     const location = useLocation()
     useEffect(() => {
         setPageHeader()
+        if(projects.length == 0){
+            getProjects()
+        }
     }, [])
     const goToUrl = (url = '') => {
         if (url == '') {
@@ -49,6 +56,16 @@ const Header = (props) => {
                 break;
         }
     }
+    console.log(user)
+    const getProjects = async () => {
+        let payloadUrl = `configuration/getProjectsByAccountId/${AccountId}`
+        let method = "GET";
+        let formData = {}
+        let res = await ApiService.fetchData(payloadUrl, method, formData);
+        if (res && res.message == "Success") {
+            console.log(res)
+        }
+    }
     return (
         <header>
             <div className="align-items-center d-flex justify-content-between aDm_navigation">
@@ -80,14 +97,26 @@ const Header = (props) => {
                     </div>
                 </nav>
                 <div className="userProfile pr-2 ml-sm-auto">
+                    {/* <div className="btn-group">
+                        <div className="dropdown">
+                            <button type="button" className="btn btn-primary dropdown-toggle sdrp" data-toggle="dropdown">
+                                HIPAA Secur...
+                            </button>
+                            <div className="dropdown-menu mt-1">
+                                <a className="dropdown-item" href="#">Link 1</a>
+                                <a className="dropdown-item" href="#">Link 2</a>
+                                <a className="dropdown-item" href="#">Link 3</a>
+                            </div>
+                        </div>
+                    </div> */}
                     <div className="mdw bg-transparent p-0 shadow-none">
                         <div className="dropdown">
                             <a className="dropdown-toggle profileSet" data-toggle="dropdown">
                                 <img src="/assets/img/userProfile.png" alt="profile" className="img-fluid" />
                             </a>
                             <div className="dropdown-menu">
-                                <a className="dropdown-item" onClick={()=> {}}>Company Profile</a>
-                                <a className="dropdown-item" onClick={()=> navigate(`/change-password`)}>Change Password</a>
+                                <a className="dropdown-item" onClick={() => { }}>Company Profile</a>
+                                <a className="dropdown-item" onClick={() => navigate(`/change-password`)}>Change Password</a>
                             </div>
                         </div>
                     </div>
