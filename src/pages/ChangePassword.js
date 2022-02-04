@@ -49,7 +49,7 @@ const ChangePassword = (props) => {
     let formData = { current_password: data.oldPass, new_password: data.newPass }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
-      formRes = { status: true, err_status: false, type: "updatePass", error: {}, msg: "Password chnaged successfully" }
+      formRes = { status: true, err_status: false, type: "updatePass", error: {}, msg: "Password changed successfully" }
       setFormRes(formRes)
     } else {
       formRes['err_status'] = true
@@ -110,7 +110,6 @@ const ChangePassword = (props) => {
                     <input type="password" className="form-control bg-transparent" {...register("newPass",{required:true,pattern:passRegex})} name="newPass" autoComplete="off" defaultValue="" />
                   </div>
                   {errors.newPass?.type === 'required' && <div className="error_block text-danger">*Password is required</div>} 
-                  {errors.newPass?.type === 'pattern' && <div className="error_block text-danger">*Password should be alphanumeric, must contain atleast 1 uppercase and 1 special character and should have atleast 10 characters </div>}
                   {
                     formRes.err_status && formRes.error?.pass_not_match?.required
                     ? <div className="text-danger"><div>{formRes.error?.pass_not_match?.msg}</div> </div>
@@ -126,6 +125,7 @@ const ChangePassword = (props) => {
                 </div>
               </div>
               <div className="row">
+              {errors.newPass?.type === 'pattern' && <div className="error_block text-danger">*Password should be alphanumeric, must contain atleast 1 uppercase and 1 special character and should have atleast 10 characters </div>}
                 {
                   !formRes.status && formRes.err_status && formRes.error?.type == "updatePass" && formRes.error?.msg
                     ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>

@@ -163,19 +163,20 @@ const Header = (props) => {
                             )
                         }
                     })()}
-
+                    <div className="mdw"><a href="#"><img src="/assets/img/gbl.svg" alt="notification" className="img-fluid" /></a></div>
                     <div className="mdw bg-transparent p-0 shadow-none">
                         <div className="dropdown">
                             <a className="dropdown-toggle profileSet" data-toggle="dropdown">
-                                <img src="/assets/img/userProfile.png" alt="profile" className="img-fluid" />
+                                <span>{user?.currentUser?.org_name}</span>
+                                {/* <img src="/assets/img/userProfile.png" alt="profile" className="img-fluid" /> */}
                             </a>
                             <div className="dropdown-menu">
-                                <a className="dropdown-item" onClick={() => { }}>Company Profile</a>
-                                <a className="dropdown-item" onClick={() => navigate(`/change-password`)}>Change Password</a>
+                                {/* <a className="dropdown-item" onClick={() => { }}>Company Profile</a> */}
+                                <a className="dropdown-item link_url" onClick={() => navigate(`/change-password`)}>Change Password</a>
                             </div>
                         </div>
                     </div>
-                    <div className="mdw"><a href="#"><img src="/assets/img/gbl.svg" alt="notification" className="img-fluid" /></a></div>
+                    
                 </div>
             </div>
             <div className="align-items-center d-flex justify-content-between aDm_navigation pl-lg-3 border-0 mb-3">
