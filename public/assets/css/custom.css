@@ -44,6 +44,23 @@
     max-height: 75vh;
     object-fit: contain;
 }
+.aDm_navigation .nav-link {
+    position: relative;
+}
+.aDm_navigation .nav-link.active {
+    color: #1C204D;
+}
+.aDm_navigation .nav-link.active::after{
+    position: absolute;
+    content: "";
+    background: #DC2C5A;
+    width: 50%;
+    left: 50%;
+    bottom: -3px;
+    height: 3px;
+    margin: auto;
+    transform: translate(-50%, 7px);
+}
 
 .loader_sec .loader_block{
     width: 50px;
@@ -87,7 +104,7 @@
     color: #037e03;
     line-height: 1;
 }
-.accordion .card-header a > span.info_icon{
+#accordion .card-header a > span.info_icon{
     border-radius: 50%;
     overflow: hidden;
     vertical-align: middle;
@@ -97,7 +114,7 @@
     opacity: 1;
     line-height: 1;
 }
-.accordion .card-header a > span.info_icon > i {
+#accordion .card-header a > span.info_icon > i {
     font-size: 13px;
     line-height: 1;
     background: transparent linear-gradient(143deg, #FCBA3F 0%, #DB2A5A 53%, #D9551A 100%) 0% 0% no-repeat padding-box;

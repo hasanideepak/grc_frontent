@@ -4,6 +4,7 @@ import { Link, useNavigate, useOutletContext, useParams } from "react-router-dom
 import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
 import crypto from 'crypto'
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const ChangePassword = (props) => {
   const { user = {} } = useOutletContext()
@@ -73,7 +74,23 @@ const ChangePassword = (props) => {
         <div className="card">
           <form onSubmit={handleSubmit(updatePassword)}>
             <div className="card-header justify-content-between py-4">
-              <a className="card-title">Change Password</a>
+              <a className="card-title">
+                Change Password
+                <OverlayTrigger
+                  key={"right"}
+                  placement={"right"}
+                  overlay={
+                    <Tooltip className="text-left" id={`tooltip-right`}>
+                      <span>&#8226; Password should be alphanumeric</span><br/>
+                      <span>&#8226; Password must contain atleast 1 uppercase</span><br/>
+                      <span>&#8226; Password must contain atleast 1 special character</span><br/>
+                      <span>&#8226; Password should have atleast 10 characters</span><br/>
+                    </Tooltip>
+                  }
+                >
+                  <span className="info_icon d-inline-block ml-1"><i className="fa fa-info-circle" aria-hidden="true"></i></span>
+                </OverlayTrigger>
+              </a>
               <button className="btn btn-primary" type="submit">Update</button>
             </div>
             <div className="card-body">

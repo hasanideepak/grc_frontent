@@ -1,19 +1,22 @@
 import { useState, useEffect } from "react"
-import { useLocation, useNavigate, useOutletContext } from "react-router-dom"
+import { NavLink, useLocation, useNavigate, useOutletContext } from "react-router-dom"
+import { GetCookie, SetCookie } from "../../helpers/Helper"
 import ApiService from "../../services/ApiServices"
 
 
 const Header = (props) => {
-    const {user = {}} = useOutletContext()
-    const AccountId = user?.currentUser?.org_id || 0;
+    const { user = {} } = useOutletContext()
+    const AccountId = user?.currentUser?.account_id || 0;
+    const AccountName = user?.currentUser?.account_name
     const { defHeaderTitle = '' } = props
     const [headerTitle, setHeaderTitle] = useState('')
     const [projects, setProjects] = useState([])
+    const [selectedProject, setSelectedProject] = useState({})
     const navigate = useNavigate();
     const location = useLocation()
     useEffect(() => {
         setPageHeader()
-        if(projects.length == 0){
+        if (projects.length == 0) {
             getProjects()
         }
     }, [])
@@ -63,9 +66,47 @@ const Header = (props) => {
         let formData = {}
         let res = await ApiService.fetchData(payloadUrl, method, formData);
         if (res && res.message == "Success") {
-            console.log(res)
+            // console.log(res)
+            let projects = res.results
+            setProjects(res.results)
+            projects && projects.length > 0 && projects.map((project) => {
+                if (project.status == "A") {
+                    if(!GetCookie('selectedProject')){
+                        let setcookie = SetCookie('selectedProject', JSON.stringify(project))
+                        setSelectedProject(project)
+                    }else{
+                        let project = GetCookie('selectedProject') ? JSON.parse(GetCookie('selectedProject')) : null;
+                        if(project){
+                            setSelectedProject(project)
+                        } 
+                    }
+                    
+                }
+            })
+
         }
     }
+
+    const changeProject = (project = null) => {
+        if (project == null) {
+            return false
+        }
+
+        let setcookie = SetCookie('selectedProject', JSON.stringify(project))
+        console.log(project)
+        setSelectedProject(project)
+        window.location.reload()
+    }
+
+    const showProjectDropDown = () => {
+        let result = false
+        let showDrpArr = ['/dashboard', "/task-manager", "/configuration"]
+        if (showDrpArr.indexOf(location.pathname) != -1) {
+            result = true
+        }
+        return result
+    }
+
     return (
         <header>
             <div className="align-items-center d-flex justify-content-between aDm_navigation">
@@ -76,19 +117,24 @@ const Header = (props) => {
                     <div className="collapse navbar-collapse" id="collapsibleNavbar">
                         <ul className="navbar nav pl-lg-0 pl-0">
                             <li className="nav-item">
-                                <a onClick={() => goToUrl('/dashboard')} className="nav-link">Dashboard</a>
+                                <NavLink to="/dashboard" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Dashboard</NavLink>
+                                {/* <a onClick={() => goToUrl('/dashboard')} className="nav-link">Dashboard</a> */}
                             </li>
                             <li className="nav-item ">
-                                <a onClick={() => goToUrl('/task-manager')} className="nav-link">Task Manager</a>
+                                <NavLink to="/task-manager" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Task Manager</NavLink>
+                                {/* <a onClick={() => goToUrl('/task-manager')} className="nav-link">Task Manager</a> */}
                             </li>
                             <li className="nav-item">
-                                <a onClick={() => goToUrl('/evidence-manager')} className="nav-link">Evidence Manager</a>
+                                <NavLink to="/evidence-manager" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Evidence Manager</NavLink>
+                                {/* <a onClick={() => goToUrl('/evidence-manager')} className="nav-link">Evidence Manager</a> */}
                             </li>
                             <li className="nav-item">
-                                <a onClick={() => goToUrl('')} className="nav-link">Control Manager</a>
+                                <NavLink to="/control-manager" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Control Manager</NavLink>
+                                {/* <a onClick={() => goToUrl('')} className="nav-link">Control Manager</a> */}
                             </li>
                             <li className="nav-item ">
-                                <a onClick={() => goToUrl('/configuration')} className="nav-link ">Configuration</a>
+                                <NavLink to="/configuration" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Configuration</NavLink>
+                                {/* <a onClick={() => goToUrl('/configuration')} className="nav-link ">Configuration</a> */}
                             </li>
                             {/* <li className="nav-item ">
                                 <a onClick={() => goToUrl('/onboarding')} className="nav-link ">Onboarding</a>
@@ -97,18 +143,27 @@ const Header = (props) => {
                     </div>
                 </nav>
                 <div className="userProfile pr-2 ml-sm-auto">
-                    {/* <div className="btn-group">
-                        <div className="dropdown">
-                            <button type="button" className="btn btn-primary dropdown-toggle sdrp" data-toggle="dropdown">
-                                HIPAA Secur...
-                            </button>
-                            <div className="dropdown-menu mt-1">
-                                <a className="dropdown-item" href="#">Link 1</a>
-                                <a className="dropdown-item" href="#">Link 2</a>
-                                <a className="dropdown-item" href="#">Link 3</a>
-                            </div>
-                        </div>
-                    </div> */}
+                    {(() => {
+                        if (showProjectDropDown()) {
+                            return (
+                                <div className="btn-group">
+                                    <div className="dropdown">
+                                        <button type="button" className="btn btn-primary dropdown-toggle sdrp" data-toggle="dropdown">
+                                            {selectedProject && selectedProject?.project_id ? selectedProject?.project_name : 'Select Project'}
+                                        </button>
+                                        <div className="dropdown-menu mt-1">
+                                            {projects && projects.length > 0 && projects.map((project) => {
+                                                return (
+                                                    <a className="dropdown-item" onClick={() => changeProject(project)}>{project.project_name}</a>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        }
+                    })()}
+
                     <div className="mdw bg-transparent p-0 shadow-none">
                         <div className="dropdown">
                             <a className="dropdown-toggle profileSet" data-toggle="dropdown">

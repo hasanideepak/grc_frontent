@@ -14,6 +14,8 @@ const Configuration = (props) => {
   const { user = {} } = useOutletContext()
   const orgId = user?.currentUser?.org_id || 0;
   const [getAllConfigs, setAllConfigs] = useState({})
+  const [selectedProject, setSelectedProject] = useState(null)
+  const [projectId, setProjectId] = useState(null)
   const [accountsList, setAccountsList] = useState(null)
   const [addFrameWorksList, setAddFrameWorksList] = useState([])
 
@@ -37,9 +39,15 @@ const Configuration = (props) => {
     // if (frameWorks.length == 0) {
     //   fetchInfo("frameworks")
     // }
-    if (Object.keys(getAllConfigs).length == 0 && user?.currentUser?.is_onboard == "Y") {
-      fetchInfo("all")
+    let projectObj =  GetCookie('selectedProject') ? JSON.parse(GetCookie('selectedProject')) : null
+    if(selectedProject == null && projectObj){
+        setSelectedProject(projectObj);
+        setProjectId(projectObj.project_id)
     }
+    if (Object.keys(getAllConfigs).length == 0 && user?.currentUser?.is_onboard == "Y") {
+      fetchInfo("all",projectObj)
+    }
+    
     if (memberRoles.length == 0) {
       fetchInfo("member_roles")
     }
@@ -60,7 +68,7 @@ const Configuration = (props) => {
     })
   }
 
-  const fetchInfo = async (type = '') => {
+  const fetchInfo = async (type = '',projectInfo = null) => {
     if (type == '') {
       return false
     };
@@ -71,7 +79,9 @@ const Configuration = (props) => {
 
     if (type == 'all') {
       // https://zp5ffmsibc.us-east-1.awsapprunner.com/configuration/getConfiguration/15/2/2
-      payloadUrl = `configuration/getConfiguration/${orgId}`
+      console.log(projectId)
+      let proId = projectId ? projectId : (projectInfo ? projectInfo.project_id : null)
+      payloadUrl = proId ? `configuration/getConfiguration/${orgId}/${user?.currentUser?.account_id}/${proId}` : `configuration/getConfiguration/${proId}`
       method = "GET";
     }
 
@@ -133,11 +143,6 @@ const Configuration = (props) => {
 
         console.log(obj)
       }
-      // else if(type == "frameworks") {
-      //   setFrameWorks(oldVal => {
-      //     return [...res.results]
-      //   })
-      // }
       else if (type == "member_roles") {
         setMemberRoles(oldVal => {
           return [...res.results]
@@ -147,11 +152,6 @@ const Configuration = (props) => {
           return [...res.results]
         })
       }
-      // else if (type == "get_tps") {
-      //   setTpServices(oldVal => {
-      //     return [...res.results]
-      //   })
-      // }
     }
   }
   const onSubmit = async (...data) => {
@@ -203,6 +203,8 @@ const Configuration = (props) => {
       setAccountsList(oldVal => {
         return [...accListArr]
       })
+      SetCookie('selectedProject',JSON.stringify(accListArr[0]))
+      setProjectId(res.project_id)
       accInput.value = ""
       accProjectInput.value = ""
       changePanel(1)
@@ -261,7 +263,8 @@ const Configuration = (props) => {
     let payloadUrl = "configuration/addProjectFrameworks"
     let method = "POST";
     // let frmwrkIds = addFrameWorksList.map(({ id }) => id)
-    let formData = { project_id: accountsList[0].project_id, framework_ids: addFrameWorksList }
+    // let formData = { project_id: accountsList[0].project_id, framework_ids: addFrameWorksList }
+    let formData = { project_id: projectId, framework_ids: addFrameWorksList }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let obj = getAllConfigs;
@@ -321,7 +324,8 @@ const Configuration = (props) => {
 
     let payloadUrl = "configuration/addKeyMember"
     let method = "POST";
-    let formData = { first_name: memFirstName, last_name: memLastName, email: memEmail, department_name: memRole.name, authority_id: memRole.id, project_id: accountsList[0].project_id, org_id: orgId }
+    // let formData = { first_name: memFirstName, last_name: memLastName, email: memEmail, department_name: memRole.name, authority_id: memRole.id, project_id: accountsList[0].project_id, org_id: orgId }
+    let formData = { first_name: memFirstName, last_name: memLastName, email: memEmail, department_name: memRole.name, authority_id: memRole.id, project_id: projectId, org_id: orgId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let memListArr = Object.assign([], members);
@@ -356,7 +360,8 @@ const Configuration = (props) => {
     console.log(delMem)
     let payloadUrl = "configuration/deleteKeyMember"
     let method = "DELETE";
-    let formData = { emp_id: delMem.emp_id, org_id: orgId, project_id: accountsList[0].project_id }
+    // let formData = { emp_id: delMem.emp_id, org_id: orgId, project_id: accountsList[0].project_id }
+    let formData = { emp_id: delMem.emp_id, org_id: orgId, project_id: projectId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let tempArr = members;
@@ -399,7 +404,8 @@ const Configuration = (props) => {
 
     let payloadUrl = "configuration/addServicePartner"
     let method = "POST";
-    let formData = { first_name: partnerFn, last_name: partnerLn, email: partnerEmail, project_id: accountsList[0].project_id }
+    // let formData = { first_name: partnerFn, last_name: partnerLn, email: partnerEmail, project_id: accountsList[0].project_id }
+    let formData = { first_name: partnerFn, last_name: partnerLn, email: partnerEmail, project_id: projectId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let listArr = Object.assign([], servicePartners);
@@ -435,7 +441,8 @@ const Configuration = (props) => {
     console.log(delPartner)
     let payloadUrl = "configuration/deleteServicePartner"
     let method = "DELETE";
-    let formData = { emp_id: delPartner.emp_id, org_id: orgId, project_id: accountsList[0].project_id }
+    // let formData = { emp_id: delPartner.emp_id, org_id: orgId, project_id: accountsList[0].project_id }
+    let formData = { emp_id: delPartner.emp_id, org_id: orgId, project_id: projectId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let tempArr = servicePartners;
@@ -483,7 +490,8 @@ const Configuration = (props) => {
 
     let payloadUrl = "configuration/addTaskOwner"
     let method = "POST";
-    let formData = { first_name: toFn, last_name: toLn, email: toEmail, department_name: oRole.name, authority_id: oRole.id, project_id: accountsList[0].project_id, org_id: orgId }
+    // let formData = { first_name: toFn, last_name: toLn, email: toEmail, department_name: oRole.name, authority_id: oRole.id, project_id: accountsList[0].project_id, org_id: orgId }
+    let formData = { first_name: toFn, last_name: toLn, email: toEmail, department_name: oRole.name, authority_id: oRole.id, project_id: projectId, org_id: orgId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let listArr = Object.assign([], taskOwners);
@@ -519,7 +527,8 @@ const Configuration = (props) => {
     console.log(delOwner)
     let payloadUrl = "configuration/deleteTaskOwner"
     let method = "DELETE";
-    let formData = { emp_id: delOwner.emp_id, org_id: orgId, project_id: accountsList[0].project_id }
+    // let formData = { emp_id: delOwner.emp_id, org_id: orgId, project_id: accountsList[0].project_id }
+    let formData = { emp_id: delOwner.emp_id, org_id: orgId, project_id: projectId }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let tempArr = taskOwners;
@@ -571,7 +580,8 @@ const Configuration = (props) => {
     let apiType = selectedTPS.length == 0 ? 'add' : 'update'
     let payloadUrl = "configuration/addThirdPartyConnector"
     let method = "POST";
-    let formData = { project_id: accountsList[0].project_id, connector_ids: selectedTPS }
+    // let formData = { project_id: accountsList[0].project_id, connector_ids: selectedTPS }
+    let formData = { project_id: projectId, connector_ids: selectedTPS }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let obj = tpServices || []
@@ -613,7 +623,8 @@ const Configuration = (props) => {
 
     let payloadUrl = "configuration/addThirdPartyConnectorToken"
     let method = "POST";
-    let formData = { project_id: accountsList[0].project_id, connector_id: selTPS.id, token: token }
+    // let formData = { project_id: accountsList[0].project_id, connector_id: selTPS.id, token: token }
+    let formData = { project_id: projectId, connector_id: selTPS.id, token: token }
     let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
       let listArr = Object.assign([], tpServices);
@@ -676,7 +687,7 @@ const Configuration = (props) => {
       <Header />
       <div id="accordion" className="accordion pl-lg-3 pr-lg-3 accordianSec">
         {(() => {
-          if (user?.currentUser?.is_onboard == "N") {
+          if (user?.currentUser?.is_onboard == "N" && accountsList && accountsList.length == 0) {
             return (
               <div className="card ">
                 <div className="d-flex align-items-center">
@@ -1230,7 +1241,7 @@ const Configuration = (props) => {
         <div className="d-flex justify-content-end yrscpe">
           {
             accountsList && accountsList.length > 0
-              ? <Link to={`/onboarding_scope/${accountsList[0].project_id}`} className="btn btn-primary submitBtn btn-lg">Define Your Scope</Link>
+              ? <Link to={`/onboarding_scope/${projectId}`} className="btn btn-primary submitBtn btn-lg">Define Your Scope</Link>
               : ''
           }
 

@@ -64,9 +64,11 @@ const TaskManager = (props) => {
         task_owners: res.task_owners,
         third_party_connectors: res.third_party_connectors,
       }
-      setProjectId(res.accounts_and_projects[0].project_id)
+      let selectedProject = GetCookie('selectedProject')
+      selectedProject = selectedProject ? JSON.parse(selectedProject) : res.accounts_and_projects[0]
+      setProjectId(selectedProject.project_id)
       console.log(res.accounts_and_projects[0].project_id)
-      fetchInfo("all_tasks", res.accounts_and_projects[0].project_id)
+      fetchInfo("all_tasks", selectedProject.project_id)
     }
   }
 
