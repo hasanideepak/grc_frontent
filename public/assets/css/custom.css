@@ -40,6 +40,13 @@
     cursor: pointer !important;
 }
 
+.field_err,
+.form_success,
+.form_err{
+    font-size: 11px;
+    margin-top:5px
+}
+
 .page404_img {
     max-height: 75vh;
     object-fit: contain;
@@ -61,7 +68,10 @@
     margin: auto;
     transform: translate(-50%, 7px);
 }
-
+.loader_sec{
+    top: 0;
+    background: #ffffffd6;
+}
 .loader_sec .loader_block{
     width: 50px;
 }
@@ -70,10 +80,21 @@
     color: #ffffff !important;
     cursor: pointer;
 }
-
-.profileSet + .dropdown-menu {
-    left: -20px!important;
-    top: 13px!important;
+.userProfile .profileSet::after{
+    background: url('../img/gbl.svg') 110px 56px;
+    background-color: transparent;
+    width: 11px;
+    height: 8px;
+    top: 8px;
+    transform: rotateZ(0deg);
+    right: 2px;
+    transition: transform 0.2s ease-in-out;
+}
+.userProfile .dropdown.show .profileSet::after{
+    transform: translateY(-50%) rotateZ(180deg);
+}
+.profileSet + .dropdown-menu::after {
+    left: 76%;
 }
 .select_labl{
     font-size: 14px;

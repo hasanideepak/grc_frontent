@@ -1,9 +1,8 @@
 import React, {Suspense, lazy, useState, createContext} from 'react';
-import { BrowserRouter as Router, Routes, Route, Outlet, Navigate} from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate, useLocation} from 'react-router-dom'
 import './App.css';
+import Loader from './components/partials/Loader';
 import { LayoutContext } from './ContextProviders/LayoutContext';
-// import Layout from './components/layouts/MainLayout';
-// import PublicLayout from './components/layouts/PublicLayout';
 import { IsAuthenticated } from './helpers/Auth';
 import Project from './pages/Project';
 import TestPage from './pages/TestPage';
@@ -31,44 +30,34 @@ function App() {
     let  getAuthUser = IsAuthenticated(true)
     let isAuth = (isPublic || (!isPublic && getAuthUser.isLoggedIn)) ? true : false;
     const [showLoader, setShowLoader] = useState(false)
+    const [projectId, setProjectId] = useState(null)
+    const location = useLocation()
     // console.log(getAuthUser)
-    let lContextObj = {showLoader,setShowLoader}
-    return isAuth ? (
+    let lContextObj = {showLoader,setShowLoader,projectId,setProjectId}
+    
+    if( isAuth){
+      let is_onboard = getAuthUser.isLoggedIn && getAuthUser?.currentUser?.is_onboard == "N" ? false : true
+      return !is_onboard && location.pathname != "/onboarding" ? (
+        <Navigate to="/onboarding" replace />
+      ) : (
         <LayoutContext.Provider value={lContextObj}>
           <Layout showLoader>
             <Outlet context={{user:getAuthUser}} />
           </Layout>
         </LayoutContext.Provider>
-      ) : (
-          <Navigate to="/login" replace />
-      );
+      );  
+    }else{
+      return (
+        <Navigate to="/login" replace />
+      )
+    }
   }
   return (
     
       <Router>
-        <Suspense fallback={<div>Loading....</div>}>
+        <Suspense fallback={<Loader showLoader={true} pos={'absolute'} />}>
+        {/* <Suspense fallback={<div>Loading....</div>}> */}
           <Routes>
-            {/* public layout routes start */}
-            {/* <Route>
-                <PublicLayout>
-                  <Route exact path="/" element={<Home />}></Route>
-                  <Route exact path="/home" element={<Home />}></Route>
-                  <Route exact path="/login" element={<Login />}></Route>
-                </PublicLayout>
-            </Route> */}
-            {/* public layout routes end */}
-
-            {/* after login layout routes start */}
-            {/* <Route>
-                <Layout>
-                  <Route exact path="/dashboard" element={<Dashboard />}></Route>
-                  <Route exact path="/onboarding" element={<Onboarding />}></Route>
-                  <Route exact path="/task-manager" element={<TaskManager /> }></Route>
-                  <Route exact path="/evidence-manager" element={<EvidenceManager /> }></Route>
-                  <Route exact path="/configuration" element={<Configuration /> }></Route>
-                </Layout>
-            </Route> */}
-            {/* after login layout routes end */}
 
                   {/* <Route exact path="/" element={<Home />}></Route> */}
                   <Route path="/" element={<RouterOutlet layout={Layout} />}>
@@ -91,13 +80,9 @@ function App() {
                     <Route exact path="/forgotpassword" element={<ForgotPassword />}></Route>
                     <Route exact path="/resetpassword/:token" element={<ResetPassword />}></Route>
                     <Route exact path="/setpassword/:token" element={<ResetPassword />}></Route>
+                    <Route exact path="/test" element={<TestPage />}></Route>
                   </Route>
-
-                  <Route path="/test" element={<PublicLayout><TestPage /> </PublicLayout>}></Route>
                   <Route path="*" element={<PublicLayout><Page404 /> </PublicLayout>}></Route>
-
-                  
-                  
           </Routes>
         </Suspense>
       </Router>

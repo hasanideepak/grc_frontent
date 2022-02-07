@@ -71,25 +71,25 @@ const Project = (props) => {
                     <label htmlFor="">Select Account:</label>
                     <input type="text" className="form-control bg-transparent" {...register("account",{required:true})} name="account" autoComplete="off" defaultValue="" />
                   </div>
-                  {errors.account?.type === 'required' && <div className="error_block text-danger">{AIR_MSG.account_required}</div>} 
+                  {errors.account?.type === 'required' && <div className="field_err text-danger">{AIR_MSG.account_required}</div>} 
                 </div>
                 <div className="col-md-6">
                   <div className="formInline m-0">
                     <label htmlFor="">Project Name:</label>
                     <input type="text" className="form-control bg-transparent"{...register("project_name",{required:true})} name="project_name" autoComplete="off" defaultValue="" />
                   </div>
-                  {errors.project_name?.type === 'required' && <div className="error_block text-danger">{AIR_MSG.project_name_required}</div>} 
+                  {errors.project_name?.type === 'required' && <div className="field_err text-danger">{AIR_MSG.project_name_required}</div>} 
                 </div>
               </div>
               <div className="row">
                 {
                   !formRes.status && formRes.err_status && formRes.error?.type == "addProject"
-                    ? <div className="text-danger"><div>{AIR_MSG.form_success('Project','add')}</div> </div>
+                    ? <div className="form_err text-danger"><div>{AIR_MSG.form_success('Project','add')}</div> </div>
                     : ''
                 }
                 {
                   formRes.status && formRes?.type == "addProject"
-                    ? <div className="text-success"><div>{AIR_MSG.form_err('Project')}</div> </div>
+                    ? <div className="form_success text-success"><div>{AIR_MSG.form_err('Project')}</div> </div>
                     : ''
                 }
               </div>

@@ -59,7 +59,6 @@ const Header = (props) => {
                 break;
         }
     }
-    console.log(user)
     const getProjects = async () => {
         let payloadUrl = `configuration/getProjectsByAccountId/${AccountId}`
         let method = "GET";
@@ -166,7 +165,7 @@ const Header = (props) => {
                     <div className="mdw"><a href="#"><img src="/assets/img/gbl.svg" alt="notification" className="img-fluid" /></a></div>
                     <div className="mdw bg-transparent p-0 shadow-none">
                         <div className="dropdown">
-                            <a className="dropdown-toggle profileSet" data-toggle="dropdown">
+                            <a className="dropdown-toggle profileSet mr-3 text-decoration-none" data-toggle="dropdown">
                                 <span>{user?.currentUser?.org_name}</span>
                                 {/* <img src="/assets/img/userProfile.png" alt="profile" className="img-fluid" /> */}
                             </a>

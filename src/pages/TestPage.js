@@ -6,7 +6,7 @@ const TestPage = (props) => {
   const {showLoader,setShowLoader} = useContext(LayoutContext)
   console.log(showLoader,setShowLoader)
   const toggleLoader = () =>{
-    let toggle = showLoader ? !showLoader : showLoader;
+    let toggle = !showLoader
     console.log(showLoader)
     setShowLoader(toggle)
   }

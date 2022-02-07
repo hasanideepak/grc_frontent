@@ -414,7 +414,7 @@ const ConfigurationScope = (props) => {
                   <input type="text" className="form-control bg-transparent" placeholder="No. of Employees" id="empInput" defaultValue={ getAllScopes.peoples && getAllScopes?.peoples[0]?.employees ? getAllScopes?.peoples[0]?.employees : '' } />
                   {
                     formRes.err_status && formRes.error?.employees?.required
-                      ? <div className="text-danger"><div>{formRes.error?.employees?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.employees?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -423,7 +423,7 @@ const ConfigurationScope = (props) => {
                   <input type="text" className="form-control bg-transparent" placeholder="No. of Consultant" id="consultantInput" defaultValue={ getAllScopes.peoples &&  getAllScopes?.peoples[0]?.consultants ? getAllScopes?.peoples[0]?.consultants : '' }/>
                   {
                     formRes.err_status && formRes.error?.consultants?.required
-                      ? <div className="text-danger"><div>{formRes.error?.consultants?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.consultants?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -431,12 +431,12 @@ const ConfigurationScope = (props) => {
               <div className="row">
                 {
                   !formRes.status && formRes.err_status && formRes.error?.type == "people" && formRes.error?.msg
-                    ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
+                    ? <div className="form_err text-danger"><div>{formRes.error?.msg}</div> </div>
                     : ''
                 }
                 {
                   formRes.status && formRes?.type == "people" && formRes.msg
-                    ? <div className="text-success"><div>{formRes.msg}</div> </div>
+                    ? <div className="form_success text-success"><div>{formRes.msg}</div> </div>
                     : ''
                 }
               </div>
@@ -477,7 +477,7 @@ const ConfigurationScope = (props) => {
                   <input type="text" className="form-control bg-transparent" placeholder="No. of Endpoints" id="epInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets[0]?.endpoints ? getAllScopes?.technology_assets[0]?.endpoints : '' } />
                   {
                     formRes.err_status && formRes.error?.endPoints?.required
-                      ? <div className="text-danger"><div>{formRes.error?.endPoints?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.endPoints?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -486,7 +486,7 @@ const ConfigurationScope = (props) => {
                   <input type="text" className="form-control bg-transparent" placeholder="No. of Servers" id="serverInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets[0]?.servers ? getAllScopes?.technology_assets[0]?.servers : '' } />
                   {
                     formRes.err_status && formRes.error?.servers?.required
-                      ? <div className="text-danger"><div>{formRes.error?.servers?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.servers?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -497,7 +497,7 @@ const ConfigurationScope = (props) => {
                   <input type="text" className="form-control bg-transparent" placeholder="No. of Mobile Devices" id="mdInput" defaultValue={ getAllScopes.technology_assets && getAllScopes?.technology_assets[0]?.mobile_devices ? getAllScopes?.technology_assets[0]?.mobile_devices : '' } />
                   {
                     formRes.err_status && formRes.error?.mobileDevices?.required
-                      ? <div className="text-danger"><div>{formRes.error?.mobileDevices?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.mobileDevices?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -505,12 +505,12 @@ const ConfigurationScope = (props) => {
               <div className="row">
                 {
                   !formRes.status && formRes.err_status && formRes.error?.type == "techAssets" && formRes.error?.msg
-                    ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
+                    ? <div className="form_err text-danger"><div>{formRes.error?.msg}</div> </div>
                     : ''
                 }
                 {
                   formRes.status && formRes?.type == "techAssets" && formRes.msg
-                    ? <div className="text-success"><div>{formRes.msg}</div> </div>
+                    ? <div className="form_success text-success"><div>{formRes.msg}</div> </div>
                     : ''
                 }
               </div>
@@ -546,7 +546,7 @@ const ConfigurationScope = (props) => {
                   <input type="text" className="form-control pl-0" placeholder="Enter Name" id="vendorInput" />
                   {
                     formRes.err_status && formRes.error?.vendor?.required
-                      ? <div className="text-danger"><div>{formRes.error?.vendor?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.vendor?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -555,12 +555,12 @@ const ConfigurationScope = (props) => {
               <div className="row m-0">
                 {
                   !formRes.status && formRes.err_status && formRes.error?.type == "vendor" && formRes.error?.msg
-                    ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
+                    ? <div className="form_err text-danger"><div>{formRes.error?.msg}</div> </div>
                     : ''
                 }
                 {
                   formRes.status && formRes?.type == "vendor" && formRes.msg
-                    ? <div className="text-success"><div>{formRes.msg}</div> </div>
+                    ? <div className="form_success text-success"><div>{formRes.msg}</div> </div>
                     : ''
                 }
               </div>
@@ -608,7 +608,7 @@ const ConfigurationScope = (props) => {
                   <input type="text" className="form-control" placeholder="Enter Name"  id="utilityInput" />
                   {
                     formRes.err_status && formRes.error?.utility?.required
-                      ? <div className="text-danger"><div>{formRes.error?.utility?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.utility?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -617,12 +617,12 @@ const ConfigurationScope = (props) => {
               <div className="row m-0">
                 {
                   !formRes.status && formRes.err_status && formRes.error?.type == "utility" && formRes.error?.msg
-                    ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
+                    ? <div className="form_err text-danger"><div>{formRes.error?.msg}</div> </div>
                     : ''
                 }
                 {
                   formRes.status && formRes?.type == "utility" && formRes.msg
-                    ? <div className="text-success"><div>{formRes.msg}</div> </div>
+                    ? <div className="form_success text-success"><div>{formRes.msg}</div> </div>
                     : ''
                 }
               </div>

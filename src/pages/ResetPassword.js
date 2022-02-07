@@ -92,18 +92,18 @@ const ResetPassword = (props) => {
                             <div className="form-group">
                               <label htmlFor="password">New Password</label>
                               <input type="password" className="form-control mb-1" {...register("password",{required:true,pattern:passRegex})} name="password" autoComplete="off" defaultValue="" />
-                              {errors.password?.type === 'required' && <div className="error_block text-danger">*Password is required</div>} 
-                              {errors.password?.type === 'pattern' && <div className="error_block text-danger">*Password should be alphanumeric, must contain atleast 1 uppercase and 1 special character and should have atleast 10 characters </div>}
+                              {errors.password?.type === 'required' && <div className="field_err text-danger">*Password is required</div>} 
+                              {errors.password?.type === 'pattern' && <div className="field_err text-danger">*Password should be alphanumeric, must contain atleast 1 uppercase and 1 special character and should have atleast 10 characters </div>}
                               {
                                 formRes.err_status && formRes.error?.pass_not_match?.required
-                                ? <div className="text-danger"><div>{formRes.error?.pass_not_match?.msg}</div> </div>
+                                ? <div className="field_err text-danger"><div>{formRes.error?.pass_not_match?.msg}</div> </div>
                                 : ''
                               }                           
                             </div>
                             <div className="form-group">
                               <label htmlFor="conf_password">Confirm Password</label>
                               <input type="password" className="form-control mb-1" {...register("conf_password",{required:true})} name="conf_password" autoComplete="off" defaultValue="" />
-                              {errors.conf_password?.type === 'required' && <div className="error_block text-danger">*Confirm password is required</div>}
+                              {errors.conf_password?.type === 'required' && <div className="field_err text-danger">*Confirm password is required</div>}
                             </div>
                             {/* <div className="d-flex justify-content-end form-group">
                               <span>Remember password? &nbsp;</span>
@@ -112,12 +112,12 @@ const ResetPassword = (props) => {
                             <button className="btn btn-primary btn-block mb-lg-4 mb-md-4 mb-2" type="submit" disabled={formSubmitted}> Reset Password</button>
                             {
                               !formRes.status && formRes.err_status && formRes.error?.type =="reset_pass" && formRes.error?.msg
-                              ? <div className="text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
+                              ? <div className="form_err text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
                               : ''
                             }
                             {
                               formRes.status && formRes?.type == "reset_pass" && formRes.msg
-                              ? <div className="text-success mt-2"><div>{formRes.msg}</div> </div>
+                              ? <div className="form_success text-success mt-2"><div>{formRes.msg}</div> </div>
                               : ''
                             }
                           </form>

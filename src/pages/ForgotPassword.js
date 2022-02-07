@@ -91,7 +91,7 @@ const ForgotPassword = (props) => {
                             <div className="form-group">
                               <label htmlFor="email">Email address</label>
                               <input type="email" className="form-control" {...register("email",{required:true})} name="email" autoComplete="off" defaultValue="" />
-                              {errors.email?.type === 'required' && <div className="error_block text-danger">*Email is required</div>}
+                              {errors.email?.type === 'required' && <div className="field_err text-danger">*Email is required</div>}
                             </div>
                             <div className="d-flex justify-content-end form-group">
                               <span>Remember password? &nbsp;</span>
@@ -100,12 +100,12 @@ const ForgotPassword = (props) => {
                             <button className="btn btn-primary btn-block mb-lg-4 mb-md-4 mb-2" type="submit"> Send</button>
                             {
                               !formRes.status && formRes.err_status && formRes.error?.type =="reset_pass" && formRes.error?.msg
-                              ? <div className="text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
+                              ? <div className="form_err text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
                               : ''
                             }
                             {
                               formRes.status && formRes?.type == "reset_pass" && formRes.msg
-                              ? <div className="text-success mt-2"><div>{formRes.msg}</div> </div>
+                              ? <div className="form_success text-success mt-2"><div>{formRes.msg}</div> </div>
                               : ''
                             }
                           </form>

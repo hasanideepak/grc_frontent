@@ -100,7 +100,7 @@ const ChangePassword = (props) => {
                     <label htmlFor="">Current Password:</label>
                     <input type="password" className="form-control" {...register("oldPass",{required:true})} name="oldPass" autoComplete="off" defaultValue="" />
                   </div>
-                  {errors.oldPass?.type === 'required' && <div className="error_block text-danger">*Old assword is required</div>} 
+                  {errors.oldPass?.type === 'required' && <div className="field_err text-danger">*Old assword is required</div>} 
                 </div>
               </div>
               <div className="row">
@@ -109,10 +109,10 @@ const ChangePassword = (props) => {
                     <label htmlFor="">New Password:</label>
                     <input type="password" className="form-control bg-transparent" {...register("newPass",{required:true,pattern:passRegex})} name="newPass" autoComplete="off" defaultValue="" />
                   </div>
-                  {errors.newPass?.type === 'required' && <div className="error_block text-danger">*Password is required</div>} 
+                  {errors.newPass?.type === 'required' && <div className="field_err text-danger">*Password is required</div>} 
                   {
                     formRes.err_status && formRes.error?.pass_not_match?.required
-                    ? <div className="text-danger"><div>{formRes.error?.pass_not_match?.msg}</div> </div>
+                    ? <div className="field_err text-danger"><div>{formRes.error?.pass_not_match?.msg}</div> </div>
                     : ''
                   }
                 </div>
@@ -121,19 +121,19 @@ const ChangePassword = (props) => {
                     <label htmlFor="">Confirm Password:</label>
                     <input type="password" className="form-control bg-transparent"{...register("confPass",{required:true})} name="confPass" autoComplete="off" defaultValue="" />
                   </div>
-                  {errors.confPass?.type === 'required' && <div className="error_block text-danger">*Confirm password is required</div>} 
+                  {errors.confPass?.type === 'required' && <div className="field_err text-danger">*Confirm password is required</div>} 
                 </div>
               </div>
               <div className="row">
-              {errors.newPass?.type === 'pattern' && <div className="error_block text-danger">*Password should be alphanumeric, must contain atleast 1 uppercase and 1 special character and should have atleast 10 characters </div>}
+              {errors.newPass?.type === 'pattern' && <div className="form_err text-danger">*Password should be alphanumeric, must contain atleast 1 uppercase and 1 special character and should have atleast 10 characters </div>}
                 {
                   !formRes.status && formRes.err_status && formRes.error?.type == "updatePass" && formRes.error?.msg
-                    ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
+                    ? <div className="form_err text-danger"><div>{formRes.error?.msg}</div> </div>
                     : ''
                 }
                 {
                   formRes.status && formRes?.type == "updatePass" && formRes.msg
-                    ? <div className="text-success"><div>{formRes.msg}</div> </div>
+                    ? <div className="form_success text-success"><div>{formRes.msg}</div> </div>
                     : ''
                 }
               </div>

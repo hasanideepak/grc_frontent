@@ -79,7 +79,6 @@ const Configuration = (props) => {
 
     if (type == 'all') {
       // https://zp5ffmsibc.us-east-1.awsapprunner.com/configuration/getConfiguration/15/2/2
-      console.log(projectId)
       let proId = projectId ? projectId : (projectInfo ? projectInfo.project_id : null)
       payloadUrl = proId ? `configuration/getConfiguration/${orgId}/${user?.currentUser?.account_id}/${proId}` : `configuration/getConfiguration/${proId}`
       method = "GET";
@@ -681,13 +680,12 @@ const Configuration = (props) => {
   }
 
   // console.log(watch("email")); // watch input value by passing the name of it
-
   return (
     <>
       <Header />
       <div id="accordion" className="accordion pl-lg-3 pr-lg-3 accordianSec">
         {(() => {
-          if (user?.currentUser?.is_onboard == "N" && accountsList && accountsList.length == 0) {
+          if (user?.currentUser?.is_onboard == "N" && (!accountsList || accountsList.length == 0)) {
             return (
               <div className="card ">
                 <div className="d-flex align-items-center">
@@ -723,7 +721,7 @@ const Configuration = (props) => {
                         <input id="accName" type="text" className="form-control" placeholder="Enter Account name" disabled={accountsList && accountsList.length > 0} />
                         {
                           formRes.err_status && formRes.error?.account_name?.required
-                            ? <div className="text-danger"><div>{formRes.error?.account_name?.msg}</div> </div>
+                            ? <div className="field_err text-danger"><div>{formRes.error?.account_name?.msg}</div> </div>
                             : ''
                         }
 
@@ -732,7 +730,7 @@ const Configuration = (props) => {
                         <input id="accProject" type="text" className="form-control" placeholder="Enter Project" disabled={accountsList && accountsList.length > 0} />
                         {
                           formRes.err_status && formRes.error?.project_name?.required
-                            ? <div className="text-danger"><div>{formRes.error?.account_name?.msg}</div> </div>
+                            ? <div className="field_err text-danger"><div>{formRes.error?.account_name?.msg}</div> </div>
                             : ''
                         }
                       </div>
@@ -740,12 +738,12 @@ const Configuration = (props) => {
                     </div>
                     {
                       !formRes.status && formRes.err_status && formRes.error?.type == "account" && formRes.error?.msg
-                        ? <div className="text-danger"><div>{formRes.error?.msg}</div> </div>
+                        ? <div className="form_err text-danger"><div>{formRes.error?.msg}</div> </div>
                         : ''
                     }
                     {
                       formRes.status && formRes?.type == "account" && formRes.msg
-                        ? <div className="text-success"><div>{formRes.msg}</div> </div>
+                        ? <div className="form_success text-success"><div>{formRes.msg}</div> </div>
                         : ''
                     }
                   </div>
@@ -850,7 +848,7 @@ const Configuration = (props) => {
                   <input id="memFnInp" type="text" className="form-control" placeholder="First Name" />
                   {
                     formRes.err_status && formRes.error?.memberEmail?.required
-                      ? <div className="text-danger"><div>{formRes.error?.memberEmail?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.memberEmail?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -858,7 +856,7 @@ const Configuration = (props) => {
                   <input id="memLnInp" type="text" className="form-control" placeholder="Last Name" />
                   {
                     formRes.err_status && formRes.error?.memberFname?.required
-                      ? <div className="text-danger"><div>{formRes.error?.memberFname?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.memberFname?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -866,7 +864,7 @@ const Configuration = (props) => {
                   <input id="memberEmail" type="text" className="form-control" placeholder="Email Address" />
                   {
                     formRes.err_status && formRes.error?.memberLname?.required
-                      ? <div className="text-danger"><div>{formRes.error?.memberLname?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.memberLname?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -881,7 +879,7 @@ const Configuration = (props) => {
                   </select>
                   {
                     formRes.err_status && formRes.error?.memberRole?.required
-                      ? <div className="text-danger"><div>{formRes.error?.memberRole?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.memberRole?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -889,12 +887,12 @@ const Configuration = (props) => {
               </div>
               {
                 !formRes.status && formRes.err_status && formRes.error?.type == "member" && formRes.error?.msg
-                  ? <div className="text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
+                  ? <div className="form_err text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
                   : ''
               }
               {
                 formRes.status && formRes?.type == "member" && formRes.msg
-                  ? <div className="text-success mt-2"><div>{formRes.msg}</div> </div>
+                  ? <div className="form_success text-success mt-2"><div>{formRes.msg}</div> </div>
                   : ''
               }
             </div>
@@ -954,7 +952,7 @@ const Configuration = (props) => {
                   <input id="partnerFnameInp" type="text" className="form-control" placeholder="First Name" />
                   {
                     formRes.err_status && formRes.error?.partnerFname?.required
-                      ? <div className="text-danger"><div>{formRes.error?.partnerFname?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.partnerFname?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -962,7 +960,7 @@ const Configuration = (props) => {
                   <input id="partnerLnameInp" type="text" className="form-control" placeholder="Last Name" />
                   {
                     formRes.err_status && formRes.error?.partnerLname?.required
-                      ? <div className="text-danger"><div>{formRes.error?.partnerLname?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.partnerLname?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -970,7 +968,7 @@ const Configuration = (props) => {
                   <input id="partnerEmail" type="text" className="form-control" placeholder="Email Address" />
                   {
                     formRes.err_status && formRes.error?.partnerEmail?.required
-                      ? <div className="text-danger"><div>{formRes.error?.partnerEmail?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.partnerEmail?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -978,12 +976,12 @@ const Configuration = (props) => {
               </div>
               {
                 !formRes.status && formRes.err_status && formRes.error?.type == "partner" && formRes.error?.msg
-                  ? <div className="text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
+                  ? <div className="form_err text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
                   : ''
               }
               {
                 formRes.status && formRes?.type == "partner" && formRes.msg
-                  ? <div className="text-success mt-2"><div>{formRes.msg}</div> </div>
+                  ? <div className="form_success text-success mt-2"><div>{formRes.msg}</div> </div>
                   : ''
               }
             </div>
@@ -1037,7 +1035,7 @@ const Configuration = (props) => {
                   <input id="toFirstname" type="text" className="form-control" placeholder="First Name" />
                   {
                     formRes.err_status && formRes.error?.ownerFirstName?.required
-                      ? <div className="text-danger"><div>{formRes.error?.ownerFirstName?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.ownerFirstName?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -1045,7 +1043,7 @@ const Configuration = (props) => {
                   <input id="toLastname" type="text" className="form-control" placeholder="Last Name" />
                   {
                     formRes.err_status && formRes.error?.ownerLastName?.required
-                      ? <div className="text-danger"><div>{formRes.error?.ownerLastName?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.ownerLastName?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -1053,7 +1051,7 @@ const Configuration = (props) => {
                   <input id="toEmail" type="text" className="form-control" placeholder="Email Address" />
                   {
                     formRes.err_status && formRes.error?.ownerEmail?.required
-                      ? <div className="text-danger"><div>{formRes.error?.ownerEmail?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.ownerEmail?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -1068,7 +1066,7 @@ const Configuration = (props) => {
                   </select>
                   {
                     formRes.err_status && formRes.error?.ownerRole?.required
-                      ? <div className="text-danger"><div>{formRes.error?.ownerRole?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.ownerRole?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -1076,12 +1074,12 @@ const Configuration = (props) => {
               </div>
               {
                 !formRes.status && formRes.err_status && formRes.error?.type == "owner" && formRes.error?.msg
-                  ? <div className="text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
+                  ? <div className="form_err text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
                   : ''
               }
               {
                 formRes.status && formRes?.type == "owner" && formRes.msg
-                  ? <div className="text-success mt-2"><div>{formRes.msg}</div> </div>
+                  ? <div className="form_success text-success mt-2"><div>{formRes.msg}</div> </div>
                   : ''
               }
             </div>
@@ -1191,7 +1189,7 @@ const Configuration = (props) => {
                   </select>
                   {
                     formRes.err_status && formRes.error?.aTokenService?.required
-                      ? <div className="text-danger"><div>{formRes.error?.aTokenService?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.aTokenService?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -1199,7 +1197,7 @@ const Configuration = (props) => {
                   <input id="tpsAccessToken" type="text" className="form-control" placeholder="Access Token" />
                   {
                     formRes.err_status && formRes.error?.aTokenValue?.required
-                      ? <div className="text-danger"><div>{formRes.error?.aTokenValue?.msg}</div> </div>
+                      ? <div className="field_err text-danger"><div>{formRes.error?.aTokenValue?.msg}</div> </div>
                       : ''
                   }
                 </div>
@@ -1207,12 +1205,12 @@ const Configuration = (props) => {
               </div>
               {
                 !formRes.status && formRes.err_status && formRes.error?.type == "atoken" && formRes.error?.msg
-                  ? <div className="text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
+                  ? <div className="form_err text-danger mt-2"><div>{formRes.error?.msg}</div> </div>
                   : ''
               }
               {
                 formRes.status && formRes?.type == "atoken" && formRes.msg
-                  ? <div className="text-success mt-2"><div>{formRes.msg}</div> </div>
+                  ? <div className="form_success text-success mt-2"><div>{formRes.msg}</div> </div>
                   : ''
               }
             </div>
