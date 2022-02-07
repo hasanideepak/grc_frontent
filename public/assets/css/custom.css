@@ -80,18 +80,22 @@
     color: #ffffff !important;
     cursor: pointer;
 }
+.userProfile .dropdown-toggle{
+    color: #7A8295 !important;
+    font-size: 14px;
+}
 .userProfile .profileSet::after{
-    background: url('../img/gbl.svg') 110px 56px;
+    background: url('../img/gbl.svg') 214px 55px;
     background-color: transparent;
     width: 11px;
     height: 8px;
-    top: 8px;
+    top: 9px;
     transform: rotateZ(0deg);
     right: 2px;
     transition: transform 0.2s ease-in-out;
 }
 .userProfile .dropdown.show .profileSet::after{
-    transform: translateY(-50%) rotateZ(180deg);
+    transform: translateY(1px) rotateZ(180deg);
 }
 .profileSet + .dropdown-menu::after {
     left: 76%;
