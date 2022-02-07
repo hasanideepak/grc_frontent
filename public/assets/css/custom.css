@@ -100,6 +100,10 @@
 .profileSet + .dropdown-menu::after {
     left: 76%;
 }
+.profileSet + .dropdown-menu {
+    left: -52px!important;
+    /* top: 13px!important; */
+}
 .select_labl{
     font-size: 14px;
 }
