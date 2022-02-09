@@ -12,14 +12,16 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Calendar } from 'react-date-range';
 import { Accordion, Button, Card, useAccordionButton } from "react-bootstrap";
+import AirModal from "../elements/AirModal";
 const TaskDetails = (props) => {
   const { user = {} } = useOutletContext()
   const orgId = user?.currentUser?.org_id || 0;
   const { taskId = 0 } = useParams()
   const accessRole = user?.currentUser?.access_role || '';
   const [taskDetails, setTaskDetails] = useState({})
-
   const navigate = useNavigate()
+  const [modalType,setModalType] = useState(null)
+  const [openModal, setShowModal] = useState(false);
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   useEffect(() => {
@@ -55,6 +57,25 @@ const TaskDetails = (props) => {
     //     endDate: [native Date Object],
     //   }
     // }
+  }
+
+  const showModal = async (modalName = null)=>{
+    if(modalName == null){
+      return false
+    }
+
+    switch(modalName){
+      case 'view_upload_evidence':
+        setModalType(modalName)
+        setShowModal(true)
+      break;
+      
+    }
+  }
+
+  const hideModal = ()=>{
+    setModalType(null)
+    setShowModal(false)
   }
 
 
@@ -147,14 +168,14 @@ const TaskDetails = (props) => {
                                   return (
                                     <>
                                       <div className="assets_box pt-3">
-                                        <div className="header">People</div>
-                                        <ul className="m-0 pl-2">
+                                        <div className="header"><span className="box_bullet mr-2"></span>People</div>
+                                        <ul className="m-0 pl-4">
                                           <li className="d-flex justify-content-between">
-                                            <span>Employees:</span>
+                                            <span>&#8627;	 Employees:</span>
                                             <span>{taskDetails?.applicable_assets?.peoples[0]?.employees ? taskDetails?.applicable_assets?.peoples[0]?.employees : 0}</span>
                                           </li>
                                           <li className="d-flex justify-content-between">
-                                            <span>Consultants:</span>
+                                            <span>&#8627;	 Consultants:</span>
                                             <span>{taskDetails?.applicable_assets?.peoples[0]?.consultants ? taskDetails?.applicable_assets?.peoples[0]?.consultants : 0}</span>
                                           </li>
                                         </ul>
@@ -168,18 +189,18 @@ const TaskDetails = (props) => {
                                   return (
                                     <>
                                       <div className="assets_box pt-3">
-                                        <div className="header">Technology Assets</div>
-                                        <ul className="m-0 pl-2">
+                                        <div className="header"><span className="box_bullet mr-2"></span>Technology Assets</div>
+                                        <ul className="m-0 pl-4">
                                           <li className="d-flex justify-content-between">
-                                            <span>Endpoints:</span>
+                                            <span>&#8627;	Endpoints:</span>
                                             <span>{taskDetails?.applicable_assets?.technology_assets[0]?.endpoints ? taskDetails?.applicable_assets?.technology_assets[0]?.endpoints : 0}</span>
                                           </li>
                                           <li className="d-flex justify-content-between">
-                                            <span>Mobile Devices:</span>
+                                            <span>&#8627;	Mobile Devices:</span>
                                             <span>{taskDetails?.applicable_assets?.technology_assets[0]?.mobile_devices ? taskDetails?.applicable_assets?.technology_assets[0]?.mobile_devices : 0}</span>
                                           </li>
                                           <li className="d-flex justify-content-between">
-                                            <span>Servers:</span>
+                                            <span>&#8627;	Servers:</span>
                                             <span>{taskDetails?.applicable_assets?.technology_assets[0]?.servers ? taskDetails?.applicable_assets?.technology_assets[0]?.servers : 0}</span>
                                           </li>
                                         </ul>
@@ -193,12 +214,12 @@ const TaskDetails = (props) => {
                                   return (
                                     <>
                                       <div className="assets_box pt-3">
-                                        <div className="header">Vendors/Service Providers</div>
-                                        <ul className="m-0 pl-2">
+                                        <div className="header"><span className="box_bullet mr-2"></span>Vendors/Service Providers</div>
+                                        <ul className="m-0 pl-4">
                                           {taskDetails?.applicable_assets?.vendors && taskDetails?.applicable_assets?.vendors.map((vendor, vIndex) => {
                                             return (
                                               <li key={vIndex} className="d-flex justify-content-between">
-                                                <span>{vendor.vendor}</span>
+                                                <span>&#8627;	{vendor.vendor}</span>
                                                 <span></span>
                                               </li>
                                             )
@@ -215,13 +236,13 @@ const TaskDetails = (props) => {
                                   return (
                                     <>
                                       <div className="assets_box pt-3">
-                                        <div className="header">Saas/Third Party Utility</div>
-                                        <ul className="m-0 pl-2">
+                                        <div className="header"><span className="box_bullet mr-2"></span>Saas/Third Party Utility</div>
+                                        <ul className="m-0 pl-4">
                                           {taskDetails?.applicable_assets?.third_party_utilities && taskDetails?.applicable_assets?.third_party_utilities.map((utility, uIndex) => {
                                             if (utility.is_selected == 'Y') {
                                               return (
                                                 <li key={uIndex} className="d-flex justify-content-between">
-                                                  <span>{utility.name}</span>
+                                                  <span>&#8627;	{utility.name}</span>
                                                   <span></span>
                                                 </li>
                                               )
@@ -262,7 +283,12 @@ const TaskDetails = (props) => {
                         return (
                           <div key={eIndex} className="card_box px-0">
                             <span> <i className="fa fa-file" aria-hidden="true"></i> {evidence.evidence_name}</span>
-                            <span>Uploded</span>
+                            {
+                              !evidence.document_url
+                              ? <span className="link_url" onClick={() => showModal('view_upload_evidence')}>Uplod Documents</span>
+                              : <span>Uploded</span>
+                            }
+                            
                           </div>
                         )
                       })}
@@ -414,6 +440,19 @@ const TaskDetails = (props) => {
           </div>
         </div>
       </div>
+
+      {(() => {
+        if (modalType && modalType != '' && modalType != null) {
+          if (modalType == 'view_upload_evidence') {
+            return <AirModal
+              show={openModal}
+              modalType={modalType}
+              hideModal={hideModal}
+              modalData={{taskDetails}}
+              formSubmit={() =>{}} />
+          } 
+        }
+      })()}
     </>
   )
 }

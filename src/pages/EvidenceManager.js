@@ -45,7 +45,7 @@ const EvidenceManager = (props) => {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-3">
+          {/* <div className="col-md-3">
             <div className="card card_shadow border-0">
 
               <div className="card-body p-0">
@@ -59,8 +59,8 @@ const EvidenceManager = (props) => {
               </div>
 
             </div>
-          </div>
-          <div className="col-md-9">
+          </div> */}
+          <div className="col-md-12">
             <div className="card card_shadow border-0">
               <div className="card-header bg-pink border-0">
                 <h4 className="mb-0">Authantication</h4>
@@ -69,47 +69,83 @@ const EvidenceManager = (props) => {
                 <div className="table-responsive">
                   <table className="table table-borderless">
                     <tbody><tr>
-                      <th>Task No.</th>
+                      <th>Task ID</th>
+                      <th>Evidence Type.</th>
                       <th>File Name</th>
-                      <th>Updated On</th>
-                      <th>Updated By</th>
+                      <th>Uploaded On</th>
+                      <th>Action</th>
                     </tr>
                       <tr className="odd">
                         <td>101</td>
+                        <td>type</td>
                         <td>Ppn_cloud Security.pdf</td>
                         <td>Jan 22, 2022</td>
-                        <td>Susan James</td>
-                      </tr>
-                      <tr className="even">
-                        <td>101</td>
-                        <td>Ppn_cloud Security.pdf</td>
-                        <td>Jan 22, 2022</td>
-                        <td>Susan James</td>
+                        <td>
+                          <span className="link_url"><i className="fa fa-eye"></i></span>
+                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
+                        </td>
                       </tr>
                       <tr className="odd">
                         <td>101</td>
+                        <td>type</td>
                         <td>Ppn_cloud Security.pdf</td>
                         <td>Jan 22, 2022</td>
-                        <td>Susan James</td>
-                      </tr>
-                      <tr className="even">
-                        <td>101</td>
-                        <td>Ppn_cloud Security.pdf</td>
-                        <td>Jan 22, 2022</td>
-                        <td>Susan James</td>
+                        <td>
+                          <span className="link_url"><i className="fa fa-eye"></i></span>
+                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
+                        </td>
                       </tr>
                       <tr className="odd">
                         <td>101</td>
+                        <td>type</td>
                         <td>Ppn_cloud Security.pdf</td>
                         <td>Jan 22, 2022</td>
-                        <td>Susan James</td>
+                        <td>
+                          <span className="link_url"><i className="fa fa-eye"></i></span>
+                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
+                        </td>
                       </tr>
-                      <tr className="even">
+                      <tr className="odd">
                         <td>101</td>
+                        <td>type</td>
                         <td>Ppn_cloud Security.pdf</td>
                         <td>Jan 22, 2022</td>
-                        <td>Susan James</td>
+                        <td>
+                          <span className="link_url"><i className="fa fa-eye"></i></span>
+                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
+                        </td>
                       </tr>
+                      <tr className="odd">
+                        <td>101</td>
+                        <td>type</td>
+                        <td>Ppn_cloud Security.pdf</td>
+                        <td>Jan 22, 2022</td>
+                        <td>
+                          <span className="link_url"><i className="fa fa-eye"></i></span>
+                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
+                        </td>
+                      </tr>
+                      <tr className="odd">
+                        <td>101</td>
+                        <td>type</td>
+                        <td>Ppn_cloud Security.pdf</td>
+                        <td>Jan 22, 2022</td>
+                        <td>
+                          <span className="link_url"><i className="fa fa-eye"></i></span>
+                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
+                        </td>
+                      </tr>
+                      <tr className="odd">
+                        <td>101</td>
+                        <td>type</td>
+                        <td>Ppn_cloud Security.pdf</td>
+                        <td>Jan 22, 2022</td>
+                        <td>
+                          <span className="link_url"><i className="fa fa-eye"></i></span>
+                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
+                        </td>
+                      </tr>
+                      
                     </tbody></table>
                 </div>
               </div>

@@ -306,10 +306,10 @@ const Configuration = (props) => {
     if (!memFirstName || !memLastName || !memEmail || !memRole) {
       formRes['err_status'] = true
       if (!memFirstName) {
-        formRes['error']['memberFname'] = { required: true, msg: "First name is required!" }
+        formRes['error']['memberFname'] = { required: true, msg: "First Name is required!" }
       }
       if (!memLastName) {
-        formRes['error']['memberLname'] = { required: true, msg: "Last name is required!" }
+        formRes['error']['memberLname'] = { required: true, msg: "Last Lame is required!" }
       }
       if (!memEmail) {
         formRes['error']['memberEmail'] = { required: true, msg: "Email is required!" }
@@ -392,10 +392,10 @@ const Configuration = (props) => {
         formRes['error']['partnerEmail'] = { required: true, msg: "Email is required!" }
       }
       if (!partnerFn) {
-        formRes['error']['partnerFname'] = { required: true, msg: "First name is required!" }
+        formRes['error']['partnerFname'] = { required: true, msg: "First Name is required!" }
       }
       if (!partnerLn) {
-        formRes['error']['partnerLname'] = { required: true, msg: "Last name is required!" }
+        formRes['error']['partnerLname'] = { required: true, msg: "Last Name is required!" }
       }
       setFormRes(formRes)
       return false;
@@ -847,24 +847,24 @@ const Configuration = (props) => {
                 <div className="flex-grow-1 mr-2 w-75">
                   <input id="memFnInp" type="text" className="form-control" placeholder="First Name" />
                   {
-                    formRes.err_status && formRes.error?.memberEmail?.required
-                      ? <div className="field_err text-danger"><div>{formRes.error?.memberEmail?.msg}</div> </div>
-                      : ''
-                  }
-                </div>
-                <div className="flex-grow-1 mr-2 w-75">
-                  <input id="memLnInp" type="text" className="form-control" placeholder="Last Name" />
-                  {
                     formRes.err_status && formRes.error?.memberFname?.required
                       ? <div className="field_err text-danger"><div>{formRes.error?.memberFname?.msg}</div> </div>
                       : ''
                   }
                 </div>
                 <div className="flex-grow-1 mr-2 w-75">
-                  <input id="memberEmail" type="text" className="form-control" placeholder="Email Address" />
+                  <input id="memLnInp" type="text" className="form-control" placeholder="Last Name" />
                   {
                     formRes.err_status && formRes.error?.memberLname?.required
                       ? <div className="field_err text-danger"><div>{formRes.error?.memberLname?.msg}</div> </div>
+                      : ''
+                  }
+                </div>
+                <div className="flex-grow-1 mr-2 w-75">
+                  <input id="memberEmail" type="text" className="form-control" placeholder="Email Address" />
+                  {
+                    formRes.err_status && formRes.error?.memberEmail?.required
+                      ? <div className="field_err text-danger"><div>{formRes.error?.memberEmail?.msg}</div> </div>
                       : ''
                   }
                 </div>

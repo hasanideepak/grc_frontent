@@ -97,6 +97,15 @@
 .userProfile .dropdown.show .profileSet::after{
     transform: translateY(1px) rotateZ(180deg);
 }
+.userProfile .sel_project_btn::after {
+    transform: rotateZ(0deg);
+    transition: transform 0.2s ease-in-out;
+    top: 8px;
+}
+.userProfile .dropdown.show .sel_project_btn::after {
+    
+    transform: translateY(4px) rotateZ(180deg);
+}
 .profileSet + .dropdown-menu::after {
     left: 76%;
 }
@@ -274,6 +283,9 @@ a.info{
 
 
 /* task manager card view custom  css start */
+.drpicker_block{
+    min-width: 250px !important;
+}
 .timecontainer>.grid_item>.card>.card-body {
     min-height: 150px !important;
 }
@@ -417,9 +429,9 @@ a.info{
     width: 300px;
 }
 
-.task_details_modal .modal-dialog {
+/* .task_details_modal .modal-dialog {
     margin-right: 20px;
-}
+} */
 
 a.taskDetailPage_link {
     color: #606063;
@@ -549,6 +561,34 @@ a.taskDetailPage_link {
     transform: translate(3px,-1px) rotateZ(-90deg);
 }
 
+#taskDetails_sec .task_card_block .accordion .assets_list .assets_box .box_bullet{
+    width: 10px;
+    display: inline-block;
+    height: 10px;
+    vertical-align: middle;
+    position: relative;
+}
+#taskDetails_sec .task_card_block .accordion .assets_list .assets_box .box_bullet::before{
+        content: '';
+        width: 7px;
+        height: 7px;
+        border: 1px solid #7A8295;
+        background-color:#7A8295;
+        position: absolute;
+        top: 1px;
+        left: 2px;
+        
+}
+#taskDetails_sec .task_card_block .accordion .assets_list .assets_box .box_bullet::after{
+    content: '';
+    width: 7px;
+    height: 7px;
+    border: 1px solid #7A8295;
+    background-color:#ffffff;
+    position: absolute;
+    top: -1px;
+    left: 0px;
+}
 #taskDetails_sec .task_card_block .accordion .assets_list .assets_box .header{
     color: #1C204D;
     font-size: 13px;
@@ -556,6 +596,7 @@ a.taskDetailPage_link {
 #taskDetails_sec .task_card_block .accordion .assets_list .assets_box ul li{
     color: #606063;
     font-size: 13px;
+    margin: 4px 0;
 }
 
 #taskDetails_sec .taskDetails_btn.sticky {
@@ -592,3 +633,21 @@ a.taskDetailPage_link {
 
 
 /* task details section css end */
+
+/* Custom modal css start */
+#form_file_upload_modal .file_upload_block {
+    border: none;
+    outline: 2px dashed #717A86;
+    min-height: 250px;
+}
+#form_file_upload_modal i{
+    font-size: 100px;
+}
+#form_file_upload_modal .fileUploadInp{
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+}
+/* Custom modal css end */

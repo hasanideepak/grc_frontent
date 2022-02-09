@@ -147,7 +147,7 @@ const Header = (props) => {
                             return (
                                 <div className="btn-group">
                                     <div className="dropdown">
-                                        <button type="button" className="btn btn-primary dropdown-toggle sdrp" data-toggle="dropdown">
+                                        <button type="button" className="btn btn-primary dropdown-toggle sdrp sel_project_btn" data-toggle="dropdown">
                                             {selectedProject && selectedProject?.project_id ? selectedProject?.project_name : 'Select Project'}
                                         </button>
                                         <div className="dropdown-menu mt-1">

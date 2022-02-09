@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
-import { SetCookie, GetCookie } from "../helpers/Helper";
+import { SetCookie, GetCookie, FormatDate } from "../helpers/Helper";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
@@ -18,6 +18,8 @@ const TaskManager = (props) => {
   const [projectId, setProjectId] = useState(0)
   const accessRole = user?.currentUser?.access_role || '';
   const [viewType, setViewType] = useState({ board: true })
+  const [filterType, setfilterType] = useState("start_date")
+  const [priority, setPriority] = useState("low")
   const [cardView, setCardViewe] = useState('all')
   const [tasks, setTasks] = useState([]);
   const [tasksByDates, setTasksByDates] = useState([]);
@@ -32,6 +34,15 @@ const TaskManager = (props) => {
   const [openModal, setShowModal] = useState(false);
   const [taskDetails, setTaskDetails] = useState({})
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+  const now = new Date()
+  const numDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
+  let stDate = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+  stDate = `${stDate.getFullYear()}-${('00' + stDate.getMonth()).slice(-2)}-${('00' + stDate.getDate()).slice(-2)}`
+  const startDate = FormatDate(null,stDate,1)
+  let edDate = new Date(now.getFullYear(), now.getMonth() + 1, numDays)
+  edDate = `${edDate.getFullYear()}-${('00' + edDate.getMonth()).slice(-2)}-${('00' + edDate.getDate()).slice(-2)}`
+  const endDate = FormatDate(null,edDate,1)
 
   useEffect(() => {
     if (projectId == 0) {
@@ -77,26 +88,34 @@ const TaskManager = (props) => {
     if (type == '') {
       return false
     };
-
+    console.log(cardView)
     let payloadUrl = ""
     let method = "POST";
     let formData = {};
-    let now = new Date()
-    let numDays = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()
-    let startDate = new Date(now.getFullYear(), now.getMonth() + 1, 1)
-    startDate = `${startDate.getFullYear()}-${('00' + startDate.getMonth()).slice(-2)}-${('00' + startDate.getDate()).slice(-2)}`
-    let endDate = new Date(now.getFullYear(), now.getMonth() + 1, numDays)
-    endDate = `${endDate.getFullYear()}-${('00' + endDate.getMonth()).slice(-2)}-${('00' + endDate.getDate()).slice(-2)}`
+    let sDate = startDate
+    let eDate = endDate
+    let dateRange = document.getElementById('drpicker').value;
+    dateRange = dateRange ? dateRange : null
+    console.log(dateRange)
+    if(dateRange){
+      let drArr = dateRange.replace(/\s/g,'').split('-');
+      if(drArr.length > 0){
+        let sDateArr = drArr[0].split('/')
+        let eDateArr = drArr[1].split('/')
+        sDate = `${sDateArr[2]}-${sDateArr[0]}-${sDateArr[1]}`
+        eDate = `${eDateArr[2]}-${eDateArr[0]}-${eDateArr[1]}`
+      }
+    }
     if (type == 'all_tasks') {
       // https://zp5ffmsibc.us-east-1.awsapprunner.com/tasks/listTasks
       payloadUrl = `tasks/listTasks`
       method = "POST";
-      formData = { project_id: projectId || project_id, authority: accessRole, start_date: startDate, end_date: endDate, task_status: "all" }
+      formData = { project_id: projectId || project_id, authority: accessRole, start_date: sDate, end_date: eDate, task_status: "all",date_criteria:filterType,priority}
     } else {
       // https://zp5ffmsibc.us-east-1.awsapprunner.com/tasks/listTasks
       payloadUrl = `tasks/listTasks/`
       method = "POST";
-      formData = { project_id: projectId || project_id, authority: accessRole, start_date: startDate, end_date: endDate, task_status: type }
+      formData = { project_id: projectId || project_id, authority: accessRole, start_date: sDate, end_date: eDate, task_status: type,date_criteria:filterType,priority }
     }
 
     let res = await ApiService.fetchData(payloadUrl, method, formData);
@@ -189,6 +208,12 @@ const TaskManager = (props) => {
       return { ...obj }
     })
   }
+  const changeFilterType = (view = "") => {
+    if (view == "") {
+      return false
+    }
+    setfilterType(view)
+  }
   const changeCardView = (view = "") => {
     if (view == "") {
       return false
@@ -267,9 +292,43 @@ const TaskManager = (props) => {
 
 
               </div>
-              <div className="Position-relative">
+              <div>
+                <div className="userProfile">
+                  <div className="dropdown fdrp">
+                    <button type="button" className="btn btn-primary dropdown-toggle viewMenu" data-toggle="dropdown">
+                      {priority && priority.toUpperCase()}
+                    </button>
+                    <div className="dropdown-menu mt-1">
+                      <a className={`dropdown-item ${priority == "low" ? "d-none" : ""}`} onClick={() => setPriority("low")}>Low</a>
+                      <a className={`dropdown-item ${priority == "normal" ? "d-none" : ""}`} onClick={() => setPriority("normal")}>Normal</a>
+                      <a className={`dropdown-item ${priority == "high" ? "d-none" : ""}`} onClick={() => setPriority("high")}>High</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className="userProfile">
+                  <div className="dropdown fdrp">
+                    <button type="button" className="btn btn-primary dropdown-toggle viewMenu" data-toggle="dropdown">
+                      {(() => {
+                        if (filterType == "start_date") {
+                          return "Start Date"
+                        } else if (filterType == "due_date") {
+                          return "Due Date"
+                        } 
+                      })()}
+                    </button>
+                    <div className="dropdown-menu mt-1">
+                      <a className={`dropdown-item ${filterType == "start_date" ? "d-none" : ""}`} onClick={() => changeFilterType("start_date")}>Start Date</a>
+                      <a className={`dropdown-item ${filterType == "due_date" ? "d-none" : ""}`} onClick={() => changeFilterType("due_date")}>Due Date</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="Position-relative drpicker_block">
                 <DateRangePicker
-                  initialSettings={{ startDate: '1/1/2014', endDate: '3/1/2014', ranges: selectionRange }}
+                  initialSettings={{ startDate: startDate, endDate: endDate, ranges: selectionRange }}
+                  onApply={()=>fetchInfo(cardView)}
                 >
                   <input id="drpicker" type="text" className="form-control border-0" name="date" placeholder="Select Date" />
                 </DateRangePicker>

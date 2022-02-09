@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Accordion, Button, Modal } from "react-bootstrap";
+import { Accordion, Button, Modal, ProgressBar } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../services/ApiServices";
@@ -47,6 +47,30 @@ const AirModal = (intialData) => {
         return false
     }
 
+    const _ = (el) => {
+        return document.getElementById(el);
+    }
+
+    const progressHandler = (event) => {
+        _("loaded_n_total").innerHTML = "Uploaded " + event.loaded + " bytes of " + event.total;
+        var percent = (event.loaded / event.total) * 100;
+        _("progressBar").value = Math.round(percent);
+        _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+      }
+      
+    const completeHandler = (event) => {
+        _("status").innerHTML = event.target.responseText;
+        _("progressBar").value = 0; //wil clear progress bar after successful upload
+      }
+      
+    const errorHandler = (event) => {
+        _("status").innerHTML = "Upload Failed";
+      }
+      
+    const abortHandler = (event) => {
+        _("status").innerHTML = "Upload Aborted";
+      }
+
 
 
 
@@ -64,7 +88,7 @@ const AirModal = (intialData) => {
                     scrollable={true}
                 >
                     <Modal.Header closeButton>
-                        <Modal.Title>Task Details <a className="taskDetailPage_link position-absolute ml-3" onClick={()=>navigate(`/task-details/${taskDetails?.task[0]?.task_id}`)}><i className="fa fa-external-link"></i></a></Modal.Title>
+                        <Modal.Title>Task Details <a className="taskDetailPage_link position-absolute ml-3" onClick={() => navigate(`/task-details/${taskDetails?.task[0]?.task_id}`)}><i className="fa fa-external-link"></i></a></Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className="container-fluid">
@@ -78,8 +102,8 @@ const AirModal = (intialData) => {
                                                         <div className="card_block py-3">
                                                             <div className="d-flex justify-content-between align-items-center px-3">
                                                                 <div className="task_name_block">
-                                                                    <span className="task_name mr-2">{taskDetails && taskDetails?.task && taskDetails?.task[0]?.title}</span> 
-                                                                    <label className={`m-0 badge badge-pill badge-${taskDetails && taskDetails?.task && taskDetails?.task[0] && taskDetails?.task[0]?.priority.toLowerCase() == 'low' ? 'success' : (taskDetails && taskDetails?.task &&  taskDetails?.task[0] && taskDetails?.task[0]?.priority.toLowerCase() == 'medium' ? 'warning' :'danger')} ml-auto`}>{taskDetails && taskDetails?.task &&  taskDetails?.task[0] && taskDetails?.task[0]?.priority.toUpperCase()}</label>
+                                                                    <span className="task_name mr-2">{taskDetails && taskDetails?.task && taskDetails?.task[0]?.title}</span>
+                                                                    <label className={`m-0 badge badge-pill badge-${taskDetails && taskDetails?.task && taskDetails?.task[0] && taskDetails?.task[0]?.priority.toLowerCase() == 'low' ? 'success' : (taskDetails && taskDetails?.task && taskDetails?.task[0] && taskDetails?.task[0]?.priority.toLowerCase() == 'medium' ? 'warning' : 'danger')} ml-auto`}>{taskDetails && taskDetails?.task && taskDetails?.task[0] && taskDetails?.task[0]?.priority.toUpperCase()}</label>
                                                                 </div>
                                                                 <div className="widget_box d-flex flex-column text-right">
                                                                     <span>Task Owner</span>
@@ -105,7 +129,7 @@ const AirModal = (intialData) => {
                                                                     <span>Status</span>
                                                                     {
                                                                         taskDetails && taskDetails?.task && taskDetails?.task[0]?.task_status
-                                                                            ? <span className={`text-${taskDetails?.task[0]?.task_status == "pending" ? 'danger' : (taskDetails?.task[0]?.task_status == 'in_progress' ? 'wraning' : (taskDetails?.task[0]?.task_status == 'review' ? 'secondary' : 'success'))}`}>{taskDetails?.task[0]?.task_status == "pending" ? 'Pending' : (taskDetails?.task[0]?.task_status == 'in_progress' ? 'In Progress' : (taskDetails?.task[0]?.task_status == 'review' ? 'Under Review' : 'Completed')) }</span>
+                                                                            ? <span className={`text-${taskDetails?.task[0]?.task_status == "pending" ? 'danger' : (taskDetails?.task[0]?.task_status == 'in_progress' ? 'wraning' : (taskDetails?.task[0]?.task_status == 'review' ? 'secondary' : 'success'))}`}>{taskDetails?.task[0]?.task_status == "pending" ? 'Pending' : (taskDetails?.task[0]?.task_status == 'in_progress' ? 'In Progress' : (taskDetails?.task[0]?.task_status == 'review' ? 'Under Review' : 'Completed'))}</span>
                                                                             : ''
                                                                     }
                                                                 </div>
@@ -380,6 +404,46 @@ const AirModal = (intialData) => {
                                 </div>
                             </div>
                         </div>
+                    </Modal.Footer>
+                </Modal>
+            </>
+        )
+    }
+    if (modalType == 'view_upload_evidence') {
+        return (
+            <>
+
+                <Modal
+                    show={show}
+                    onHide={handleModalClose}
+                    backdrop="static"
+                    keyboard={false}
+                    size="xl"
+                    className="custom-modal task_details_modal"
+                    scrollable={true}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Upload Documnets</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className="container-fluid">
+                            <div id="form_file_upload_modal">
+                                <div class="form-control file_upload_block position-relative d-flex justify-content-center align-items-center flex-column">
+                                    <input class="fileUploadInp" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
+                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                    <label for="file"><strong>Choose a file</strong><span class="fileDropBox"> or drag it here</span>.</label>
+                                    <div className="taskDetails_btn_block px-3 d-none">
+                                        <div className="card_button_block ">
+                                            <Button className="btn_1 btn_wide " variant="outline-dark" type="submit">Upload</Button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ProgressBar animated now={45} label={'45'} />
+
+                            </div>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
                     </Modal.Footer>
                 </Modal>
             </>
