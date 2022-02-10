@@ -3,9 +3,43 @@ import ApiService from "../services/ApiServices";
 import { SetCookie, GetCookie } from "../helpers/Helper";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/partials/Header";
+import { lazy, useContext, useEffect, useState } from "react";
+import { LayoutContext } from "../ContextProviders/LayoutContext";
+import AirModal from "../elements/AirModal";
+
+// const LayoutContext = lazy(() => import("../ContextProviders/LayoutContext"))
+
 const EvidenceManager = (props) => {
+  const { projectId = null } = useContext(LayoutContext)
+  console.log(projectId)
   const navigate = useNavigate()
+  const [evidences, setEvidences] = useState([])
+  const [viewFileDetails, setViewFileDetails] = useState(null)
+  const [modalType,setModalType] = useState(null)
+  const [openModal, setShowModal] = useState(false);
+
+  const [viewFile, setViewFile] = useState(null)
+  const [fileType, setFileType] = useState(null)
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+  useEffect(() => {
+    if (evidences.length == 0 && projectId != null) {
+      getEvidences()
+    }
+  }, [projectId])
+
+  const getEvidences = async () => {
+    let payloadUrl = `evidences/listEvidences/${projectId}`
+    let method = "GET";
+    let formData = {};
+
+    let res = await ApiService.fetchData(payloadUrl, method);
+    if (res && res.message == "Success") {
+      setEvidences(oldVal => {
+        return [...res.results]
+      })
+    }
+  }
   const onSubmit = async (data) => {
     console.log(data);
     if (!data.email || data.email == '' || !data.password || data.password == '') {
@@ -20,6 +54,62 @@ const EvidenceManager = (props) => {
     }
   }
 
+  const getFileDetails = async (data = null) =>{
+    if(data != null){
+      
+      let payloadUrl = `${data.evidence_url}`
+      let method = "GET";
+      let response = await ApiService.fetchFile(payloadUrl,method);
+      let jsonResponse = response.clone()
+      let res = await response.arrayBuffer();
+      if(res){
+        let contentType = response && response.headers.get('content-type') ? response.headers.get('content-type') : 'application/pdf' ;
+        console.log(contentType)
+        if(contentType.indexOf('application/json') == -1){
+          var blob = new Blob([res], {type: contentType});
+          let reader = new FileReader();
+          let url = reader.readAsDataURL(blob);
+          reader.onloadend = () => {
+            let fileType = contentType ? contentType.substr(contentType.lastIndexOf('/')+1) : null;
+            setFileType(fileType)
+            setViewFile(reader.result)
+          };
+          return {status:true,message:"Success"}
+        }else{
+          let jres = await jsonResponse.json();
+          return {status:false,message:jres.message}
+        }
+        
+      }
+
+      
+    }
+  }
+
+  const showModal = async (modalName = null,data= null)=>{
+    if(modalName == null){
+      return false
+    }
+
+    switch(modalName){
+      case 'view_documents':
+        if(data != null){
+          setViewFile(null);
+          setFileType(null)
+          let fileDetails = getFileDetails(data)
+          
+          setModalType(modalName)
+          setShowModal(true)
+        }
+      break;
+      
+    }
+  }
+
+  const hideModal = ()=>{
+    setModalType(null)
+    setShowModal(false)
+  }
   // console.log(watch("email")); // watch input value by passing the name of it
 
   return (
@@ -39,7 +129,7 @@ const EvidenceManager = (props) => {
               </div>
               <div className="invisible">
                 <input type="text" className="form-control border-0" name="date" placeholder="Select Date" />
-                  <i className="fa fa-calendar"></i>
+                <i className="fa fa-calendar"></i>
               </div>
             </div>
           </div>
@@ -72,80 +162,25 @@ const EvidenceManager = (props) => {
                       <th>Task ID</th>
                       <th>Evidence Type.</th>
                       <th>File Name</th>
+                      <th>Uploaded By</th>
                       <th>Uploaded On</th>
                       <th>Action</th>
                     </tr>
-                      <tr className="odd">
-                        <td>101</td>
-                        <td>type</td>
-                        <td>Ppn_cloud Security.pdf</td>
-                        <td>Jan 22, 2022</td>
-                        <td>
-                          <span className="link_url"><i className="fa fa-eye"></i></span>
-                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
-                        </td>
-                      </tr>
-                      <tr className="odd">
-                        <td>101</td>
-                        <td>type</td>
-                        <td>Ppn_cloud Security.pdf</td>
-                        <td>Jan 22, 2022</td>
-                        <td>
-                          <span className="link_url"><i className="fa fa-eye"></i></span>
-                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
-                        </td>
-                      </tr>
-                      <tr className="odd">
-                        <td>101</td>
-                        <td>type</td>
-                        <td>Ppn_cloud Security.pdf</td>
-                        <td>Jan 22, 2022</td>
-                        <td>
-                          <span className="link_url"><i className="fa fa-eye"></i></span>
-                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
-                        </td>
-                      </tr>
-                      <tr className="odd">
-                        <td>101</td>
-                        <td>type</td>
-                        <td>Ppn_cloud Security.pdf</td>
-                        <td>Jan 22, 2022</td>
-                        <td>
-                          <span className="link_url"><i className="fa fa-eye"></i></span>
-                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
-                        </td>
-                      </tr>
-                      <tr className="odd">
-                        <td>101</td>
-                        <td>type</td>
-                        <td>Ppn_cloud Security.pdf</td>
-                        <td>Jan 22, 2022</td>
-                        <td>
-                          <span className="link_url"><i className="fa fa-eye"></i></span>
-                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
-                        </td>
-                      </tr>
-                      <tr className="odd">
-                        <td>101</td>
-                        <td>type</td>
-                        <td>Ppn_cloud Security.pdf</td>
-                        <td>Jan 22, 2022</td>
-                        <td>
-                          <span className="link_url"><i className="fa fa-eye"></i></span>
-                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
-                        </td>
-                      </tr>
-                      <tr className="odd">
-                        <td>101</td>
-                        <td>type</td>
-                        <td>Ppn_cloud Security.pdf</td>
-                        <td>Jan 22, 2022</td>
-                        <td>
-                          <span className="link_url"><i className="fa fa-eye"></i></span>
-                          <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
-                        </td>
-                      </tr>
-                      
+                      {evidences && evidences.length > 0 && evidences.map((evidence, eIndex) => {
+                        return (
+                          <tr key={eIndex} className="odd">
+                            <td><span className="link_url" onClick={() => navigate(`/task-details/${evidence.project_task_id}`)}>{evidence.project_task_id}</span></td>
+                            <td>{evidence.evidence_type}</td>
+                            <td>{evidence.file_name}</td>
+                            <td>{evidence.uploaded_by}</td>
+                            <td>{evidence.uploaded_on}</td>
+                            <td>
+                              <span className="link_url" onClick={()=> showModal('view_documents',evidence)}><i className="fa fa-eye"></i></span>
+                              <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
+                            </td>
+                          </tr>
+                        )
+                      })}
                     </tbody></table>
                 </div>
               </div>
@@ -155,6 +190,19 @@ const EvidenceManager = (props) => {
 
         </div>
       </div>
+
+      {(() => {
+        if (modalType && modalType != '' && modalType != null) {
+          if (modalType == 'view_documents') {
+            return <AirModal
+              show={openModal}
+              modalType={modalType}
+              hideModal={hideModal}
+              modalData={{viewFile:viewFile,fileType:fileType}}
+              formSubmit={() =>{}} />
+          } 
+        }
+      })()}
     </>
   )
 }

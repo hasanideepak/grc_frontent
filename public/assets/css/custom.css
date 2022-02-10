@@ -630,7 +630,10 @@ a.taskDetailPage_link {
     font-weight: 600;
 }
 
-
+#taskDetails_sec .evidences_list{
+    color: #606063;
+    font-size: 10px;
+}
 
 /* task details section css end */
 
@@ -649,5 +652,8 @@ a.taskDetailPage_link {
     opacity: 0;
     overflow: hidden;
     position: absolute;
+}
+.view_doc_container{
+    min-height: 1280px;
 }
 /* Custom modal css end */

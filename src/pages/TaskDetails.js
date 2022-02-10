@@ -19,8 +19,10 @@ const TaskDetails = (props) => {
   const { taskId = 0 } = useParams()
   const accessRole = user?.currentUser?.access_role || '';
   const [taskDetails, setTaskDetails] = useState({})
+  const [viewFile, setViewFile] = useState(null)
+  const [fileType, setFileType] = useState(null)
   const navigate = useNavigate()
-  const [modalType,setModalType] = useState(null)
+  const [modalType, setModalType] = useState(null)
   const [openModal, setShowModal] = useState(false);
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
@@ -59,21 +61,63 @@ const TaskDetails = (props) => {
     // }
   }
 
-  const showModal = async (modalName = null)=>{
-    if(modalName == null){
-      return false
-    }
+  const getFileDetails = async (data = null) =>{
+    if(data != null){
+      
+      let payloadUrl = `${data.evidence_url}`
+      let method = "GET";
+      let response = await ApiService.fetchFile(payloadUrl,method);
+      let jsonResponse = response.clone()
+      let res = await response.arrayBuffer();
+      if(res){
+        let contentType = response && response.headers.get('content-type') ? response.headers.get('content-type') : 'application/pdf' ;
+        console.log(contentType)
+        if(contentType.indexOf('application/json') == -1){
+          var blob = new Blob([res], {type: contentType});
+          let reader = new FileReader();
+          let url = reader.readAsDataURL(blob);
+          reader.onloadend = () => {
+            let fileType = contentType ? contentType.substr(contentType.lastIndexOf('/')+1) : null;
+            setFileType(fileType)
+            setViewFile(reader.result)
+          };
+          return {status:true,message:"Success"}
+        }else{
+          let jres = await jsonResponse.json();
+          return {status:false,message:jres.message}
+        }
+        
+      }
 
-    switch(modalName){
-      case 'view_upload_evidence':
-        setModalType(modalName)
-        setShowModal(true)
-      break;
       
     }
   }
 
-  const hideModal = ()=>{
+  const showModal = async (modalName = null,data=null) => {
+    if (modalName == null) {
+      return false
+    }
+
+    switch (modalName) {
+      case 'view_upload_evidence':
+        setModalType(modalName)
+        setShowModal(true)
+        break;
+      case 'view_documents':
+        if(data != null){
+          setViewFile(null);
+          setFileType(null)
+          let fileDetails = getFileDetails(data)
+          
+          setModalType(modalName)
+          setShowModal(true)
+        }
+      break;
+
+    }
+  }
+
+  const hideModal = () => {
     setModalType(null)
     setShowModal(false)
   }
@@ -99,8 +143,8 @@ const TaskDetails = (props) => {
                       <div className="card_block py-3">
                         <div className="d-flex justify-content-between align-items-center px-3">
                           <div className="task_name_block">
-                            <span className="task_name mr-2">{taskDetails && taskDetails?.task && taskDetails?.task[0]?.title}</span> 
-                            <label className={`m-0 badge badge-pill badge-${taskDetails && taskDetails?.task && taskDetails?.task[0] && taskDetails?.task[0]?.priority.toLowerCase() == 'low' ? 'success' : (taskDetails && taskDetails?.task &&  taskDetails?.task[0] && taskDetails?.task[0]?.priority.toLowerCase() == 'medium' ? 'warning' :'danger')} ml-auto`}>{taskDetails && taskDetails?.task &&  taskDetails?.task[0] && taskDetails?.task[0]?.priority.toUpperCase()}</label>
+                            <span className="task_name mr-2">{taskDetails && taskDetails?.task && taskDetails?.task[0]?.title}</span>
+                            <label className={`m-0 badge badge-pill badge-${taskDetails && taskDetails?.task && taskDetails?.task[0] && taskDetails?.task[0]?.priority.toLowerCase() == 'low' ? 'success' : (taskDetails && taskDetails?.task && taskDetails?.task[0] && taskDetails?.task[0]?.priority.toLowerCase() == 'medium' ? 'warning' : 'danger')} ml-auto`}>{taskDetails && taskDetails?.task && taskDetails?.task[0] && taskDetails?.task[0]?.priority.toUpperCase()}</label>
                           </div>
                           <div className="widget_box d-flex flex-column text-right">
                             <span>Task Owner</span>
@@ -126,7 +170,7 @@ const TaskDetails = (props) => {
                             <span>Status</span>
                             {
                               taskDetails && taskDetails?.task && taskDetails?.task[0]?.task_status
-                                ? <span className={`text-${taskDetails?.task[0]?.task_status == "pending" ? 'danger' : (taskDetails?.task[0]?.task_status == 'in_progress' ? 'wraning' : (taskDetails?.task[0]?.task_status == 'review' ? 'secondary' : 'success'))}`}>{taskDetails?.task[0]?.task_status == "pending" ? 'Pending' : (taskDetails?.task[0]?.task_status == 'in_progress' ? 'In Progress' : (taskDetails?.task[0]?.task_status == 'review' ? 'Under Review' : 'Completed')) }</span>
+                                ? <span className={`text-${taskDetails?.task[0]?.task_status == "pending" ? 'danger' : (taskDetails?.task[0]?.task_status == 'in_progress' ? 'wraning' : (taskDetails?.task[0]?.task_status == 'review' ? 'secondary' : 'success'))}`}>{taskDetails?.task[0]?.task_status == "pending" ? 'Pending' : (taskDetails?.task[0]?.task_status == 'in_progress' ? 'In Progress' : (taskDetails?.task[0]?.task_status == 'review' ? 'Under Review' : 'Completed'))}</span>
                                 : ''
                             }
                           </div>
@@ -281,14 +325,29 @@ const TaskDetails = (props) => {
                       </div>
                       {taskDetails && taskDetails?.evidence_needed && taskDetails?.evidence_needed.map((evidence, eIndex) => {
                         return (
-                          <div key={eIndex} className="card_box px-0">
-                            <span> <i className="fa fa-file" aria-hidden="true"></i> {evidence.evidence_name}</span>
-                            {
-                              !evidence.document_url
-                              ? <span className="link_url" onClick={() => showModal('view_upload_evidence')}>Uplod Documents</span>
-                              : <span>Uploded</span>
-                            }
-                            
+                          <div key={eIndex} className="px-0">
+                            <div className="card_box px-0">
+                              <span> <i className="fa fa-file" aria-hidden="true"></i> {evidence.evidence_name}</span>
+                              {
+                                !evidence.document_url
+                                  ? <span className="link_url" onClick={() => showModal('view_upload_evidence')}>Upload Documents</span>
+                                  : <span>Uploded</span>
+                              }
+                            </div>
+                            <div className="evidences_list px-4">
+                              <ul className="m-0 p-0 px-2">
+                                {evidence && evidence.evidence_uploaded && evidence.evidence_uploaded.length > 0 && evidence.evidence_uploaded.map((evDocs, evIndex) => {
+                                  return (
+                                    <li key={evIndex} className="d-flex justify-content-between my-2">
+                                      <span>&#8627; {evDocs.file_name}</span>
+                                      <span className="action">
+                                        <span className="link_url" onClick={() => showModal('view_documents', evDocs)}><i className="fa fa-eye"></i></span>
+                                      </span>
+                                    </li>
+                                  )
+                                })}
+                              </ul>
+                            </div>
                           </div>
                         )
                       })}
@@ -448,9 +507,17 @@ const TaskDetails = (props) => {
               show={openModal}
               modalType={modalType}
               hideModal={hideModal}
-              modalData={{taskDetails}}
+              modalData={{ taskDetails }}
+              formSubmit={() => { }} />
+          }
+          if (modalType == 'view_documents') {
+            return <AirModal
+              show={openModal}
+              modalType={modalType}
+              hideModal={hideModal}
+              modalData={{viewFile:viewFile,fileType:fileType}}
               formSubmit={() =>{}} />
-          } 
+          }
         }
       })()}
     </>

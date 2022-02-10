@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { NavLink, useLocation, useNavigate, useOutletContext } from "react-router-dom"
+import { LayoutContext } from "../../ContextProviders/LayoutContext"
 import { GetCookie, SetCookie } from "../../helpers/Helper"
 import ApiService from "../../services/ApiServices"
 
 
 const Header = (props) => {
+    const {projectId = null,setProjectId } = useContext(LayoutContext)
     const { user = {} } = useOutletContext()
     const AccountId = user?.currentUser?.account_id || 0;
     const AccountName = user?.currentUser?.account_name
@@ -72,10 +74,12 @@ const Header = (props) => {
                 if (project.status == "A") {
                     if(!GetCookie('selectedProject')){
                         let setcookie = SetCookie('selectedProject', JSON.stringify(project))
+                        setProjectId(project.project_id)
                         setSelectedProject(project)
                     }else{
                         let project = GetCookie('selectedProject') ? JSON.parse(GetCookie('selectedProject')) : null;
                         if(project){
+                            setProjectId(project.project_id)
                             setSelectedProject(project)
                         } 
                     }

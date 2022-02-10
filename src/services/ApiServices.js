@@ -118,6 +118,48 @@ class ApiService {
           console.log(err);
         }
     }
+    static fetchFile = async (url ='', method ='',data= {},customHeader= false,auth=false,formType = '') => {
+        if(url == '' && method == ''){
+          return false
+        }
+        try {
+            let formData = new FormData();
+            if(formType == 'form'){
+              if(Object.keys(data).length > 0){
+                for (let [key, value] of Object.entries(data)) {
+                  formData.append(key,value)
+                }
+              }
+            }else{
+              formData = JSON.stringify(data)
+            }
+            
+            let config = {
+                method: method,
+                // body: formData,
+                headers:{'Content-Type': 'application/json'},
+              }
+            if(method == 'POST' || method == 'PATCH' || method == 'DELETE'){
+              config.body = formData
+            }
+            let userData = GetCookie('currentUser')
+            userData  = userData ? JSON.parse(userData) : false;
+            if(userData){
+              let authToken = `Bearer ${userData.accessToken}`
+              if(!config['headers']){
+                config['headers'] = {}
+              }
+              config['headers']['Authorization'] = authToken
+            }
+            config['headers']['apikey'] = process.env.REACT_APP_API_KEY;
+          const response = await fetch(`${url}`,config);
+          // let res = await response.json();
+          return response
+        }
+        catch (err) {
+          console.log(err);
+        }
+    }
 }
 
 export default ApiService

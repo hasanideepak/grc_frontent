@@ -3,7 +3,7 @@ import ApiService from "../services/ApiServices";
 import { SetCookie, GetCookie, FormatDate } from "../helpers/Helper";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Header from "../components/partials/Header";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import moment from "moment";
@@ -12,10 +12,11 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Calendar } from 'react-date-range';
 import AirModal from "../elements/AirModal";
+import { LayoutContext } from "../ContextProviders/LayoutContext";
 const TaskManager = (props) => {
   const { user = {} } = useOutletContext()
   const orgId = user?.currentUser?.org_id || 0;
-  const [projectId, setProjectId] = useState(0)
+  const {projectId=null} = useContext(LayoutContext)
   const accessRole = user?.currentUser?.access_role || '';
   const [viewType, setViewType] = useState({ board: true })
   const [filterType, setfilterType] = useState("start_date")
@@ -45,16 +46,10 @@ const TaskManager = (props) => {
   const endDate = FormatDate(null,edDate,1)
 
   useEffect(() => {
-    if (projectId == 0) {
-      getProjectInfo()
+    if(projectId != null){
+      fetchInfo("all_tasks")
     }
-    if (Object.keys(dates).length == 0) {
-      // initDates()
-    }
-    // if (tasks.length == 0) {
-    //   fetchInfo("all_tasks")
-    // }
-  }, []);
+  }, [projectId]);
 
 
 
@@ -77,14 +72,13 @@ const TaskManager = (props) => {
       }
       let selectedProject = GetCookie('selectedProject')
       selectedProject = selectedProject ? JSON.parse(selectedProject) : res.accounts_and_projects[0]
-      setProjectId(selectedProject.project_id)
+      // setProjectId(selectedProject.project_id)
       console.log(res.accounts_and_projects[0].project_id)
-      fetchInfo("all_tasks", selectedProject.project_id)
     }
   }
 
 
-  const fetchInfo = async (type = '', project_id = 0) => {
+  const fetchInfo = async (type = '', project_id = 0,filter_type = null,priority_type = null) => {
     if (type == '') {
       return false
     };
@@ -106,16 +100,18 @@ const TaskManager = (props) => {
         eDate = `${eDateArr[2]}-${eDateArr[0]}-${eDateArr[1]}`
       }
     }
+    let filter = filter_type || filterType;
+    let priorityType = priority_type || priority
     if (type == 'all_tasks') {
       // https://zp5ffmsibc.us-east-1.awsapprunner.com/tasks/listTasks
       payloadUrl = `tasks/listTasks`
       method = "POST";
-      formData = { project_id: projectId || project_id, authority: accessRole, start_date: sDate, end_date: eDate, task_status: "all",date_criteria:filterType,priority}
+      formData = { project_id: projectId || project_id, authority: accessRole, start_date: sDate, end_date: eDate, task_status: "all",date_criteria:filter,priority:priorityType}
     } else {
       // https://zp5ffmsibc.us-east-1.awsapprunner.com/tasks/listTasks
       payloadUrl = `tasks/listTasks/`
       method = "POST";
-      formData = { project_id: projectId || project_id, authority: accessRole, start_date: sDate, end_date: eDate, task_status: type,date_criteria:filterType,priority }
+      formData = { project_id: projectId || project_id, authority: accessRole, start_date: sDate, end_date: eDate, task_status: type,date_criteria:filter,priority:priorityType }
     }
 
     let res = await ApiService.fetchData(payloadUrl, method, formData);
@@ -208,11 +204,19 @@ const TaskManager = (props) => {
       return { ...obj }
     })
   }
-  const changeFilterType = (view = "") => {
-    if (view == "") {
+  const changeFilterType = (filter = "") => {
+    if (filter == "") {
       return false
     }
-    setfilterType(view)
+    setfilterType(filter)
+    fetchInfo(cardView,projectId,filter,priority)  
+  }
+  const changePriority = (priorityType = "") => {
+    if (priorityType == "") {
+      return false
+    }
+    setPriority(priorityType)
+    fetchInfo(cardView,projectId,filterType,priorityType)  
   }
   const changeCardView = (view = "") => {
     if (view == "") {
@@ -299,9 +303,9 @@ const TaskManager = (props) => {
                       {priority && priority.toUpperCase()}
                     </button>
                     <div className="dropdown-menu mt-1">
-                      <a className={`dropdown-item ${priority == "low" ? "d-none" : ""}`} onClick={() => setPriority("low")}>Low</a>
-                      <a className={`dropdown-item ${priority == "normal" ? "d-none" : ""}`} onClick={() => setPriority("normal")}>Normal</a>
-                      <a className={`dropdown-item ${priority == "high" ? "d-none" : ""}`} onClick={() => setPriority("high")}>High</a>
+                      <a className={`dropdown-item ${priority == "low" ? "d-none" : ""}`} onClick={() => changePriority("low")}>Low</a>
+                      <a className={`dropdown-item ${priority == "normal" ? "d-none" : ""}`} onClick={() => changePriority("normal")}>Normal</a>
+                      <a className={`dropdown-item ${priority == "high" ? "d-none" : ""}`} onClick={() => changePriority("high")}>High</a>
                     </div>
                   </div>
                 </div>

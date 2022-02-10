@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Accordion, Button, Modal, ProgressBar } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/partials/Loader";
 import ApiService from "../services/ApiServices";
 
 
@@ -56,20 +57,20 @@ const AirModal = (intialData) => {
         var percent = (event.loaded / event.total) * 100;
         _("progressBar").value = Math.round(percent);
         _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
-      }
-      
+    }
+
     const completeHandler = (event) => {
         _("status").innerHTML = event.target.responseText;
         _("progressBar").value = 0; //wil clear progress bar after successful upload
-      }
-      
+    }
+
     const errorHandler = (event) => {
         _("status").innerHTML = "Upload Failed";
-      }
-      
+    }
+
     const abortHandler = (event) => {
         _("status").innerHTML = "Upload Aborted";
-      }
+    }
 
 
 
@@ -423,7 +424,7 @@ const AirModal = (intialData) => {
                     scrollable={true}
                 >
                     <Modal.Header closeButton>
-                        <Modal.Title>Upload Documnets</Modal.Title>
+                        <Modal.Title>Upload Documents</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className="container-fluid">
@@ -441,6 +442,57 @@ const AirModal = (intialData) => {
                                 <ProgressBar animated now={45} label={'45'} />
 
                             </div>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                    </Modal.Footer>
+                </Modal>
+            </>
+        )
+    }
+    if (modalType == 'view_documents') {
+        console.log(modalData)
+        return (
+            <>
+
+                <Modal
+                    show={show}
+                    onHide={handleModalClose}
+                    backdrop="static"
+                    keyboard={false}
+                    size="xl"
+                    className="custom-modal task_details_modal"
+                    scrollable={true}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Documnets Viewer</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className="container-fluid">
+                            <section className="view_document_section my-sm-5 my-lg-0">
+                                <div className="container">
+                                    <div className="row py-5 justify-content-center">
+                                        <div className="col-12 col-md-12">
+                                            <div className={`view_doc_container h-100`}>
+                                                {(() => {
+                                                    if (modalData.viewFile && modalData.viewFile != '') {
+                                                        if (modalData.fileType && modalData.fileType != '') {
+                                                            if (modalData.fileType == 'pdf') {
+                                                                return <object data={modalData.viewFile} className="w-100 img-fluid h-100"></object>
+                                                            } else if (modalData.fileType == 'jpeg' || modalData.fileType == 'jpg' || modalData.fileType == 'png' || modalData.fileType == 'webp' || modalData.fileType == 'svg' || modalData.fileType == 'gif') {
+                                                                return <img src={modalData.viewFile} className="w-100 img-fluid" />
+                                                            }
+
+                                                        }
+                                                    }else{
+                                                        return <Loader showLoader={true} pos={'absolute'} />
+                                                    }
+                                                })()}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
