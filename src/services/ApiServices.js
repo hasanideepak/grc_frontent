@@ -76,27 +76,24 @@ class ApiService {
     }
 
     
-    static fetchData = async (url ='', method ='',data= {},customHeader= false,auth=false,formType = '') => {
+    static fetchData = async (url ='', method ='',data= {},formType = '') => {
         if(url == '' && method == ''){
           return false
         }
         try {
             let formData = new FormData();
-            if(formType == 'form'){
-              if(Object.keys(data).length > 0){
-                for (let [key, value] of Object.entries(data)) {
-                  formData.append(key,value)
-                }
-              }
-            }else{
+            if(formType != 'form'){
               formData = JSON.stringify(data)
+            }else{
+              formData = data
             }
             
             let config = {
                 method: method,
                 // body: formData,
-                headers:{'Content-Type': 'application/json'},
+               
               }
+           
             if(method == 'POST' || method == 'PATCH' || method == 'DELETE'){
               config.body = formData
             }
@@ -108,6 +105,12 @@ class ApiService {
                 config['headers'] = {}
               }
               config['headers']['Authorization'] = authToken
+            }
+            if(formType != 'form'){
+              if(!config['headers']){
+                config['headers'] = {}
+              }
+              config['headers']['Content-Type'] = 'application/json'
             }
             config['headers']['apikey'] = process.env.REACT_APP_API_KEY;
           const response = await fetch(`${process.env.REACT_APP_API_URL}${url}`,config);

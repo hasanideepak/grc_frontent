@@ -22,6 +22,10 @@
 .btn_wide{
     min-width: 150px;
 }
+.btn_small{
+    width: auto;
+    font-size: 8px;
+}
 .btn_2{
     color: #DB2C58;
     border-color: #DB2C58;
@@ -71,6 +75,7 @@
 .loader_sec{
     top: 0;
     background: #ffffffd6;
+    max-height: 100%;
 }
 .loader_sec .loader_block{
     width: 50px;
@@ -643,7 +648,7 @@ a.taskDetailPage_link {
     outline: 2px dashed #717A86;
     min-height: 250px;
 }
-#form_file_upload_modal i{
+#form_file_upload_modal i:not(.fa-times){
     font-size: 100px;
 }
 #form_file_upload_modal .fileUploadInp{
@@ -655,5 +660,12 @@ a.taskDetailPage_link {
 }
 .view_doc_container{
     min-height: 1280px;
+}
+
+.uploadsList .file_card{
+    font-size: 12px;
+}
+.uploadsList .close_btn{
+    font-size: 16px;
 }
 /* Custom modal css end */

@@ -34,6 +34,8 @@ const TaskManager = (props) => {
   const [modalType,setModalType] = useState(null)
   const [openModal, setShowModal] = useState(false);
   const [taskDetails, setTaskDetails] = useState({})
+  const [viewFile, setViewFile] = useState(null)
+  const [fileType, setFileType] = useState(null)
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   const now = new Date()
@@ -256,7 +258,39 @@ const TaskManager = (props) => {
     }
 }
 
-  const showModal = async (modalName = null)=>{
+const getFileDetails = async (data = null) =>{
+  if(data != null){
+    
+    let payloadUrl = `${data.evidence_url}`
+    let method = "GET";
+    let response = await ApiService.fetchFile(payloadUrl,method);
+    let jsonResponse = response.clone()
+    let res = await response.arrayBuffer();
+    if(res){
+      let contentType = response && response.headers.get('content-type') ? response.headers.get('content-type') : 'application/pdf' ;
+      console.log(contentType)
+      if(contentType.indexOf('application/json') == -1){
+        var blob = new Blob([res], {type: contentType});
+        let reader = new FileReader();
+        let url = reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+          let fileType = contentType ? contentType.substr(contentType.lastIndexOf('/')+1) : null;
+          setFileType(fileType)
+          setViewFile(reader.result)
+        };
+        return {status:true,message:"Success"}
+      }else{
+        let jres = await jsonResponse.json();
+        return {status:false,message:jres.message}
+      }
+      
+    }
+
+    
+  }
+}
+
+  const showModal = async (modalName = null,data=null)=>{
     if(modalName == null){
       return false
     }
@@ -265,6 +299,16 @@ const TaskManager = (props) => {
       case 'view_task_details':
         setModalType(modalName)
         setShowModal(true)
+      break;
+      case 'view_documents':
+        if(data != null){
+          setViewFile(null);
+          setFileType(null)
+          let fileDetails = getFileDetails(data)
+          
+          setModalType(modalName)
+          setShowModal(true)
+        }
       break;
       
     }

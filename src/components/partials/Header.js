@@ -6,7 +6,7 @@ import ApiService from "../../services/ApiServices"
 
 
 const Header = (props) => {
-    const {projectId = null,setProjectId } = useContext(LayoutContext)
+    const { projectId = null, setProjectId } = useContext(LayoutContext)
     const { user = {} } = useOutletContext()
     const AccountId = user?.currentUser?.account_id || 0;
     const AccountName = user?.currentUser?.account_name
@@ -72,18 +72,18 @@ const Header = (props) => {
             setProjects(res.results)
             projects && projects.length > 0 && projects.map((project) => {
                 if (project.status == "A") {
-                    if(!GetCookie('selectedProject')){
+                    if (!GetCookie('selectedProject')) {
                         let setcookie = SetCookie('selectedProject', JSON.stringify(project))
                         setProjectId(project.project_id)
                         setSelectedProject(project)
-                    }else{
+                    } else {
                         let project = GetCookie('selectedProject') ? JSON.parse(GetCookie('selectedProject')) : null;
-                        if(project){
+                        if (project) {
                             setProjectId(project.project_id)
                             setSelectedProject(project)
-                        } 
+                        }
                     }
-                    
+
                 }
             })
 
@@ -103,7 +103,7 @@ const Header = (props) => {
 
     const showProjectDropDown = () => {
         let result = false
-        let showDrpArr = ['/dashboard', "/task-manager", "/configuration"]
+        let showDrpArr = ['/dashboard', "/task-manager", "/configuration", "/evidence-manager"]
         if (showDrpArr.indexOf(location.pathname) != -1) {
             result = true
         }
@@ -155,6 +155,11 @@ const Header = (props) => {
                                             {selectedProject && selectedProject?.project_id ? selectedProject?.project_name : 'Select Project'}
                                         </button>
                                         <div className="dropdown-menu mt-1">
+                                            {
+                                                location.pathname == '/evidence-manager'
+                                                    ? <a className="dropdown-item" onClick={() => changeProject({ "project_id": -1, "project_name": "All", "status": "A" })}>All</a>
+                                                    : ''
+                                            }
                                             {projects && projects.length > 0 && projects.map((project) => {
                                                 return (
                                                     <a className="dropdown-item" onClick={() => changeProject(project)}>{project.project_name}</a>
@@ -179,7 +184,7 @@ const Header = (props) => {
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
             <div className="align-items-center d-flex justify-content-between aDm_navigation pl-lg-3 border-0 mb-3">

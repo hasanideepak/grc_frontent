@@ -9,6 +9,7 @@ const Asidebar = (props) => {
         let loggedInUser = IsAuthenticated(true);
         if(loggedInUser.isLoggedIn){
            let del =  DelCookie('currentUser')
+           let delProject = DelCookie('selectedProject')
            if(del){
             navigate("login")
            }

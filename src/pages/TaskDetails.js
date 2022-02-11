@@ -24,6 +24,7 @@ const TaskDetails = (props) => {
   const navigate = useNavigate()
   const [modalType, setModalType] = useState(null)
   const [openModal, setShowModal] = useState(false);
+  const [evidenceTypeId, setEvidenceTypeId] = useState(null);
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   useEffect(() => {
@@ -97,9 +98,12 @@ const TaskDetails = (props) => {
     if (modalName == null) {
       return false
     }
-
+    setEvidenceTypeId(null)
     switch (modalName) {
       case 'view_upload_evidence':
+        if(data.evidence_type_id){
+          setEvidenceTypeId(data.evidence_type_id)
+        }
         setModalType(modalName)
         setShowModal(true)
         break;
@@ -118,6 +122,9 @@ const TaskDetails = (props) => {
   }
 
   const hideModal = () => {
+    if(modalType == 'view_upload_evidence'){
+      getTaskDetails()
+    }
     setModalType(null)
     setShowModal(false)
   }
@@ -329,9 +336,9 @@ const TaskDetails = (props) => {
                             <div className="card_box px-0">
                               <span> <i className="fa fa-file" aria-hidden="true"></i> {evidence.evidence_name}</span>
                               {
-                                !evidence.document_url
-                                  ? <span className="link_url" onClick={() => showModal('view_upload_evidence')}>Upload Documents</span>
-                                  : <span>Uploded</span>
+                                !evidence.evidence_uploaded || evidence.evidence_uploaded.length == 0
+                                  ? <div className="control_button_block pl-3"><Button className="btn_1 btn_small" variant="outline-dark" onClick={() => showModal('view_upload_evidence',evidence)}>Upload Documents</Button></div>
+                                  : <div className="control_button_block pl-3"><Button className="btn_1 btn_small" variant="outline-dark" onClick={() => showModal('view_upload_evidence',evidence)}>Upload Documents</Button></div>
                               }
                             </div>
                             <div className="evidences_list px-4">
@@ -507,7 +514,7 @@ const TaskDetails = (props) => {
               show={openModal}
               modalType={modalType}
               hideModal={hideModal}
-              modalData={{ taskDetails }}
+              modalData={{ taskDetails,taskId:taskDetails.task[0].task_id,evidenceTypeId:evidenceTypeId }}
               formSubmit={() => { }} />
           }
           if (modalType == 'view_documents') {

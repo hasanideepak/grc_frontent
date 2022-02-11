@@ -13,8 +13,12 @@ const AirModal = (intialData) => {
     const [formRes, setFormRes] = useState({ staus: false, err: false, data: {} })
     const [formSubmitted, setFormSbmt] = useState(false)
     const [modalFormData, setModalFormData] = useState({})
-    const [showLoader, setShowLoader] = useState(true)
+    const [showLoader, setShowLoader] = useState(false)
     const [taskDetails, setTaskDetails] = useState({})
+
+    const [msgError, setMsgErr] = useState('')
+    const [uploadfiles, setUploadFiles] = useState(null)
+    const [uploadErr, setUploadErr] = useState('')
 
     useEffect(() => {
         if (modalType == 'view_task_details') {
@@ -22,6 +26,12 @@ const AirModal = (intialData) => {
                 let obj = modalData?.taskDetails ? modalData?.taskDetails : {};
                 setTaskDetails(obj)
             }
+        }
+        if(modalType == 'view_upload_evidence'){
+            setMsgErr('')
+            setUploadErr('')
+            setShowLoader(false)
+            setUploadFiles(null)
         }
     }, []);
 
@@ -70,6 +80,70 @@ const AirModal = (intialData) => {
 
     const abortHandler = (event) => {
         _("status").innerHTML = "Upload Aborted";
+    }
+
+    const onFileChange = (event = null) => {
+        setMsgErr('')
+        setUploadErr('')
+        if (event == null) {
+            return false
+        }
+        let files = event.target.files
+        setUploadFiles(Array.from(files))
+        console.log(Array.from(files))
+    }
+
+    const uploadFile = async () => {
+        setMsgErr('')
+        setUploadErr('')
+        setShowLoader(true)
+        
+        if (uploadfiles == '' || uploadfiles == null || uploadfiles == undefined) {
+            console.log('Please select a file')
+            setMsgErr('Please select a file');
+            return false
+        }
+        console.log('sending form')
+        let formData = new FormData();
+        console.log(uploadfiles)
+        let files = []
+        if(uploadfiles && uploadfiles.length > 0){
+            for (var i = 0; i < uploadfiles.length; i++) {
+                console.log(uploadfiles[i])
+                // files[i] = uploadfiles[i]
+                formData.append(`file[${i}]`, uploadfiles[i])
+            }
+        }
+        // formData.append(`file`, uploadfiles)
+        let payloadUrl = `evidences/uploadEvidence/${modalData.evidenceTypeId}/${modalData.taskId}`;
+        let method = "POST"
+        let res = await ApiService.fetchData(payloadUrl, method, formData,'form');
+        if (res && res.message == "Success") {
+            setShowLoader(false)
+            setFormSbmt(false)
+            hideModal();
+            // setUploadErr('We are not able to create your profile at this moment. Please continue by filling in fields manually')
+        } else {
+            setFormSbmt(false)
+            setShowLoader(false)
+            // setUploadErr(res.message)
+        }
+    }
+
+    const removeUploadFile = async (fileIndex = null) =>{
+        if(fileIndex == null){
+            return false
+        }
+        let files = uploadfiles;
+        files.splice(fileIndex,1)
+        setUploadFiles(files)
+        console.log(files)
+    }
+
+    const resetFile = () => {
+        setUploadFiles(null);
+        setMsgErr('')
+        setUploadErr('')
     }
 
 
@@ -270,9 +344,25 @@ const AirModal = (intialData) => {
                                                         </div>
                                                         {taskDetails && taskDetails?.evidence_needed && taskDetails?.evidence_needed.map((evidence, eIndex) => {
                                                             return (
-                                                                <div key={eIndex} className="card_box px-0">
-                                                                    <span> <i className="fa fa-file" aria-hidden="true"></i> {evidence.evidence_name}</span>
-                                                                    <span>Uploded</span>
+                                                                <div key={eIndex} className="px-0">
+                                                                    <div className="card_box px-0">
+                                                                        <span> <i className="fa fa-file" aria-hidden="true"></i> {evidence.evidence_name}</span>
+                                                                        <span>Uploded</span>
+                                                                    </div>
+                                                                    <div className="evidences_list px-4">
+                                                                        <ul className="m-0 p-0 px-2">
+                                                                            {evidence && evidence.evidence_uploaded && evidence.evidence_uploaded.length > 0 && evidence.evidence_uploaded.map((evDocs, evIndex) => {
+                                                                                return (
+                                                                                    <li key={evIndex} className="d-flex justify-content-between my-2">
+                                                                                        <span>&#8627; {evDocs.file_name}</span>
+                                                                                        <span className="action">
+                                                                                            {/* <span className="link_url" onClick={() => {}}><i className="fa fa-eye"></i></span> */}
+                                                                                        </span>
+                                                                                    </li>
+                                                                                )
+                                                                            })}
+                                                                        </ul>
+                                                                    </div>
                                                                 </div>
                                                             )
                                                         })}
@@ -429,17 +519,43 @@ const AirModal = (intialData) => {
                     <Modal.Body>
                         <div className="container-fluid">
                             <div id="form_file_upload_modal">
-                                <div class="form-control file_upload_block position-relative d-flex justify-content-center align-items-center flex-column">
-                                    <input class="fileUploadInp" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
-                                    <i class="fa fa-download" aria-hidden="true"></i>
-                                    <label for="file"><strong>Choose a file</strong><span class="fileDropBox"> or drag it here</span>.</label>
-                                    <div className="taskDetails_btn_block px-3 d-none">
-                                        <div className="card_button_block ">
-                                            <Button className="btn_1 btn_wide " variant="outline-dark" type="submit">Upload</Button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <ProgressBar animated now={45} label={'45'} />
+                                {(() => {
+                                    if (uploadfiles == null) {
+                                        return (
+                                            <div class="form-control file_upload_block position-relative d-flex justify-content-center align-items-center flex-column">
+                                                <input class="fileUploadInp" type="file" name="file" onChange={(e) => onFileChange(e)} id="file" data-multiple-caption="{count} files selected" multiple />
+                                                <i class="fa fa-download" aria-hidden="true"></i>
+                                                <label for="file"><strong>Choose a file</strong><span class="fileDropBox"> or drag it here</span>.</label>
+                                            </div>
+                                        )
+
+                                    } else {
+                                        return (
+                                            <div class="form-control file_upload_block position-relative d-flex justify-content-center align-items-center flex-column">
+                                               <div className="uploadsList">
+                                                   {uploadfiles && uploadfiles.length > 0 && uploadfiles.map((file,fIndex)=>{
+                                                       return (
+                                                            <div key={fIndex} className="file_card">
+                                                                <span>{file.name}</span>
+                                                                <span className="close_btn link_url" onClick={()=> removeUploadFile(fIndex)}><i className="fa fa-times"></i></span>
+                                                            </div>
+                                                       )
+                                                   })}
+                                               </div>
+                                                <div className="taskDetails_btn_block px-3">
+                                                    <div className="card_button_block ">
+                                                        <Button className="btn_1 btn_wide " variant="outline-dark" type="submit" onClick={() => uploadFile()}>Upload</Button>
+                                                    </div>
+                                                    {/* <ProgressBar animated now={45} label={'45'} /> */}
+                                                </div>
+                                                <Loader showLoader={showLoader}></Loader>
+                                            </div>
+                                        )
+
+                                    }
+                                })()}
+
+
 
                             </div>
                         </div>
@@ -465,7 +581,7 @@ const AirModal = (intialData) => {
                     scrollable={true}
                 >
                     <Modal.Header closeButton>
-                        <Modal.Title>Documnets Viewer</Modal.Title>
+                        <Modal.Title>Documents Viewer</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className="container-fluid">
@@ -484,7 +600,7 @@ const AirModal = (intialData) => {
                                                             }
 
                                                         }
-                                                    }else{
+                                                    } else {
                                                         return <Loader showLoader={true} pos={'absolute'} />
                                                     }
                                                 })()}

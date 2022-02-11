@@ -152,9 +152,9 @@ const EvidenceManager = (props) => {
           </div> */}
           <div className="col-md-12">
             <div className="card card_shadow border-0">
-              <div className="card-header bg-pink border-0">
+              {/* <div className="card-header bg-pink border-0">
                 <h4 className="mb-0">Authantication</h4>
-              </div>
+              </div> */}
               <div className="card-body ">
                 <div className="table-responsive">
                   <table className="table table-borderless">
