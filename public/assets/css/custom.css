@@ -664,6 +664,14 @@ a.taskDetailPage_link {
 
 .uploadsList .file_card{
     font-size: 12px;
+    display: inline-block;
+    margin-right: 20px;
+}
+.uploadsList .file_card img{
+    max-width: 50px;
+    max-height: 50px;
+    object-fit: cover;
+    object-position: center;
 }
 .uploadsList .close_btn{
     font-size: 16px;

@@ -90,7 +90,7 @@ const AirModal = (intialData) => {
         }
         let files = event.target.files
         setUploadFiles(Array.from(files))
-        console.log(Array.from(files))
+        // console.log(Array.from(files))
     }
 
     const uploadFile = async () => {
@@ -136,8 +136,9 @@ const AirModal = (intialData) => {
         }
         let files = uploadfiles;
         files.splice(fileIndex,1)
-        setUploadFiles(files)
-        console.log(files)
+        setUploadFiles(oldVal =>{
+            return [...files]
+        })
     }
 
     const resetFile = () => {
@@ -520,7 +521,7 @@ const AirModal = (intialData) => {
                         <div className="container-fluid">
                             <div id="form_file_upload_modal">
                                 {(() => {
-                                    if (uploadfiles == null) {
+                                    if (uploadfiles == null || uploadfiles.length < 1) {
                                         return (
                                             <div class="form-control file_upload_block position-relative d-flex justify-content-center align-items-center flex-column">
                                                 <input class="fileUploadInp" type="file" name="file" onChange={(e) => onFileChange(e)} id="file" data-multiple-caption="{count} files selected" multiple />
@@ -532,12 +533,12 @@ const AirModal = (intialData) => {
                                     } else {
                                         return (
                                             <div class="form-control file_upload_block position-relative d-flex justify-content-center align-items-center flex-column">
-                                               <div className="uploadsList">
+                                               <div className="uploadsList my-2">
                                                    {uploadfiles && uploadfiles.length > 0 && uploadfiles.map((file,fIndex)=>{
                                                        return (
-                                                            <div key={fIndex} className="file_card">
-                                                                <span>{file.name}</span>
-                                                                <span className="close_btn link_url" onClick={()=> removeUploadFile(fIndex)}><i className="fa fa-times"></i></span>
+                                                            <div key={fIndex} className="file_card position-relative">
+                                                                <span className=""><img src={URL.createObjectURL(file)} className="img-fluid" /></span>
+                                                                <span className="close_btn link_url position-absolute" onClick={()=> removeUploadFile(fIndex)}><i className="fa fa-times"></i></span>
                                                             </div>
                                                        )
                                                    })}
@@ -581,7 +582,7 @@ const AirModal = (intialData) => {
                     scrollable={true}
                 >
                     <Modal.Header closeButton>
-                        <Modal.Title>Documents Viewer</Modal.Title>
+                        <Modal.Title>Document Viewer</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className="container-fluid">
