@@ -8,9 +8,11 @@ export const IsAuthenticated = (fetchUser = false) => {
     let result = {isLoggedIn : false,currentUser: null,token: ''}
     // console.log(userData)
     if(userData){
+        let otpVerified = userData.otpVerified  ? userData.otpVerified : false
         result.isLoggedIn = true;
         result.currentUser = fetchUser ? userData.user : null;
         result.token = fetchUser ? userData.accessToken : '';
+        result.otpVerified = otpVerified;
     }
     
     return result

@@ -4,14 +4,15 @@ import './App.css';
 import Loader from './components/partials/Loader';
 import { LayoutContext } from './ContextProviders/LayoutContext';
 import { IsAuthenticated } from './helpers/Auth';
-import Project from './pages/Project';
 import TestPage from './pages/TestPage';
+import RouterOutlet from './RouterOutlet';
 // import Login from './pages/Login';
 
 const Layout = lazy(()=> import("./components/layouts/MainLayout"))
 const PublicLayout = lazy(()=> import("./components/layouts/PublicLayout"))
 const Home = lazy(()=> import("./pages/Home"))
 const Login = lazy(()=> import("./pages/Login"))
+const Login2 = lazy(()=> import("./pages/Login2"))
 const Configuration = lazy(()=> import("./pages/Configuration"))
 const ConfigurationScope = lazy(()=> import("./pages/ConfigurationScope"))
 const Dashboard = lazy(()=> import("./pages/Dashboard"))
@@ -19,39 +20,40 @@ const EvidenceManager = lazy(()=> import("./pages/EvidenceManager"))
 const Onboarding = lazy(()=> import("./pages/Onboarding"))
 const TaskManager = lazy(()=> import("./pages/TaskManager"))
 const TaskDetails = lazy(()=> import("./pages/TaskDetails"))
+const Project = lazy(()=> import("./pages/Project"))
 const ForgotPassword = lazy(()=> import("./pages/ForgotPassword"))
 const ResetPassword = lazy(()=> import("./pages/ResetPassword"))
 const Page404 = lazy(()=> import("./pages/Page404"))
 const ChangePassword = lazy(()=> import("./pages/ChangePassword"))
 // const {LayoutContext} = lazy(()=> import("./ContextProviders/LayoutContext"))
 function App() {
-  const  RouterOutlet = ({layout:Layout,...rest}) =>{
-    let {isPublic = false,roles = 'admin'} = rest
-    let  getAuthUser = IsAuthenticated(true)
-    let isAuth = (isPublic || (!isPublic && getAuthUser.isLoggedIn)) ? true : false;
-    const [showLoader, setShowLoader] = useState(false)
-    const [projectId, setProjectId] = useState(null)
-    const location = useLocation()
-    // console.log(getAuthUser)
-    let lContextObj = {showLoader,setShowLoader,projectId,setProjectId}
+  // const  RouterOutlet = ({layout:Layout,...rest}) =>{
+  //   let {isPublic = false,roles = 'admin'} = rest
+  //   let  getAuthUser = IsAuthenticated(true)
+  //   let isAuth = (isPublic || (!isPublic && getAuthUser.isLoggedIn)) ? true : false;
+  //   const [showLoader, setShowLoader] = useState(false)
+  //   const [projectId, setProjectId] = useState(null)
+  //   const location = useLocation()
+  //   // console.log(getAuthUser)
+  //   let lContextObj = {showLoader,setShowLoader,projectId,setProjectId}
     
-    if( isAuth){
-      let is_onboard = getAuthUser.isLoggedIn && getAuthUser?.currentUser?.is_onboard == "N" ? false : true
-      return !is_onboard && location.pathname != "/onboarding" ? (
-        <Navigate to="/onboarding" replace />
-      ) : (
-        <LayoutContext.Provider value={lContextObj}>
-          <Layout showLoader>
-            <Outlet context={{user:getAuthUser}} />
-          </Layout>
-        </LayoutContext.Provider>
-      );  
-    }else{
-      return (
-        <Navigate to="/login" replace />
-      )
-    }
-  }
+  //   if( isAuth){
+  //     let is_onboard = getAuthUser.isLoggedIn && getAuthUser?.currentUser?.is_onboard == "N" ? false : true
+  //     return !is_onboard && location.pathname != "/onboarding" ? (
+  //       <Navigate to="/onboarding" replace />
+  //     ) : (
+  //       <LayoutContext.Provider value={lContextObj}>
+  //         <Layout showLoader>
+  //           <Outlet context={{user:getAuthUser}} />
+  //         </Layout>
+  //       </LayoutContext.Provider>
+  //     );  
+  //   }else{
+  //     return (
+  //       <Navigate to="/login" replace />
+  //     )
+  //   }
+  // }
   return (
     
       <Router>
@@ -77,6 +79,7 @@ function App() {
 
                   <Route path="/" element={<RouterOutlet layout={PublicLayout} isPublic="true" />} >
                     <Route exact path="/login" element={<Login />}></Route>
+                    <Route exact path="/otp-verification" element={<Login2 />}></Route>
                     <Route exact path="/forgotpassword" element={<ForgotPassword />}></Route>
                     <Route exact path="/resetpassword/:token" element={<ResetPassword />}></Route>
                     <Route exact path="/setpassword/:token" element={<ResetPassword />}></Route>

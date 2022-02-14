@@ -11,15 +11,16 @@ import AirModal from "../elements/AirModal";
 
 const EvidenceManager = (props) => {
   const { projectId = null } = useContext(LayoutContext)
-  console.log(projectId)
+  // console.log(projectId)
   const navigate = useNavigate()
   const [evidences, setEvidences] = useState([])
   const [viewFileDetails, setViewFileDetails] = useState(null)
-  const [modalType,setModalType] = useState(null)
+  const [modalType, setModalType] = useState(null)
   const [openModal, setShowModal] = useState(false);
 
   const [viewFile, setViewFile] = useState(null)
   const [fileType, setFileType] = useState(null)
+  const [taskDetails, setTaskDetails] = useState({})
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   useEffect(() => {
@@ -54,59 +55,129 @@ const EvidenceManager = (props) => {
     }
   }
 
-  const getFileDetails = async (data = null) =>{
-    if(data != null){
-      
+  const getFileDetails = async (data = null) => {
+    if (data != null) {
+
       let payloadUrl = `${data.evidence_url}`
       let method = "GET";
-      let response = await ApiService.fetchFile(payloadUrl,method);
+      let response = await ApiService.fetchFile(payloadUrl, method);
       let jsonResponse = response.clone()
       let res = await response.arrayBuffer();
-      if(res){
-        let contentType = response && response.headers.get('content-type') ? response.headers.get('content-type') : 'application/pdf' ;
+      if (res) {
+        let contentType = response && response.headers.get('content-type') ? response.headers.get('content-type') : 'application/pdf';
         console.log(contentType)
-        if(contentType.indexOf('application/json') == -1){
-          var blob = new Blob([res], {type: contentType});
+        if (contentType.indexOf('application/json') == -1) {
+          var blob = new Blob([res], { type: contentType });
           let reader = new FileReader();
           let url = reader.readAsDataURL(blob);
           reader.onloadend = () => {
-            let fileType = contentType ? contentType.substr(contentType.lastIndexOf('/')+1) : null;
+            let fileType = contentType ? contentType.substr(contentType.lastIndexOf('/') + 1) : null;
             setFileType(fileType)
             setViewFile(reader.result)
           };
-          return {status:true,message:"Success"}
-        }else{
+          return { status: true, message: "Success" }
+        } else {
           let jres = await jsonResponse.json();
-          return {status:false,message:jres.message}
+          return { status: false, message: jres.message }
         }
-        
       }
-
-      
     }
   }
 
-  const showModal = async (modalName = null,data= null)=>{
-    if(modalName == null){
+  const downloadFile = async (data = null) => {
+    if (data != null) {
+
+      let payloadUrl = `${data.evidence_url}`
+      let method = "GET";
+      let response = await ApiService.fetchFile(payloadUrl, method);
+      let jsonResponse = response.clone()
+      let res = await response.arrayBuffer();
+      if (res) {
+        let contentType = response && response.headers.get('content-type') ? response.headers.get('content-type') : 'application/pdf';
+        // console.log(contentType)
+        if (contentType.indexOf('application/json') == -1) {
+          var blob = new Blob([res], { type: contentType });
+          let url  = window.URL.createObjectURL(blob)
+          // window.open(url,'_blank')
+
+          if (
+            window.navigator && 
+            window.navigator.msSaveOrOpenBlob
+          ) return window.navigator.msSaveOrOpenBlob(blob);
+      
+          // For other browsers:
+          // Create a link pointing to the ObjectURL containing the blob.
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = data.file_name;
+          // this is necessary as link.click() does not work on the latest firefox
+          link.dispatchEvent(
+            new MouseEvent('click', { 
+              bubbles: true, 
+              cancelable: true, 
+              view: window 
+            })
+          );
+      
+          setTimeout(() => {
+            // For Firefox it is necessary to delay revoking the ObjectURL
+            window.URL.revokeObjectURL(data);
+            link.remove();
+          }, 100);
+          
+          // return {status:true,message:"Success"}
+        } else {
+          // let jres = await jsonResponse.json();
+          // return {status:false,message:jres.message}
+        }
+      }
+    }
+  }
+
+  const getTaskDetails = async (taskId = null) => {
+    if(taskId == null){
+      return false
+    }
+    let payloadUrl = `tasks/getTaskDetails/${taskId}`
+    let method = "GET";
+    let formData = {};
+    let res = await ApiService.fetchData(payloadUrl, method);
+    if (res && res.message == "Success") {
+        let { task, evidence_needed, applicable_assets } = res
+        setTaskDetails(oldVal => {
+            let obj = { task: task, evidence_needed: evidence_needed, applicable_assets: applicable_assets }
+            return { ...obj }
+        })
+        showModal('view_task_details')
+        // fetchInfo("all_tasks",res.accounts_and_projects[0].project_id)
+    }
+  }
+
+  const showModal = async (modalName = null, data = null) => {
+    if (modalName == null) {
       return false
     }
 
-    switch(modalName){
+    switch (modalName) {
       case 'view_documents':
-        if(data != null){
+        if (data != null) {
           setViewFile(null);
           setFileType(null)
           let fileDetails = getFileDetails(data)
-          
+
           setModalType(modalName)
           setShowModal(true)
         }
       break;
-      
+      case 'view_task_details':
+        setModalType(modalName)
+        setShowModal(true)
+      break;
+
     }
   }
 
-  const hideModal = ()=>{
+  const hideModal = () => {
     setModalType(null)
     setShowModal(false)
   }
@@ -169,14 +240,15 @@ const EvidenceManager = (props) => {
                       {evidences && evidences.length > 0 && evidences.map((evidence, eIndex) => {
                         return (
                           <tr key={eIndex} className="odd">
-                            <td><span className="link_url" onClick={() => navigate(`/task-details/${evidence.project_task_id}`)}>{evidence.project_task_id}</span></td>
+                            <td><span className="link_url text_underline" onClick={() => getTaskDetails(evidence.project_task_id)}>{evidence.project_task_id}</span></td>
                             <td>{evidence.evidence_type}</td>
                             <td>{evidence.file_name}</td>
                             <td>{evidence.uploaded_by}</td>
                             <td>{evidence.uploaded_on}</td>
                             <td>
-                              <span className="link_url" onClick={()=> showModal('view_documents',evidence)}><i className="fa fa-eye"></i></span>
-                              <span className="ml-2 link_url"><i className="fa fa-download"></i></span>
+                              <span className="link_url" onClick={() => showModal('view_documents', evidence)}><i className="fa fa-eye"></i></span>
+                              <span className="ml-2 link_url" onClick={() => downloadFile(evidence)}><i className="fa fa-download"></i></span>
+                              {/* <span className="ml-2 link_url" onClick={() => {}}><i className="fa fa-download"></i></span> */}
                             </td>
                           </tr>
                         )
@@ -198,11 +270,23 @@ const EvidenceManager = (props) => {
               show={openModal}
               modalType={modalType}
               hideModal={hideModal}
-              modalData={{viewFile:viewFile,fileType:fileType}}
+              modalData={{ viewFile: viewFile, fileType: fileType }}
+              formSubmit={() => { }} />
+          }
+        }
+        if (modalType && modalType != '' && modalType != null) {
+          if (modalType == 'view_task_details') {
+            return <AirModal
+              show={openModal}
+              modalType={modalType}
+              hideModal={hideModal}
+              modalData={{taskDetails}}
               formSubmit={() =>{}} />
           } 
         }
       })()}
+
+      
     </>
   )
 }

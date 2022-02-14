@@ -13,6 +13,9 @@
 .text_color_4{
     color: #E26F03 !important;
 }
+.text_underline{
+    text-decoration: underline;
+}
 .btn_1{
     color: #1C204D;
     border-color: #1C204D;
@@ -85,10 +88,29 @@
     color: #ffffff !important;
     cursor: pointer;
 }
+
+/* Login box css start */
+.loginForm .form_block .otp_input_field {
+    height: 50px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #8e8fac;
+    border-radius: 0px;
+    width: 14.66%;
+    margin: 0 1%;
+    text-align: center;
+    outline: none;
+}
+/* Login box css end */
+
+
 .userProfile .dropdown-toggle{
     color: #7A8295 !important;
     font-size: 14px;
 }
+
+
+
 .userProfile .profileSet::after{
     background: url('../img/gbl.svg') 214px 55px;
     background-color: transparent;
