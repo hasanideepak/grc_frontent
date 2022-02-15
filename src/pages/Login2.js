@@ -137,7 +137,7 @@ const Login2 = (props) => {
                 <div className="col-md-12 col-12 col-xl-7 col-md-6 col-sm-12 d-flex justify-content-center align-items-center pl-md-0">
 
                   <form className="w-100 mx-lg-5 mx-md-5 mx-xl-5 my-md-4 mx-2 my-2 form_block" name="form1" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-                    <h6 className="f-12 fw-600">Otp Authentication</h6>
+                    <h6 className="f-12 fw-600">OTP Authentication</h6>
                     <p className="p-0">Please enter the One Time Password (OTP) sent to your registered email. </p>
                     <div className="form-group mt-3 otp_box">
                       <input type="text" className="otp_input_field" {...register("otpInp1")} id="authOtp1" maxLength="1" onKeyDownCapture={(e) => checkOtpValidation(e, 0)}  />

@@ -7,7 +7,7 @@ export const encryptData = (data = '') =>{
     }
     // let iv = crypto.randomBytes(16).toString('hex').slice(0, 16);
     let iv = (process.env.REACT_APP_ENCRYPT_IV).slice(0, 16);
-    let encKey = process.env.REACT_APP_ENCRYPT_KEY;
+    let encKey = (process.env.REACT_APP_ENCRYPT_KEY).slice(0, 16);
     // let mykey = crypto.createCipheriv('aes-128-cbc', encKey,iv);
     let mykey = crypto.createCipheriv('aes-128-cbc', encKey,iv);
     let token = mykey.update((data).toString(), 'utf8', 'hex')
@@ -27,7 +27,7 @@ export const decryptData = (token = '') =>{
 
     // let iv = crypto.randomBytes(16).toString('hex').slice(0, 16);
     let iv = (process.env.REACT_APP_ENCRYPT_IV).slice(0, 16);
-    let encKey = process.env.REACT_APP_ENCRYPT_KEY;
+    let encKey = (process.env.REACT_APP_ENCRYPT_KEY).slice(0, 16);
     // var mykey = crypto.createDecipheriv('aes-128-cbc', encKey,iv);
     var mykey = crypto.createDecipheriv('aes-128-cbc', encKey,iv);
 	  var data = mykey.update((token).toString(), 'hex', 'utf8')
