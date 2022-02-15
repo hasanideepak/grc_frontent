@@ -8,7 +8,6 @@ import ApiService from "../../services/ApiServices"
 const Header = (props) => {
     const { projectId = null, setProjectId } = useContext(LayoutContext)
     const { user = {} } = useOutletContext()
-    console.log(user)
     const AccountId = user?.currentUser?.account_id || 0;
     const AccountName = user?.currentUser?.account_name
     const { defHeaderTitle = '' } = props
