@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
-import { SetCookie, GetCookie } from "../helpers/Helper";
+import { SetCookie, GetCookie, encryptData } from "../helpers/Helper";
 import { Link, useNavigate } from "react-router-dom";
 import crypto from 'crypto'
 const Login = (props) => {
@@ -19,13 +19,15 @@ const Login = (props) => {
     payload.url = "auth/login"
     let res = await ApiService.post(payload.type,payload,Login);
     if(res && res.message == "Success"){
-        let setcookie = SetCookie('currentUser',JSON.stringify(res.results))
-        if(res.results.user.is_onboard == 'N'){
-          navigate('/onboarding', { replace: true })
-        }else{
-          navigate('/dashboard', { replace: true })
-        }
-        
+        let userInfo = res.results;
+        userInfo.otpVerified = false
+        let setcookie = SetCookie('currentUser',JSON.stringify(userInfo))
+        navigate("/otp-verification", {replace: true})
+        // if(res.results.user.is_onboard == 'N'){
+        //   navigate('/onboarding', { replace: true })
+        // }else{
+        //   navigate('/dashboard', { replace: true })
+        // }
     }
   }
 

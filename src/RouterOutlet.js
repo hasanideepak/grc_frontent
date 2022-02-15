@@ -23,8 +23,8 @@ const RouterOutlet = ({ layout: Layout, ...rest }) => {
                 <Navigate to="/login" replace />
             )
         }else {
-            // if(!otpVerified){
-            if(!true){
+            if(!otpVerified){
+            // if(!true){
                 return (
                     <Navigate to="/otp-verification" replace />
                 )

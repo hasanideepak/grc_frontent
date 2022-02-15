@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import ApiService from "../services/ApiServices";
-import { SetCookie, GetCookie } from "../helpers/Helper";
+import { SetCookie, GetCookie, decryptData } from "../helpers/Helper";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import Header from "../components/partials/Header";
 import { useEffect, useState } from "react";
@@ -16,8 +16,9 @@ import AirModal from "../elements/AirModal";
 const TaskDetails = (props) => {
   const { user = {} } = useOutletContext()
   const orgId = user?.currentUser?.org_id || 0;
-  const { taskId = 0 } = useParams()
+  const { taskId:encTaskId = 0 } = useParams()
   const accessRole = user?.currentUser?.access_role || '';
+  const [taskId, setTaskId] = useState(null)
   const [taskDetails, setTaskDetails] = useState({})
   const [viewFile, setViewFile] = useState(null)
   const [fileType, setFileType] = useState(null)
@@ -28,7 +29,11 @@ const TaskDetails = (props) => {
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
   useEffect(() => {
-    if (Object.keys(taskDetails).length == 0 && taskId != 0) {
+    if(encTaskId != 0){
+      let id =  decryptData(encTaskId)
+      setTaskId(id)
+    }
+    if (Object.keys(taskDetails).length == 0 && taskId != null) {
       getTaskDetails()
     }
   });

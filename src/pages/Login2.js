@@ -3,29 +3,106 @@ import ApiService from "../services/ApiServices";
 import { SetCookie, GetCookie } from "../helpers/Helper";
 import { Link, useNavigate } from "react-router-dom";
 import crypto from 'crypto'
+import { useEffect, useState } from "react";
+import { IsAuthenticated } from "../helpers/Auth";
 const Login2 = (props) => {
   const navigate = useNavigate()
+  const [userInfo, setUserInfo] = useState(null)
+  const [errMsg, setErrMsg] = useState('')
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
+
+  useEffect(() => {
+    if (userInfo == null) {
+      let userData = GetCookie('currentUser') ? JSON.parse(GetCookie('currentUser')) : null
+      console.log(userData)
+      if (!userData || userData == null) {
+        navigate("/login")
+      }else if(userData.otpVerified){
+        if (userData.user.is_onboard == 'N') {
+          navigate('/onboarding', { replace: true })
+        } else {
+          navigate('/dashboard', { replace: true })
+        }
+      }
+      setUserInfo(oldVal => {
+        return { ...userData }
+      })
+    }
+  })
+
   const onSubmit = async (data) => {
-    if (!data.email || data.email == '' || !data.password || data.password == '') {
+    setErrMsg('')
+    if (
+      !data.otpInp1 || data.otpInp1 == '',
+      !data.otpInp2 || data.otpInp2 == '',
+      !data.otpInp3 || data.otpInp3 == '',
+      !data.otpInp4 || data.otpInp4 == '',
+      !data.otpInp5 || data.otpInp5 == '',
+      !data.otpInp6 || data.otpInp6 == ''
+    ) {
       return false
     };
-    if (data.password) {
-      let md5Pass = crypto.createHash('md5').update(data.password).digest('hex');
-      data.password = md5Pass
+    let otp = Object.values(data).join('')
+    if (!otp || otp == '') {
+      return false
     }
-    let payload = data
-    payload.type = "login"
-    payload.url = "auth/login"
-    let res = await ApiService.post(payload.type, payload, Login2);
+    let payloadUrl = `auth/validateOTP`
+    let method = "POST"
+    let formData = { otp }
+    let res = await ApiService.fetchData(payloadUrl, method, formData);
     if (res && res.message == "Success") {
-      let setcookie = SetCookie('currentUser', JSON.stringify(res.results))
-      if (res.results.user.is_onboard == 'N') {
+      let userData = userInfo
+      console.log(userInfo)
+      userData.otpVerified = true
+      let setcookie = SetCookie('currentUser', JSON.stringify(userData))
+      if (userData.user.is_onboard == 'N') {
         navigate('/onboarding', { replace: true })
       } else {
         navigate('/dashboard', { replace: true })
       }
 
+    }else{
+      setErrMsg(res.message)
+    }
+  }
+
+  const checkOtpValidation = (event, index) => {
+    let inptVal = event.key
+    let pattern = new RegExp(/^[0-9]$/);
+    if(event.keyCode == 8){
+      if(event.target.value.length == 0){
+        let ele = document.getElementById(`authOtp${index+1}`)
+        if(ele.previousElementSibling){
+          ele.previousElementSibling.focus()
+        }
+      }else{
+        event.target.value = ''
+      }
+      
+    }
+    if (inptVal.length == 0 || !pattern.test(inptVal)) {
+      event.preventDefault();
+      return false
+    }
+    if (inptVal.length > 0) {
+      let ele = document.getElementById(`authOtp${index+1}`)
+      // Focus on the next sibling
+      if(ele.nextElementSibling){
+        setTimeout(() => {
+          ele.nextElementSibling.focus()
+        }, 50);
+      }
+    }
+    // if(this.authOtp.te)
+  }
+
+  const resendOTP = async () =>{
+    let payloadUrl = `auth/resendOTP`
+    let method = "GET"
+    let formData = { }
+    let res = await ApiService.fetchData(payloadUrl, method);
+    if (res && res.message == "Success") {
+      window.location.reload()
     }
   }
 
@@ -61,14 +138,22 @@ const Login2 = (props) => {
 
                   <form className="w-100 mx-lg-5 mx-md-5 mx-xl-5 my-md-4 mx-2 my-2 form_block" name="form1" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
                     <h6 className="f-12 fw-600">Otp Authentication</h6>
-                    <p className="p-0">Please confirm your account by entering the authentication code sent to ******@truverify.com </p>
+                    <p className="p-0">Please enter the One Time Password (OTP) sent to your registered email. </p>
                     <div className="form-group mt-3 otp_box">
-                      <input type="text" className="otp_input_field" {...register("otpInp1")} id="authOtp1" name="authOtp1" maxLength="1" autoFocus />
-                      <input type="text" className="otp_input_field" {...register("otpInp2")} id="authOtp2" name="authOtp2" maxLength="1" autoFocus />
-                      <input type="text" className="otp_input_field" {...register("otpInp3")} id="authOtp3" name="authOtp3" maxLength="1" autoFocus />
-                      <input type="text" className="otp_input_field" {...register("otpInp4")} id="authOtp4" name="authOtp4" maxLength="1" autoFocus />
-                      <input type="text" className="otp_input_field" {...register("otpInp5")} id="authOtp5" name="authOtp5" maxLength="1" autoFocus />
-                      <input type="text" className="otp_input_field" {...register("otpInp6")} id="authOtp6" name="authOtp6" maxLength="1" autoFocus />
+                      <input type="text" className="otp_input_field" {...register("otpInp1")} id="authOtp1" maxLength="1" onKeyDownCapture={(e) => checkOtpValidation(e, 0)}  />
+                      <input type="text" className="otp_input_field" {...register("otpInp2")} id="authOtp2" maxLength="1" onKeyDownCapture={(e) => checkOtpValidation(e, 1)} />
+                      <input type="text" className="otp_input_field" {...register("otpInp3")} id="authOtp3" maxLength="1" onKeyDownCapture={(e) => checkOtpValidation(e, 2)} />
+                      <input type="text" className="otp_input_field" {...register("otpInp4")} id="authOtp4" maxLength="1" onKeyDownCapture={(e) => checkOtpValidation(e, 3)} />
+                      <input type="text" className="otp_input_field" {...register("otpInp5")} id="authOtp5" maxLength="1" onKeyDownCapture={(e) => checkOtpValidation(e, 4)} />
+                      <input type="text" className="otp_input_field" {...register("otpInp6")} id="authOtp6" maxLength="1" onKeyDownCapture={(e) => checkOtpValidation(e, 5)} />
+                    </div>
+                    {
+                      errMsg && errMsg != ''
+                      ? <span className="form_err text-danger d-block mb-3">{errMsg}</span>
+                      : ''
+                    }
+                    <div className="d-flex justify-content-end form-group">
+                      <span className="link link_url" onClick={() => resendOTP()} >Resend OTP</span>
                     </div>
                     <div className="form_submit_btn mt-3">
                       <button type="submit" className="btn btn-primary btn-block mb-lg-4 mb-md-4 mb-2 mw-100" >Verify</button>

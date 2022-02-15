@@ -1239,7 +1239,7 @@ const Configuration = (props) => {
         <div className="d-flex justify-content-end yrscpe">
           {
             accountsList && accountsList.length > 0
-              ? <Link to={`/onboarding_scope/${projectId}`} className="btn btn-primary submitBtn btn-lg">Define Your Scope</Link>
+              ? <Link to={`/onboarding_scope/${encryptData(projectId)}`} className="btn btn-primary submitBtn btn-lg">Define Your Scope</Link>
               : ''
           }
 

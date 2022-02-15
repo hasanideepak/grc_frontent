@@ -5,24 +5,35 @@ export const encryptData = (data = '') =>{
     if(data == ''){
         return data
     }
-    let iv = crypto.randomBytes(16).toString('hex').slice(0, 16);
-    let mykey = crypto.createCipheriv('aes-128-cbc', process.env.REACT_APP_ENCRYPT_KEY,iv);
+    // let iv = crypto.randomBytes(16).toString('hex').slice(0, 16);
+    let iv = (process.env.REACT_APP_ENCRYPT_IV).slice(0, 16);
+    let encKey = process.env.REACT_APP_ENCRYPT_KEY;
+    // let mykey = crypto.createCipheriv('aes-128-cbc', encKey,iv);
+    let mykey = crypto.createCipheriv('aes-128-cbc', encKey,iv);
     let token = mykey.update((data).toString(), 'utf8', 'hex')
     token += mykey.final('hex');
-    console.log(data,iv,mykey,token)
+    // console.log(data,iv,mykey,token)
     return token
 }
 export const decryptData = (token = '') =>{
+  // let algorithm = 'aes-256-cbc';
+  // let key = crypto.randomBytes(32);
+  // let iv = crypto.randomBytes(16);
+  // console.log(key.toString('hex'))
+  // console.log(iv.toString('hex'))
     if(token == ''){
         return token
     }
 
-    let iv = crypto.randomBytes(16).toString('hex').slice(0, 16);
-    var mykey = crypto.createDecipheriv('aes-128-cbc', process.env.REACT_APP_ENCRYPT_KEY,iv);
+    // let iv = crypto.randomBytes(16).toString('hex').slice(0, 16);
+    let iv = (process.env.REACT_APP_ENCRYPT_IV).slice(0, 16);
+    let encKey = process.env.REACT_APP_ENCRYPT_KEY;
+    // var mykey = crypto.createDecipheriv('aes-128-cbc', encKey,iv);
+    var mykey = crypto.createDecipheriv('aes-128-cbc', encKey,iv);
 	  var data = mykey.update((token).toString(), 'hex', 'utf8')
 	  data += mykey.final('utf8');
-    // console.log(data)
     return data
+    
 }
 
 export const GetCookie = (cookieName = '') =>{
@@ -32,7 +43,7 @@ export const GetCookie = (cookieName = '') =>{
 
     // Get a cookie
     let getCookie = cookieCutter.get(cookieName)
-    return getCookie ? getCookie : false
+    return getCookie ? decryptData(getCookie) : false
 }
 export const GetServerCookie = (req,cookieName = '') =>{
     if(!cookieName || cookieName == ''){
@@ -59,7 +70,7 @@ export const SetCookie = (cookieName = '',value,options = null) =>{
         }
     }
     // Set a cookie
-    let setCookie = cookieCutter.set(cookieName, value,options)
+    let setCookie = cookieCutter.set(cookieName, encryptData(value),options)
     return setCookie ? setCookie : false
 }
 

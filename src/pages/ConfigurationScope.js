@@ -10,8 +10,9 @@ const ConfigurationScope = (props) => {
   const { token = '' } = useParams()
   // console.log(token)
   const orgId = user?.currentUser?.org_id || 0;
-  const projectId = Number(token);
+  // const projectId = Number(token);
   // const projectId = 1;
+  const [projectId, setProjectId] = useState(null)
   const [getAllScopes, setAllScopes] = useState({})
   const [addUtilitiesList, setUtilitiesList] = useState([])
 
@@ -23,14 +24,19 @@ const ConfigurationScope = (props) => {
   const [formRes, setFormRes] = useState({ status: false, err_status: false, error: {} })
   const [errorMsg, setErrorMsg] = useState(false);
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  useEffect(()=>{
+    if(token != ''){
+      let id =  decryptData(token)
+      setProjectId(oldVal =>{
+        return id
+      })
+    }
+  })
   useEffect(() => {
-    // if (frameWorks.length == 0) {
-    //   fetchInfo("frameworks")
-    // }
-    if (Object.keys(getAllScopes).length == 0) {
+    if (Object.keys(getAllScopes).length == 0 && projectId != null) {
       fetchInfo("all")
     }
-    if (tpUtilities.length == 0) {
+    if (tpUtilities.length == 0 && projectId != null) {
       fetchInfo("tpUtilites")
     }
     // if (tpServices.length == 0) {
@@ -38,7 +44,7 @@ const ConfigurationScope = (props) => {
     // }
 
 
-  }, [])
+  }, [projectId])
 
   const fetchInfo = async (type = '') => {
     if (type == '') {

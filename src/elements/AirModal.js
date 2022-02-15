@@ -3,6 +3,7 @@ import { Accordion, Button, Modal, ProgressBar } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/partials/Loader";
+import { encryptData } from "../helpers/Helper";
 import ApiService from "../services/ApiServices";
 
 
@@ -164,7 +165,7 @@ const AirModal = (intialData) => {
                     scrollable={true}
                 >
                     <Modal.Header closeButton>
-                        <Modal.Title>Task Details <a className="taskDetailPage_link position-absolute ml-3" onClick={() => navigate(`/task-details/${taskDetails?.task[0]?.task_id}`)}><i className="fa fa-external-link"></i></a></Modal.Title>
+                        <Modal.Title>Task Details <a className="taskDetailPage_link position-absolute ml-3" onClick={() => navigate(`/task-details/${encryptData(taskDetails?.task[0]?.task_id)}`)}><i className="fa fa-external-link"></i></a></Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className="container-fluid">

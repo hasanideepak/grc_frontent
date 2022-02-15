@@ -428,7 +428,6 @@ const getFileDetails = async (data = null) =>{
                           <div className="card-body">
                             {pendingTasks && pendingTasks.length > 0 && pendingTasks.map((p_task, pIndex) => {
                               return (
-                                // <div key={pIndex} className="gridBox link_url" onClick={() => navigate(`/task-details/${p_task.project_task_id}`)}>
                                 <div key={pIndex} className="gridBox link_url" onClick={() => getTaskDetails(p_task.project_task_id)}>
                                   <div className="gridboxbody">
                                     <h4 className="d-flex">{p_task.description}</h4>
@@ -459,7 +458,7 @@ const getFileDetails = async (data = null) =>{
                           <div className="card-body">
                             {inProgresstasks && inProgresstasks.length > 0 && inProgresstasks.map((ip_task, pIndex) => {
                               return (
-                                <div key={pIndex} className="gridBox link_url" onClick={() => navigate(`/task-details/${ip_task.project_task_id}`)}>
+                                <div key={pIndex} className="gridBox link_url" onClick={() => getTaskDetails(ip_task.project_task_id)}>
                                   <div className="gridboxbody">
                                     <h4>{ip_task.description}</h4>
                                     <p><img src="assets/img/gbl.gif" alt="folder" /> <span>{ip_task.title}</span></p>
@@ -484,7 +483,7 @@ const getFileDetails = async (data = null) =>{
                           <div className="card-body">
                             {underReviewtasks && underReviewtasks.length > 0 && underReviewtasks.map((ur_task, pIndex) => {
                               return (
-                                <div key={pIndex} className="gridBox link_url" onClick={() => navigate(`/task-details/${ur_task.project_task_id}`)}>
+                                <div key={pIndex} className="gridBox link_url" onClick={() => getTaskDetails(ur_task.project_task_id)}>
                                   <div className="gridboxbody">
                                     <h4>{ur_task.description}</h4>
                                     <p><img src="assets/img/gbl.gif" alt="folder" /> <span>{ur_task.title}</span></p>
@@ -509,7 +508,7 @@ const getFileDetails = async (data = null) =>{
                           <div className="card-body">
                             {completedtasks && completedtasks.length > 0 && completedtasks.map((c_task, pIndex) => {
                               return (
-                                <div key={pIndex} className="gridBox link_url" onClick={() => navigate(`/task-details/${c_task.project_task_id}`)}>
+                                <div key={pIndex} className="gridBox link_url" onClick={() => getTaskDetails(c_task.project_task_id)}>
                                   <div className="gridboxbody">
                                     <h4>{c_task.description}</h4>
                                     <p><img src="assets/img/gbl.gif" alt="folder" /> <span>{c_task.title}</span></p>
