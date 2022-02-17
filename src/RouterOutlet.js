@@ -16,7 +16,7 @@ const RouterOutlet = ({ layout: Layout, ...rest }) => {
     let lContextObj = { showLoader, setShowLoader, projectId, setProjectId }
     let is_onboard = getAuthUser.isLoggedIn && getAuthUser?.currentUser?.is_onboard == "N" ? false : true;
 
-    console.log(otpVerified)
+    // console.log(otpVerified)
     const checkAuth = () => {
         if (!isAuth) {
             return (

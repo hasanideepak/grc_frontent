@@ -136,7 +136,7 @@ const TaskDetails = (props) => {
 
 
   // console.log(watch("email")); // watch input value by passing the name of it
-  console.log(taskDetails)
+  // console.log(taskDetails)
   return (
     <>
       <Header />

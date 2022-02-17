@@ -84,7 +84,7 @@ const TaskManager = (props) => {
     if (type == '') {
       return false
     };
-    console.log(cardView)
+    // console.log(cardView)
     let payloadUrl = ""
     let method = "POST";
     let formData = {};
@@ -92,7 +92,7 @@ const TaskManager = (props) => {
     let eDate = endDate
     let dateRange = document.getElementById('drpicker').value;
     dateRange = dateRange ? dateRange : null
-    console.log(dateRange)
+    // console.log(dateRange)
     if(dateRange){
       let drArr = dateRange.replace(/\s/g,'').split('-');
       if(drArr.length > 0){
